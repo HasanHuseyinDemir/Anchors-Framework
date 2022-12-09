@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anchors JS</title>
+    <script src="./index.js" type="module"></script>
+</head>
+
+<body>
+
+    <div id="anchors"></div>
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+        body {
+            background-color: rgb(190, 211, 255);
+        }
+
+        #anchors {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+
+            33% {
+                transform: rotate(120deg);
+                opacity: 0.3;
+            }
+
+            66% {
+                transform: rotate(240deg);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        #anchors h1 {
+            margin-top: 0;
+            font-family: 'Lobster', cursive;
+            color: rgb(54, 54, 54);
+            font-size: 3rem;
+        }
+
+        #anchors img {
+            animation: rotate 7s infinite ease-in-out;
+            width: 300px;
+        }
+
+        #anchors div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #anchors div button {
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.13);
+            border: none;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        #anchors div>button:hover {
+            color: white;
+            background: black;
+        }
+
+        @keyframes blink {
+            0% {
+                color: white;
+            }
+
+            50% {
+                color: rgb(182, 182, 182);
+            }
+
+            100% {
+                color: white;
+            }
+        }
+
+        #anchors div>button:hover {
+            animation: blink 2s ease-out infinite;
+        }
+
+        #anchors h1 {
+            text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+            user-select: none;
+        }
+    </style>
+</body>
+
+</html>
