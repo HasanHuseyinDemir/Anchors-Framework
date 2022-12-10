@@ -6,6 +6,8 @@
 <p align="center">A Declarative Javascript Framework</p>
 
 </div>
+# <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/Template-Page/">Template Page</a>
+
 
 # Installation Latest v[1.0.1]
 ## Import For Module
