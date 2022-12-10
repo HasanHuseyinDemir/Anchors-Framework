@@ -4,7 +4,7 @@
 <img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Light Javascript Framework</p>
-<p>Minified Size is Just 2kb</p>
+<p>Minified Size Is Just 2KB</p>
 
 </div>
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/Template-Page/">Template Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/Template-Page">Repo</a>
