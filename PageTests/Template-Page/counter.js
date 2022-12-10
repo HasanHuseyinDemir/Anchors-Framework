@@ -2,7 +2,7 @@ import {html} from "../../Versions/Render-Bug-Fix 1.0.1/Minified/anchors.min.mjs
 
 export function Counter(){
     let count=0;
-    let page=html`
+    let page=html/*html*/`
 
     <h2 align="center"> ' {count} ' </h2>
     <button anchor="Increase Count">Increase {count}</button>
@@ -11,9 +11,10 @@ export function Counter(){
     
     //TextNodes
     let countNodes=page.getNodes("count");
-    countNodes.text=count;
+    countNodes.text=count;//TextNode Value
     
-    //Gets array of Increase Buttons 
+    //'getAnchor' Returns array of Increase Buttons
+    //anchor="Increase Count" same as {Increase Count} 
     let IncreaseButtons=page.getAnchor("Increase Count");
     IncreaseButtons.forEach((item)=>{
         item.onclick=()=>{

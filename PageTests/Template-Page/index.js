@@ -1,20 +1,22 @@
 import { html } from "../../Versions/Render-Bug-Fix 1.0.1/Minified/anchors.min.mjs";
-import {Counter} from "./counter.js"
+import {Counter} from "./counter.js";
+import {DigitalClock} from "../First-Page/digital-clock.js";
 
 function Main(){
     let page=html/*html*/`
     <div>
     
-    {Anchors Are Hidden}
+    {Anchors Can Be Empty}
     {Anchors Icon}
     {Anchors Title}
+    ${DigitalClock()}
+    ${Counter()}
 
-    ${/*This Renders Counter*/Counter()}
 
     </div>
     `
 
-    //Returns Array Of Elements
+    //Returns Array Of Selected Anchor Elements
     let Icon=page.getAnchor("Anchors Icon");
     //Need ForEach for declaring attributes
     Icon.forEach(element => {
@@ -22,9 +24,14 @@ function Main(){
         element.onclick=()=>{console.log("Anchors JS")}
     });
 
+    let CurlyBraces={
+        left:"&lcub;",
+        right:"&rcub;"
+    }
+
     let Title=page.getAnchor("Anchors Title");
     Icon.render(html`<img src="../../Images/AnchorsTransparent.png">`)
-    Title.render(html`<h1 align="center">Anchors</h1>`)
+    Title.render(html`<h1 align="center">${CurlyBraces.left} ANCHORS ${CurlyBraces.right}</h1>`)
 
     return page
 }
