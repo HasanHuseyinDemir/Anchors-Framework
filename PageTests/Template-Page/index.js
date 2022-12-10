@@ -1,4 +1,4 @@
-import { html } from "../../Versions/Render-Bug-Fix 1.0.1/Minified/anchors.min.mjs";
+import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Render-Bug-Fix%201.0.1/Minified/anchors.min.mjs";
 import {Counter} from "./counter.js";
 import {DigitalClock} from "../First-Page/digital-clock.js";
 
