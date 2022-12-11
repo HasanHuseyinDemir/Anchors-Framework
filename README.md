@@ -14,8 +14,9 @@
 # Installation Latest v[1.0.1]
 
 ## Recomended VSCode Extensions
-es6-string-html
-```"/*html*/"``` for highlighting html string
+> "es6-string-html"<br>
+```"/*html*/"``` for highlighting html string<br>
+``` let page=html/*html*/`<div>Highlighted!</div>` ```
 
 ## Import For Module
 ```
