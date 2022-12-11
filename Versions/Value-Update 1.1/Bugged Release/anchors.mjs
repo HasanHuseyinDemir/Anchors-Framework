@@ -116,7 +116,7 @@ Object.defineProperty(Object.prototype,"text",{
 })
 
 Object.prototype.getAnchor=function(anchorName){
-        let data=this.selectElement(`[anchor='${anchorName}']`);
+        let data=this.querySelectorAll(`[anchor='${anchorName}']`);
 
         data.forEach((item)=>{
             item.removeAttribute("anchor");
@@ -126,7 +126,7 @@ Object.prototype.getAnchor=function(anchorName){
 }
 
 Object.prototype.getNodes=function(anchorName){
-    let data=this.selectElement(`[anchor='${anchorName}']`);
+    let data=this.querySelectorAll(`[anchor='${anchorName}']`);
     let nodes=[];
     data.forEach((item,index)=>{
         let node=document.createTextNode("");
