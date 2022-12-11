@@ -13,7 +13,7 @@
 
 # Installation Latest v[1.0.1]
 
-## VSCode Extensions
+## Recomended VSCode Extensions
 es6-string-html
 ```"/*html*/"``` for highlighting html string
 
