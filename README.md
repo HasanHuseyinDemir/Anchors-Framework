@@ -11,7 +11,7 @@
 <br>
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/First-Page">First Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/First-Page">Repo</a>
 
-# Installation Latest v[1.0.1]
+# Installation Latest v[1.1] "Value Update" 
 
 ## Recomended VSCode Extensions
 > "es6-string-html"<br>
@@ -20,12 +20,13 @@
 
 ## Import For Module
 ```
-import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Render-Bug-Fix%201.0.1/Minified/anchors.min.mjs"
+import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Value-Update%201.1/Minified/anchors.min.mjs"
+export {html,c}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Render-Bug-Fix%201.0.1/Minified/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Value-Update%201.1/Minified/anchors.min.js"></script>
 ```
 
 
