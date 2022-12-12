@@ -14,6 +14,7 @@
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/First-Page">First Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/First-Page">Repo</a><br>
 # 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/04.StateManagement">State Management</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/04.StateManagement">Repo</a><br>
 # 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/05.SwitchComponents/">Component Switch</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/05.SwitchComponents/">Repo</a><br>
+# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/06.StandAlone/">Standalone Loading</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/06.StandAlone/">Repo</a><br>
 
 <br><br>
 
