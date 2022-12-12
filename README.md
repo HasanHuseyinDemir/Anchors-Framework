@@ -9,7 +9,8 @@
 </div>
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/Template-Page/">Template Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/Template-Page">Repo</a>
 <br>
-# 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/First-Page">First Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/First-Page">Repo</a>
+# 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/First-Page">First Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/First-Page">Repo</a><br>
+# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/04.StateManagement">State Management</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/04.StateManagement">Repo</a>
 
 # Installation Latest v[1.1] "Value Update" 
 
