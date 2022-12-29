@@ -12,9 +12,13 @@
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/Template-Page/">Template Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/Template-Page">Repo</a>
 <br>
 # 1.0.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/First-Page">First Page</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/First-Page">Repo</a><br>
-# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/04.StateManagement">State Management</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/04.StateManagement">Repo</a><br>
-# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/05.SwitchComponents/">Component Switch</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/05.SwitchComponents/">Repo</a><br>
-# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/06.StandAlone/">Standalone Loading</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/06.StandAlone/">Repo</a><br>
+# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/04.StateManagement">State Management</a> | <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/04.StateManagement">Repo</a><br>
+# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/05.SwitchComponents/">Component Switch</a> | <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/05.SwitchComponents/">Repo</a><br>
+# 1.1 <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/06.StandAlone/">Standalone Loading</a> | <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/06.StandAlone/">Repo</a><br>
+# 1.2 State Management Update 
+<a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/07.Setter/simple/">Simple</a> |
+<a href="https://hasanhuseyindemir.github.io/Anchors-Framework/PageTests/07.Setter/advanced/">Advanced</a> |
+<a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/PageTests/07.Setter/">Repo</a><br>
 
 <br><br>
 
