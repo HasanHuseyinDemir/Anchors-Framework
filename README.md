@@ -27,13 +27,13 @@
 
 ## Import For Module
 ```
-import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Value-Update%201.1/%231%20getnode%20fix/anchors.min.mjs"
+import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/anchors.min.mjs"
 export {html,c}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Value-Update%201.1/%231%20getnode%20fix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/anchors.mjs"></script>
 ```
 
 
