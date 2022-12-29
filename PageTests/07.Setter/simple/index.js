@@ -1,4 +1,4 @@
-import { html, state } from "../../../Versions/1.2-Setter Update/anchors.mjs";
+import { html, state } from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/anchors.min.mjs";
 
 const Main=()=>{
     
