@@ -31,8 +31,8 @@
 
 ## Import For Module
 ```
-import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/Minified/anchors.min.mjs"
-export {html,c}
+import {html,c,state} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/Minified/anchors.min.mjs"
+export {html,c,state}
 ```
 
 ## Import For Global 
