@@ -44,6 +44,7 @@ export const state=function(val,...node){
     let triggerList=[];
 
     const list={
+        //[TODO] Eklenen fonksiyon aynı ise Erişim engellenecek
         push:(object)=>{
             array.push(object);
             update();
@@ -72,7 +73,11 @@ export const state=function(val,...node){
         clearCallback:function(){
             callbackList=[];
         },
-        addTrigger:(...functions)=>{[...functions].forEach(function(func){typeof func=="function"?triggerList.push(func):console.warn(`Anchors TypeError \n ${func} Trigger is must be function !`)})},
+        addTrigger:(...functions)=>{
+            [...functions].forEach(
+                function(func){
+                    typeof func=="function"?triggerList.push(func):
+                    console.warn(`Anchors TypeError \n ${func} Trigger is must be function !`)})},
         removeTrigger:(func)=>{triggerList = triggerList.filter((e)=>{return ''+e != ''+func})},
         clearTrigger:function(){
             triggerList=[];

@@ -5,8 +5,8 @@ const Page=()=>{
     <div>
     <h1>Simple Counter</h1>
     <p>If the number is greater than 5, it resets itself.</p>
-    <p [[Reset Color]]>Number {Number}</p>
-    <p>Reset {Reset Counts}</p>
+    <p [[Colorize]]>Number {Number}</p>
+    <p>Resets {Reset Counts}</p>
     <button [[increase number]]>Increase</button>
     </div>
     `
@@ -22,23 +22,30 @@ const Page=()=>{
     //Callback
     const Reset=()=>{
         if(number()>5){
-            console.log("Reset")+setResets(resets()+1)+setNumber(0)
+            console.log("Reset");
+            setResets(resets()+1);
+            setNumber(0)
         }else{
             console.log(number())
         }
     }
 
-    let num=Main.getMark("Reset Color")
+    //[[Colorize]]
+    let num=Main.getMark("Colorize")
     const Color=()=>{
         if(number()>4){
-            num.style="color:orange"
+            num.style="color:orangered";
+            increaseButton.text="Reset"
         }else{
-            num.style="color:black"
+            num.style="color:black";
+            increaseButton.text="Increase"
         }
     }
 
-    //.changeCallback triggers only "number" changes
-    //.addTrigger Always works when using "setNumber"
+    //[number,setNumber,listNumber] count of number
+    //[resets,setResets] count of resets
+    //listNumber.changeCallback triggers only "number" changes
+    //listNumber.addTrigger Always works when using "setNumber"
     //check console
     //"number" state => triggers => "resets" state
     listNumber.changeCallBack(Reset,Color);
