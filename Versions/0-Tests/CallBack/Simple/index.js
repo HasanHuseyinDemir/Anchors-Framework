@@ -50,6 +50,9 @@ const Page=()=>{
     //"number" state => triggers => "resets" state
     listNumber.changeCallBack(Reset,Color);
 
+    //Reactivity Test
+    //setInterval(()=>{setNumber(number()+1)},1000)
+
     return Main;
 }
 

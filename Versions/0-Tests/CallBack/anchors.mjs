@@ -29,7 +29,7 @@ export function html(data,...keys){
 
     [...keys].forEach((key)=>{
     if(typeof key=="object"||typeof key=="number"){
-        content.querySelector(".htmlizeReplaceElement").replaceWith(key);
+        content.querySelector(".htmlizeAnchorsReplaceElement").replaceWith(key);
     }
     })
 
@@ -67,34 +67,26 @@ export const state=function(val,...node){
             })
 
         },
-        removeCallback:(func)=>{
-            callbackList = callbackList.filter((e)=>{return ''+e != ''+func})
-        },
-        clearCallback:function(){
-            callbackList=[];
-        },
+        removeCallback:(func)=>{callbackList = callbackList.filter((e)=>{return ''+e != ''+func})},
+        clearCallback:function(){callbackList=[];},
         addTrigger:(...functions)=>{
             [...functions].forEach(
                 function(func){
                     typeof func=="function"?triggerList.push(func):
                     console.warn(`Anchors TypeError \n ${func} Trigger is must be function !`)})},
         removeTrigger:(func)=>{triggerList = triggerList.filter((e)=>{return ''+e != ''+func})},
-        clearTrigger:function(){
+        clearTriggers:function(){
             triggerList=[];
         }
     }
 
-    const update=()=>{
-        array.forEach((e)=>e.text=value);
-        callbackList.forEach((e)=>e());
-    };
-
+    const update=()=>array.forEach((e)=>e.text=value);
     const setter=function(newValue){
-
         if(value!=newValue){
             value=newValue;
             //before
             triggerList.forEach((e)=>e());
+            callbackList.forEach((e)=>e());
             update();
         }else{
             triggerList.forEach((e)=>e());
@@ -140,6 +132,7 @@ Object.prototype.selectElement=function(val){
 }
 
 Object.prototype.getValue=function(val){
+    
     return this.selectElement(`[value='${val}']`)
 }
 
@@ -202,16 +195,21 @@ Object.prototype.getNodes=function(anchorName){
 }
 
 Object.prototype.render=function(page,args){
-    if(typeof page=="object"){
-        this.textContent="";
-        page.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
-        this.append(page)
-    }else if (typeof page=="function"){
-        this.textContent="";
-        let pages=page(args);
-        pages.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
-        this.append(pages)
+    if(this!=document.body){
+        if(typeof page=="object"){
+            this.textContent="";
+            page.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
+            this.replaceWith(page)
+        }else if (typeof page=="function"){
+            this.textContent="";
+            let pages=page(args);
+            pages.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
+            this.replaceWith(pages)
+        }
+    }else{
+        console.warn("Warning : Anchors Render Error \nPlease Don't Use Document.body.render");
     }
+
 }
 
 NodeList.prototype.render=function(page,args){
@@ -219,10 +217,10 @@ this.forEach((item)=>{
     item.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
     if(typeof page=="object"){
         item.textContent="";
-        item.append(page.cloneNode(true))
+        item.replaceWith(page.cloneNode(true))
     }else if (typeof page=="function"){
         item.textContent="";
-        item.append(page(args))
+        item.replaceWith(page(args))
     }
 })}
 
