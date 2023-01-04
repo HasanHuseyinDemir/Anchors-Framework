@@ -1,7 +1,6 @@
 export function html(data,...keys){
     let elements=[];
-    let randomComment=`<span class="htmlizeReplaceElement"></span>`;
-    //let randomComment=`<!--htmlize-->`
+    let randomComment=`<span class="htmlizeAnchorsReplaceElement"></span>`;
     data.forEach((item,index)=>{
         elements.push(item);
         if([...keys][index]!=undefined)
@@ -16,8 +15,6 @@ export function html(data,...keys){
     str=str.replaceAll("{{","<span value='").replaceAll("}}","'></span>")
     str=str.replaceAll("{","<span anchor='").replaceAll("}","'></span>")
     page.innerHTML=str;
-
-
 
     let content=page.content;
 
@@ -185,7 +182,7 @@ Object.prototype.getAnchor=function(anchorName){
 Object.prototype.getNodes=function(anchorName){
     let data=this.querySelectorAll(`[anchor='${anchorName}']`);
     let nodes=[];
-    data.forEach((item,index)=>{
+    data.forEach((item)=>{
         let node=document.createTextNode("");
         item.replaceWith(node);
         nodes.push(node);
@@ -207,7 +204,7 @@ Object.prototype.render=function(page,args){
             this.replaceWith(pages)
         }
     }else{
-        console.warn("Warning : Anchors Render Error \nPlease Don't Use Document.body.render");
+        console.warn("Warning : Anchors Render Error \nPlease Don't Use Document.body for Render");
     }
 
 }
@@ -228,77 +225,42 @@ Object.prototype.getMark=function(mark){
     return this.selectElement(`[mark='${mark}']`)
 }
 
+//boilerplate of attribute setting
+let a=(attribute,object,event)=>{        
+    if(Array.isArray(object)||object.length>1){
+    object.forEach((item)=>{item[attribute]=event})
+}else{
+    object[attribute]=event
+}}
+
+
 //on events for multiple elements
 Object.defineProperties(Object.prototype,{
-    "onClick":{
-    set(Event){
-        if(Array.isArray(this)||this.length>1){
-            this.forEach((item)=>{item.onclick=Event})
-           
-        }else{
-            this.onclick=Event
-    }}
-    }
-    ,
-    "onInput":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.oninput=Event})
-            }else{
-                this.oninput=Event
-        }}
-    },
-    "onChange":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.onchange=Event})
-            }else{
-                this.onchange=Event
-        }}
-    }
-    ,
-    "onMouseOver":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.onmouseover=Event})
-            }else{
-                this.onmouseover=Event
-        }}
-    },
-    "onMouseOut":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.onmouseout=Event})
-            }else{
-                this.onmouseout=Event
-        }}
-    }
-    ,    
-    "onKeyDown":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.onkeydown=Event})
-            }else{
-                this.onkeydown=Event
-        }}
-    }
-    ,    
-    "onLoad":{
-        set(Event){
-            if(Array.isArray(this)||this.length>1){
-                this.forEach((item)=>{item.onload=Event})
-            }else{
-                this.onload=Event
-        }}
-    }
+    //Inputs
+    "onClick":{set(Event){a("onclick",this,Event)}},
+    "onInput":{set(Event){a("oninput",this,Event)}},
+    "onChange":{set(Event){a("onchange",this,Event)}},
+    //multiplesets
+    "Href":{set(Event){a("href",this,Event)}},
+    "Src":{set(Event){a("src",this,Event)}},
+    "Style":{set(Event){a("style",this,Event)}},
+    "Value":{set(Event){a("value",this,Event)}},
+    //mouse
+    "onMouseOver":{set(Event){a("onmouseover",this,Event)}},
+    "onMouseOut":{set(Event){a("onmouseout",this,Event)}},  
+    //keys
+    "onKeyDown":{set(Event){a("onkeydown",this,Event)}},
+    "onKeyUp":{set(Event){a("onkeyup",this,Event)}},
+    "onKeyPress":{set(Event){a("onkeypress",this,Event)}},
+
+    "onLoad":{set(Event){a("onload",this,Event)}},
+
 })
 
 Object.prototype.setAttributes=function(attribute,value){
- 
         if(Array.isArray(this)||this.length>1){
             this.forEach((item)=>{item.setAttribute(attribute,value)})
         }else{
             this.setAttribute(attribute,value)
         }
-
 }
