@@ -40,7 +40,7 @@ const Page =()=>{
     listX.changeCallBack(checkXCallback,secondCallback,()=>x()==20?console.log("X is 20 \nThis is third Callback Function...")+setResult("Third Callback Triggered"):"")
     
     //Always works when using "setX"
-    listX.addTrigger(()=>setResult("X Changed!"),()=>console.log("Selam"))
+    listX.addTrigger(()=>setResult("X Changed!"),()=>x()>5?setX(0):"")
     let increaseBtn=Main.getMark("increase")
     increaseBtn.onClick=()=>{
         setX(x()+1)
