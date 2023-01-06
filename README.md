@@ -1,7 +1,7 @@
 <div align="center">
 
 
-<img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
+<img width="300px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors2.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Lightweight Javascript Framework</p>
 <p>Minified Size Is Just 3.4KB</p>
