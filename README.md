@@ -22,7 +22,7 @@
 
 <br><br>
 
-# Installation Latest v[1.1] "Value Update" 
+# Installation Latest v[1.21] "Reactivity Update" 
 
 ## Recomended VSCode Extensions
 > "es6-string-html"<br>
@@ -31,13 +31,13 @@
 
 ## Import For Module
 ```
-import {html,c,state} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/Minified/anchors.min.mjs"
+import {html,c,state} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
 export {html,c,state}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.2-Setter%20Update/Minified/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.js"></script>
 ```
 
 
