@@ -22,14 +22,14 @@
 
 <br><br>
 
-# 1.21 Reactivity Update Tests
+# 1.21 Reactivity Update Tests (Please preview the repos)
 > <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Callback%20Test/">Callback Tests</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Versions/0-Tests/CallBack/Callback%20Test/">Repo</a> 
 
 > <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/New%20Method/">New Method</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/New%20Method">Repo</a>
 
 > <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Patterns%20Test/XPlusOne">X Plus One</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/Patterns%20Test/XPlusOne">Repo</a>
 
-> <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Patterns%20Test/ReversedText">Patterns Test</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/Patterns%20Test/ReversedText">Repo</a>
+> <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Patterns%20Test/ReversedText">Reversed Text</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/Patterns%20Test/ReversedText">Repo</a>
 
 > <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Reactivity%20Tests/">Reactivity Tests</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/Reactivity%20Tests">Repo</a>
 
