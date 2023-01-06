@@ -44,8 +44,8 @@
 
 ## Import For Module
 ```
-import {html,c,state} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
-export {html,c,state}
+import {html,c,state,pattern} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
+export {html,c,state,pattern}
 ```
 
 ## Import For Global 
