@@ -34,6 +34,59 @@ export function html(data,...keys){
     return content;
 }
 
+////
+////
+let globalStatePatterns=[];
+
+//const xPlusOne=pattern(()=>x()+1,xPlusOneNode)
+export const pattern=function(val,...nodes){
+    let pattern=val;
+    let before=undefined;
+    let callbackList=[];
+    let triggerList=[];
+    let nodeList=[...nodes];
+    const getter=function(first,second){
+        switch(first){
+            case "push":nodeList.push(second),init();break;
+            case "changePattern":pattern=second;break;
+            case "addcallback":callbackList.push(second);break;
+            case "addtrigger":triggerList.push(second);break;
+            default :return pattern();
+        }
+    }
+
+    const init=()=>{
+        nodeList.forEach((e)=>{
+            e.text=pattern();
+        })
+    }
+
+    const update=function(){
+        let newValue=pattern();
+        triggerList.forEach(e=>e())
+        if(newValue!=before){
+            callbackList.forEach(e=>e());
+            nodeList.forEach((e)=>{
+                e.text=pattern();
+            })
+            before=newValue;
+        }
+    }
+
+    if(typeof val!="function"){
+        console.warn(`Anchors TypeError \n${second} State Patterns is must be function \nPlease Do not use () for pattern functions!\nUse instead "()=>{Function()}"`)
+        console.warn("Example #1\n'const xPlusY = pattern(()=>x()+1)'")
+        console.warn("Example #2\n'const xPlusY = pattern(function)'")
+        console.warn("Do not use pattern(function()) or pattern(x()+1)")
+    }
+
+
+    globalStatePatterns.push(update);
+    update()
+    return getter;
+}
+////
+
 export const state=function(val,...node){
     let value=val;
     let array=[...node];
@@ -59,7 +112,7 @@ export const state=function(val,...node){
                 if(typeof func=="function"){
                     callbackList.push(func);
                 }else{
-                    console.warn(`Anchors TypeError \n ${func} Callback is must be function !`)
+                    console.warn(`Anchors TypeError \n ${func} Callback is must be function \nPlease Do not use () for callback functions!\nUse instead "()=>{Callback()}"`)
                 }
             })
 
@@ -70,7 +123,7 @@ export const state=function(val,...node){
             [...functions].forEach(
                 function(func){
                     typeof func=="function"?triggerList.push(func):
-                    console.warn(`Anchors TypeError \n ${func} Trigger is must be function !`)})},
+                    console.warn(`Anchors TypeError \n ${func} Trigger is must be function \nPlease Do not use () for trigger functions!\nUse instead "()=>{Trigger()}"`)})},
         removeTrigger:(func)=>{triggerList = triggerList.filter((e)=>{return ''+e != ''+func})},
         clearTriggers:function(){
             triggerList=[];
@@ -82,6 +135,7 @@ export const state=function(val,...node){
         if(value!=newValue){
             value=newValue;
             //before
+            globalStatePatterns.forEach(e=>e())
             triggerList.forEach((e)=>e());
             callbackList.forEach((e)=>e());
             update();
@@ -91,8 +145,27 @@ export const state=function(val,...node){
         
         return value;
     }
-    const getter=function(){
-        return value
+    const getter=function(first,second){
+        switch(first){
+            case "push":case "pushNode":list.push(second);break;
+            case "delete":case "deleteNode":list.delete(second);break;
+            case "clear":case "clearNodes":list.clear();break;
+            
+            //ChangeCallBack
+            case "changeCallBack":
+            case "addCallBack":
+            case "changeCallback":
+            case "addCallback":
+            case "addcallback":
+            case "changecallback":list.changeCallBack(second);break;
+            case "trigger":case "addTrigger":case "addtrigger":list.addTrigger(second);break;
+            case "removeCallback":list.removeCallback(second);break;
+            case "clearCallback":list.clearCallback();break;
+            case "removeTrigger":case "deleteTrigger":list.removeTrigger(second);break;
+            case "deleteTriggers":case "removeTriggers":case "clearTriggers":list.clearTriggers();break;
+            default:return value
+        }
+        
     };
     //init
     update();
@@ -241,10 +314,10 @@ Object.defineProperties(Object.prototype,{
     "onInput":{set(Event){a("oninput",this,Event)}},
     "onChange":{set(Event){a("onchange",this,Event)}},
     //multiplesets
-    "Href":{set(Event){a("href",this,Event)}},
-    "Src":{set(Event){a("src",this,Event)}},
-    "Style":{set(Event){a("style",this,Event)}},
-    "Value":{set(Event){a("value",this,Event)}},
+    "Hrefs":{set(Event){a("href",this,Event)}},
+    "Srcs":{set(Event){a("src",this,Event)}},
+    "Styles":{set(Event){a("style",this,Event)}},
+    "Values":{set(Event){a("value",this,Event)}},
     //mouse
     "onMouseOver":{set(Event){a("onmouseover",this,Event)}},
     "onMouseOut":{set(Event){a("onmouseout",this,Event)}},  
