@@ -118,6 +118,7 @@ else if (typeof page=="function"){
     item.append(data.content)
     data.details.target=this;
     core.registeredRenders.push({target:this,data})
+    data.mount();
 }
 })}
 

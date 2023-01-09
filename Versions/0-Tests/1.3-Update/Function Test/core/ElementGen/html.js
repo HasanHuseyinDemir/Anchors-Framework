@@ -82,7 +82,9 @@ export function html(data,...keys){
                         key.parentList.push({effect,i:details.key})       
                     }
                 }else if(key.type=="For"){
-                    content.querySelector(".achrplcelem").replaceWith(key.fragment); 
+                    content.querySelector(".achrplcelem").replaceWith(key.fragment);
+                    key.mount();
+                    key.setParent(effect)
                 }
                 else{
                     content.querySelector(".achrplcelem").replaceWith(key); 
@@ -97,6 +99,7 @@ export function html(data,...keys){
             if(selected.content){
                 content.querySelector(".achrplcelem").replaceWith(selected.content);
                 details.childComponents.push(selected);
+                selected.mount();
             }else{
                 content.querySelector(".achrplcelem").replaceWith(selected);
             }
@@ -106,7 +109,7 @@ export function html(data,...keys){
             details.nodeLists.push({node,func,before:selected})
         }
     }
-    [elements,keyList]=[]
+    [elements,keyList]=[null,null]
     })
     let unmount={
         callback:null,
@@ -116,47 +119,56 @@ export function html(data,...keys){
         callback:()=>{
         if(details.childComponents.length>0){
                 details.childComponents.forEach((e)=>{    
-                        e.unmount.callback()
+                        e.unmount.callback();
+                        e.details.mounted=false;
                 })
         }
         details.onUnmount?details.onUnmount():"";
+        details.onUnmount=null;
+        details.mounted=false;
+        details.target=null;
         details.active=false;
     }}
-    let kill=()=>{
-        unmount.callback();
-        let target=details.target;
-        target.querySelector(`[anc-key='${details.key}']`).remove();
-    }
 
     content.firstElementChild.setAttribute("anc-key",details.key);
 
-    return {content,details,unmount,effect,kill,signal,mount};
+    return {content,details,unmount,effect,signal,mount};
 }
 
-Object.prototype.onEffect=function($a){
-    switch(typeof $a){
-        case "function":this.details.onEffect=$a;break;
+
+
+Object.prototype.unMount=function(){
+    this.unmount.callback();
+    document.body.querySelectorAll(`[anc-key='${this.details.key}']`).forEach((e)=>{
+        e.remove();
+    })
+    delete this;
+}
+
+Object.prototype.onEffect=function(a){
+    switch(typeof a){
+        case "function":this.details.onEffect=a;break;
         case undefined:default:this.details.onEffect=null;break;
     }
 }
 
-Object.prototype.onUnmount=function($a){
-    switch(typeof $a){
-        case "function":this.details.onUnmount=$a;break;
+Object.prototype.onUnmount=function(a){
+    switch(typeof a){
+        case "function":this.details.onUnmount=a;break;
         case undefined:default:this.details.onUnmount=null;break;
     }
 }
 
-Object.prototype.onMount=function($a){
-    switch(typeof $a){
-        case "function":this.details.onMount=$a;break;
+Object.prototype.onMount=function(a){
+    switch(typeof a){
+        case "function":this.details.onMount=a;break;
         case undefined:default:this.details.onMount=null;break;
     }
 }
 
-Object.prototype.onSignal=function($a){
-    switch(typeof $a){
-        case "function":this.details.onSignal=$a;break;
+Object.prototype.onSignal=function(a){
+    switch(typeof a){
+        case "function":this.details.onSignal=a;break;
         case undefined:default:this.details.onSignal=null;break;
     }
 }
