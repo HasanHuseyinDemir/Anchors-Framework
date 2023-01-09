@@ -1,4 +1,4 @@
-import { simpleFor, html } from "./core/anchors.mjs";
+import { For, html } from "./core/anchors.mjs";
 
 
 const Tasks = [
@@ -6,39 +6,62 @@ const Tasks = [
     { name: "Selam", completed: true, src: "web" },
   ];
 
-  const todoList = simpleFor(Tasks, (e, index) => {
-    return /*html*/`<p key=${index}>Adı = ${e.name} ${e.completed?"-Tamamlandı!":""}</p>`
+  const todoList = For(Tasks, (e, index) => {
+    let page=html/*html*/`
+    <div>
+    <input type="checkbox" [[checkbox]]>
+    ${()=>index}-${()=>e.name} ${()=>e.completed?"-Completed!":""}
+    <button [[deletebtn]]>Delete</button>
+    </div>
+    `
+
+    let deletebtn=page.getMark("deletebtn");
+    let check=page.getMark("checkbox");
+
+    check.checked=e.completed;
+
+    check.onInput=(el)=>{
+        e.completed=el.target.checked;
+        page.effect();
+    }
+
+    page.onSignal(()=>{
+        todoList.array[e]?"":page.kill()
+    })
+
+    page.onMount(()=>{
+        console.log(e+" Eklendi")
+    })
+
+    deletebtn.onClick=()=>{
+        todoList.remove(e)
+    }
+
+    page.onUnmount(()=>{console.log(e.name+" Uçtu")})
+
+    return page
   });
 
 const Page = () => {
   let Main=html/*html*/`
-  <div>For Test</div>
+  <div>
+  <h1>For Test</h1>
 
-  <div [[tests]]>${todoList}</div>
+  ${todoList}
+
 
   <input [[input]]>
   <button [[addButton]]>Add</button>
+  </div>
   `
 
   let input=Main.getMark("input");
   let add=Main.getMark("addButton");
-  let tests=Main.getMark("tests");
 
-  tests.onClick=(e)=>{
-    let getKEY=e.target.getAttribute("key");
-    if(Tasks[getKEY].completed==false){
-        Tasks[getKEY].completed=true
-    }else if(Tasks[getKEY].completed==true){
-        delete Tasks[getKEY]
-    }
-
-    todoList.update();
-  }
 
 
   add.onClick=()=>{
-    input.value?Tasks.push({name:input.value,completed:false,src:""}):console.log("BOŞ")
-    todoList.update();
+    input.value?todoList.push({name:input.value,completed:false,src:""}):"";
   }
 
   return Main

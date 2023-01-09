@@ -2,8 +2,9 @@ import { html } from "./ElementGen/html.js";
 import { c } from "./ElementGen/c.js";
 import { value } from "./StateManagement/variable.js";
 import { simpleFor } from "./StateManagement/simpleFor.js";
+import { For } from "./StateManagement/for.js";
 
-export { html,c,value,simpleFor}
+export { html,c,value,For,simpleFor}
 
 export const core={
     registeredRenders:[],
@@ -112,22 +113,20 @@ else if (typeof page=="function"){
             }
         })
         core.registeredRenders=core.registeredRenders.filter((e)=>e.target[0]!=this[0])
-
     }
     let data=page(args)
     item.append(data.content)
+    data.details.target=this;
     core.registeredRenders.push({target:this,data})
 }
 })}
 
 Object.prototype.getMark=function(mark){
     let selected=this.content.selectElement(`[mark='${mark}']`)
-    console.log(selected)
     if(selected.length>1){
         selected.forEach((e)=>{
             e.removeAttribute("mark");
         })
-        console.log("Buttnw")
     }else{
         selected.removeAttribute("mark");
     }

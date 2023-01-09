@@ -3,10 +3,14 @@ export function html(data,...keys){
         nodeLists:[],
         onEffect:null,
         onUnmount:null,
+        onMount:null,
+        onSignal:null,
         active:true,
         memo:false,
+        mounted:false,
         childComponents:[],
-        key:Math.random()
+        key:Math.random(),
+        target:null
     }
     /////////////////////////////////////////////////////////////////////
     let randomComment=`<span class="achrplcelem"></span>`;
@@ -48,6 +52,18 @@ export function html(data,...keys){
                         }
                     })
                 }
+        }
+        signal();
+    }
+    const signal=()=>{
+        if(details.onSignal&&details.mounted){
+            details.onSignal();
+        }
+    }
+    const mount=()=>{
+        if(details.mounted==false){
+            details.mounted=true;
+            details.onMount?details.onMount():"";
         }
     }
     ////////////////////////////////////////////////////////////////////////////
@@ -106,21 +122,42 @@ export function html(data,...keys){
         details.onUnmount?details.onUnmount():"";
         details.active=false;
     }}
+    let kill=()=>{
+        unmount.callback();
+        let target=details.target;
+        target.querySelector(`[anc-key='${details.key}']`).remove();
+    }
 
-    return {content,details,unmount,effect};
+    content.firstElementChild.setAttribute("anc-key",details.key);
+
+    return {content,details,unmount,effect,kill,signal,mount};
 }
 
-Object.prototype.onEffect=function(first){
-    switch(typeof first){
-        case "function":this.details.onEffect=first;break;
+Object.prototype.onEffect=function($a){
+    switch(typeof $a){
+        case "function":this.details.onEffect=$a;break;
         case undefined:default:this.details.onEffect=null;break;
     }
 }
 
-Object.prototype.onUnmount=function(first){
-    switch(typeof first){
-        case "function":this.details.onUnmount=first;break;
+Object.prototype.onUnmount=function($a){
+    switch(typeof $a){
+        case "function":this.details.onUnmount=$a;break;
         case undefined:default:this.details.onUnmount=null;break;
+    }
+}
+
+Object.prototype.onMount=function($a){
+    switch(typeof $a){
+        case "function":this.details.onMount=$a;break;
+        case undefined:default:this.details.onMount=null;break;
+    }
+}
+
+Object.prototype.onSignal=function($a){
+    switch(typeof $a){
+        case "function":this.details.onSignal=$a;break;
+        case undefined:default:this.details.onSignal=null;break;
     }
 }
 
