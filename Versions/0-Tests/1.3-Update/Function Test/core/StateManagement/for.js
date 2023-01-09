@@ -39,13 +39,6 @@ export const For=function(a,t){
     };
 
     const remove=(object)=>{
-        /*let ind=null;
-        array.forEach((e,index)=>{
-            if(JSON.stringify(e)==JSON.stringify(object)){
-                ind=index;
-            }
-        })
-        typeof ind=="number"?delete array[ind]:"";*/
         delete array[search(object,"index")];
         removeEmptyItems();
         update();
