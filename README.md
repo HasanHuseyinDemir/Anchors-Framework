@@ -1,7 +1,7 @@
 <div align="center">
 
 
-<img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors2.png">
+<img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Lightweight Javascript Framework</p>
 <p>Minified Size Is Just 3.4KB</p>
@@ -44,8 +44,8 @@
 
 ## Import For Module
 ```
-import {html,c,state} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
-export {html,c,state}
+import {html,c,state,pattern} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
+export {html,c,state,pattern}
 ```
 
 ## Import For Global 

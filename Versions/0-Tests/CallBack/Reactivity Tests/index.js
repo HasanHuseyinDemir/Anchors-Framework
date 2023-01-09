@@ -32,8 +32,8 @@ const Page=()=>{
     const update=()=>{
         //value for single element
         //Value for multiple elements
-        range.Value=number()
-        anotherRange.Value=number();
+        range.Values=number()
+        anotherRange.Values=number();
     }
 
     //It triggers when "number" variable changes
