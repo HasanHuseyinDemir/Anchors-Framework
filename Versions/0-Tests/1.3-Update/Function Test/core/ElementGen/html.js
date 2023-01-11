@@ -8,6 +8,7 @@ export function html(data,...keys){
         active:true,
         memo:false,
         mounted:false,
+        values:[],
         childComponents:[],
         key:Math.random(),
         target:null
@@ -81,6 +82,7 @@ export function html(data,...keys){
                     if(signal==false){
                         key.parentList.push({effect,i:details.key})       
                     }
+                    //details.values.push(key);
                 }else if(key.type=="For"){
                     content.querySelector(".achrplcelem").replaceWith(key.fragment);
                     key.mount();

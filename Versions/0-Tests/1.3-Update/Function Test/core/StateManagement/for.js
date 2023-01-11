@@ -1,13 +1,20 @@
 export const For=function(a,t){
     let array=a;
     let template=t;
+    let key=Math.random();
     let fragment=document.createElement("div");
+    fragment.setAttribute("anc-key",key);
     let parentEffect="yok";
+    let unmountCallback=null;
     let type="For";
     let mounted=false;
 
     const setParent=(e)=>{
         parentEffect=e
+    }
+
+    const setUnmount=(e)=>{
+        typeof e==="function"?unmountCallback=e:console.warn("Anchor TypeError : For unmount callback must be a function")
     }
     //init
     let comp=array.map(template);
@@ -26,6 +33,18 @@ export const For=function(a,t){
     const mount=()=>{
         mounted=true;
         comp.forEach((e)=>e.mount());
+    }
+
+    const unmount=()=>{
+        mounted=false;
+        comp.forEach((e)=>e.unmount());
+        let target=document.body.querySelectorAll("anc-key="+key)
+        if(target.length>0){
+            target.forEach((e)=>{e.remove()})
+            if(unmountCallback&&typeof unmountCallback=="function"){
+                unmountCallback();
+            }
+        }
     }
 
     const push=(object)=>{
@@ -79,9 +98,8 @@ export const For=function(a,t){
               return true;
             }
           });
-          
     }
 
     update();
-    return {type,length,fragment,update,push,remove,array,mount,search,setParent}
+    return {type,length,fragment,update,push,remove,array,mount,unmount,search,setParent,setUnmount}
 }
