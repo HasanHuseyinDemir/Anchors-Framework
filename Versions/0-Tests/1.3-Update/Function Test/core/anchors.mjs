@@ -10,6 +10,7 @@ export const core={
     registeredRenders:[],
 }
 
+if(window.prototyped==undefined){
 //PROTOTYPES
 Object.prototype.selectElement=function(val){
     let data=this.querySelectorAll(val);
@@ -174,3 +175,6 @@ Object.prototype.setAttributes=function(attribute,value){
         this.setAttribute(attribute,value)
     }
 }
+}
+
+window.prototyped=true;

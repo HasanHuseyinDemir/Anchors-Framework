@@ -18,7 +18,7 @@ export function c(arg,attribute,...childs) {
     return el;
 }
 
-export const templateHTML=(str)=>{
+export const HTML=(str)=>{
     let template=document.createElement("template");
     template.innerHTML=str;
     return template.content;

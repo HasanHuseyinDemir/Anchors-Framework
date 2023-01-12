@@ -1,4 +1,4 @@
-import { templateHTML } from "../ElementGen/c.js";
+import { HTML } from "../ElementGen/c.js";
 
 export const simpleFor=function(a,t){
     let array=a;
@@ -8,7 +8,7 @@ export const simpleFor=function(a,t){
     const update=()=>{
         let str=array.map(template).join("");
         if(fragment.innerHTML!=str){
-            let temp=templateHTML(str);
+            let temp=HTML(str);
             fragment.textContent="";
             fragment.append(temp)
         }
