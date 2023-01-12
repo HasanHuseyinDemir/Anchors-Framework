@@ -5,6 +5,7 @@ export function html(data,...keys){
         onUnmount:null,
         onMount:null,
         onSignal:null,
+        onTrigger:null,
         active:true,
         memo:false,
         mounted:false,
@@ -45,27 +46,37 @@ export function html(data,...keys){
                     }
                 }
             })
-            signal?details.onEffect():""
+            signal?details.onEffect(arg):""
             if(details.childComponents.length>0&&arg!="local"){
                     details.childComponents.forEach((e)=>{    
                         if(e.details.memo==false){
-                            e.effect()
+                            e.effect(arg)
                         }
                     })
                 }
         }
-        signal();
+        signal(arg);
     }
-    const signal=()=>{
+    const signal=(e)=>{
         if(details.onSignal&&details.mounted){
-            details.onSignal();
+            details.onSignal(e);
         }
+        //trigger({event:"signal",signal:e});
     }
     const mount=()=>{
         if(details.mounted==false){
             details.mounted=true;
             details.onMount?details.onMount():"";
         }
+        document.body.querySelectorAll(`[anc-key='${details.key}']`).forEach((e)=>{
+            e.onclick=()=>trigger({event:"click"});
+            e.beforeinput=()=>trigger({event:"beforeinput"});
+        })
+        trigger({event:"mount"})
+    }
+
+    const trigger=(e)=>{
+        typeof details.onTrigger=="function"?details.onTrigger(e):""
     }
     ////////////////////////////////////////////////////////////////////////////
     [...keys].forEach((key)=>{
@@ -85,7 +96,6 @@ export function html(data,...keys){
                     //details.values.push(key);
                 }else if(key.type=="For"){
                     content.querySelector(".achrplcelem").replaceWith(key.fragment);
-                    key.mount();
                     key.setParent(effect)
                 }
                 else{
@@ -134,7 +144,9 @@ export function html(data,...keys){
 
     content.firstElementChild.setAttribute("anc-key",details.key);
 
-    return {content,details,unmount,effect,signal,mount};
+    
+
+    return {content,details,unmount,effect,signal,mount,trigger};
 }
 
 
@@ -172,6 +184,13 @@ Object.prototype.onSignal=function(a){
     switch(typeof a){
         case "function":this.details.onSignal=a;break;
         case undefined:default:this.details.onSignal=null;break;
+    }
+}
+
+Object.prototype.onTrigger=function(e){
+    switch(typeof e){
+        case "function":this.details.onTrigger=e;break;
+        case undefined:default:this.details.onTrigger=null;break;
     }
 }
 

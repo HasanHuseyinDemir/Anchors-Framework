@@ -1,6 +1,6 @@
 export const value=(arg)=>{
     const object={
-        oldValue:arg||"",
+        oldValue:arg==undefined?"":typeof arg=="number"?arg:""||arg,
         nodeList:[],
         onCallback:null,
         onTrigger:null,
