@@ -212,15 +212,15 @@ export function html(data,...keys){
                     
                     case "model":
                         //setter
-                        if(e.type=="text"){
+                        if(e.type=="text"||e.type=="textarea"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.value;
-                                update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }else if(e.type=="checkbox"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.checked;
-                                update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }
                         document.addEventListener("updated",function(){

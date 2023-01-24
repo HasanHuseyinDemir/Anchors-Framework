@@ -214,12 +214,14 @@ export function html(data,...keys){
                         if(e.type=="text"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.value;
-                                update();
+                                //update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }else if(e.type=="checkbox"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.checked;
                                 update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }
                         document.addEventListener("updated",function(){
