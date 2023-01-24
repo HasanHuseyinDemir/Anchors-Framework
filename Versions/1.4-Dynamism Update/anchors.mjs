@@ -26,6 +26,7 @@ export function html(data,...keys){
     let page=document.createElement("template");
     let str="";
     elements.forEach((item)=>{typeof item=="string"?str+=item:str+=randomComment;})
+    str=str.replace("<>","<div>").replace("</>","</div>");
     str=str.replaceAll("[-","<span delete='").replaceAll("-]","'></span>")
     str=str.replaceAll("[[","mark='").replaceAll("]]","'")
     str=str.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>")
@@ -731,8 +732,5 @@ const debounce = (func, delayGetter) => {
 const ev=(arg,pref)=>{
 return new Function(`return  ${pref?pref+".":""}${arg}`)()
 }
-
-//kill eval
-window.eval="";
 
 window.prototyped=true;

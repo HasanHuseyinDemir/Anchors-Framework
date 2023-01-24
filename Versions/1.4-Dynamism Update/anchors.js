@@ -26,6 +26,7 @@ function html(data,...keys){
     let page=document.createElement("template");
     let str="";
     elements.forEach((item)=>{typeof item=="string"?str+=item:str+=randomComment;})
+    str=str.replaceAll("<>","<div>").replaceAll("</>","</div>");
     str=str.replaceAll("[-","<span delete='").replaceAll("-]","'></span>")
     str=str.replaceAll("[[","mark='").replaceAll("]]","'")
     str=str.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>")
@@ -658,6 +659,7 @@ else if (typeof page=="function"){
 }
 })}
 
+//[[mark]]
 Object.prototype.getMark=function(mark){
     if(this.content){
         var selected=this.content.selectElement(`[mark='${mark}']`)
@@ -731,8 +733,5 @@ const debounce = (func, delayGetter) => {
 const ev=(arg,pref)=>{
 return new Function(`return  ${pref?pref+".":""}${arg}`)()
 }
-
-//kill eval
-window.eval="";
 
 window.prototyped=true;
