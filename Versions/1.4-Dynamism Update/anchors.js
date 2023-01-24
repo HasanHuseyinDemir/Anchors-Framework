@@ -1,4 +1,4 @@
-export function html(data,...keys){
+function html(data,...keys){
     const details={
         nodeLists:[],
         onEffect:null,
@@ -455,7 +455,7 @@ Object.prototype.component=function(qs,component){
 
 //Html element creator
 //c("element",{attributes:"attribute"},childs of element)
-export function c(arg,attribute,...childs) {
+function c(arg,attribute,...childs) {
     let el=document.createElement(arg);
     
     if(attribute){
@@ -473,7 +473,7 @@ export function c(arg,attribute,...childs) {
     return el;
 }
 
-export const HTML=(str)=>{
+const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
     str.forEach((e)=>string+=e)
@@ -484,7 +484,7 @@ export const HTML=(str)=>{
 }
 
 
-export const simpleFor=function(a,t){
+const simpleFor=function(a,t){
     let array=a;
     let template=t;
     let fragment=document.createElement("div");
@@ -501,7 +501,7 @@ export const simpleFor=function(a,t){
     return {type,fragment,update}
 }
 
-export const value=(arg)=>{
+const value=(arg)=>{
     const object={
         oldValue:arg==undefined?"":typeof arg=="number"?arg:""||arg,
         nodeList:[],
