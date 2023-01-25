@@ -1,7 +1,7 @@
 export const store={
     selected:{
         src:"",
-        title:"Not Selected",
+        title:"Please click card",
         color:"",
     }
 }

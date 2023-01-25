@@ -7,6 +7,7 @@ const Page=()=>{
     let Main=html/*html*/`
     <>
 
+    [- Components -]
     <Show-Case/>
     <Container-Component/>
     <Style-Component/>
@@ -17,6 +18,7 @@ const Page=()=>{
     Main.component("show-case",ShowCase)
     Main.component("container-component",Container)
     Main.component("style-component",Style)
+
 
 
     return Main
