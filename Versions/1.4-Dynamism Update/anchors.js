@@ -26,7 +26,7 @@ function html(data,...keys){
     let page=document.createElement("template");
     let str="";
     elements.forEach((item)=>{typeof item=="string"?str+=item:str+=randomComment;})
-    str=str.replaceAll("<>","<div>").replaceAll("</>","</div>");
+    str=str.replace("<>","<div>").replace("</>","</div>");
     str=str.replaceAll("[-","<span delete='").replaceAll("-]","'></span>")
     str=str.replaceAll("[[","mark='").replaceAll("]]","'")
     str=str.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>")
@@ -215,16 +215,20 @@ function html(data,...keys){
                         if(e.type=="text"||e.type=="textarea"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.value;
-                                update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }else if(e.type=="checkbox"){
                             e["oninput"]=()=>{
                                 datalist[getted_attr]=e.checked;
-                                update();
+                                document.dispatchEvent(updatedEvent);
                             }
                         }
                         document.addEventListener("updated",function(){
-                            e.value=datalist[getted_attr]
+                            if(e.type=="text"||e.type=="textarea"||e.type=="checkbox"){
+                                e.value=datalist[getted_attr];
+                            }else{
+                                e.textContent=datalist[getted_attr];
+                            }
                         })
                     break;
                     
@@ -335,11 +339,15 @@ function html(data,...keys){
     }}
 
     const setRate=function(arg){
+        function error(){
+            console.warn("Anchors SetRate Error:\nRate Must Be A 'Whole Number 0,1,2....'")
+        }
         if(typeof arg=="number"||typeof arg=="string"){
             if(arg>-1){
-                details.rate=parseInt(arg);
+                let parsed=parseInt(arg)
+                typeof parsed!="number"?error():details.rate=parsed;
             }else{
-                console.warn("Anchors SetRate Error:\nRate Must Be A 'Whole Number 0,1,2....'")
+                error()
             }
         }
     }
@@ -659,7 +667,6 @@ else if (typeof page=="function"){
 }
 })}
 
-//[[mark]]
 Object.prototype.getMark=function(mark){
     if(this.content){
         var selected=this.content.selectElement(`[mark='${mark}']`)

@@ -224,7 +224,11 @@ export function html(data,...keys){
                             }
                         }
                         document.addEventListener("updated",function(){
-                            e.value=datalist[getted_attr]
+                            if(e.type=="text"||e.type=="textarea"||e.type=="checkbox"){
+                                e.value=datalist[getted_attr];
+                            }else{
+                                e.textContent=datalist[getted_attr];
+                            }
                         })
                     break;
                     
@@ -335,11 +339,15 @@ export function html(data,...keys){
     }}
 
     const setRate=function(arg){
+        function error(){
+            console.warn("Anchors SetRate Error:\nRate Must Be A 'Whole Number 0,1,2....'")
+        }
         if(typeof arg=="number"||typeof arg=="string"){
             if(arg>-1){
-                details.rate=parseInt(arg);
+                let parsed=parseInt(arg)
+                typeof parsed!="number"?error():details.rate=parsed;
             }else{
-                console.warn("Anchors SetRate Error:\nRate Must Be A 'Whole Number 0,1,2....'")
+                error()
             }
         }
     }
