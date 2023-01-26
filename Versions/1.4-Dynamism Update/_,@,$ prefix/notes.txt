@@ -1,0 +1,3 @@
+@ for local effect
+$ for global effect
+_ for not effect

@@ -1,0 +1,17 @@
+<div id="app">
+    <p>Hello</p>
+</div>
+
+<script>
+    //Event
+    let Ev=new Event("update");
+    let O=new Event("update");
+
+    //Dıştan içe capture gerekiyor
+
+    document.querySelector("#app").addEventListener("update",()=>console.log("İçeri"),{capture:true})
+    document.addEventListener("update",()=>console.log("Dışarı"))
+
+    document.dispatchEvent(O)
+
+</script>
