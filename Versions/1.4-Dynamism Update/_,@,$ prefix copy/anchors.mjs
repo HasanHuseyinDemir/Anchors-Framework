@@ -1,5 +1,6 @@
 //Update
-const updatedEvent=new Event("updated")
+const updatedEvent=new Event("updated");
+let mountEv=new Event("mount");
 
 const Anchor={
     replacer:function(string){
@@ -9,6 +10,7 @@ const Anchor={
         str=str.replaceAll("[[","mark='").replaceAll("]]","'")
         str=str.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>")
         str=str.replaceAll("{{","<span state='").replaceAll("}}","'></span>")
+        str=str.replaceAll("{(","<span tnode='").replaceAll(")}","'></span>")
         str=this.namer(str);
         return str
     },
@@ -70,7 +72,6 @@ export function html(data,...keys){
     //INDEV
     const analytics={
         byteOfPage:null,
-        time:new Date(),
     }
     /////////////////////////////////////////////////////////////////////
     let elements=[];
@@ -87,6 +88,7 @@ export function html(data,...keys){
     analytics.byteOfPage=str.length*2;
 
     page.innerHTML=str;
+    
     let content=page.content;
     content.querySelectorAll("[delete]").forEach((el)=>{el.remove()});
     //garbage
@@ -106,8 +108,8 @@ export function html(data,...keys){
                     content.dispatchEvent(updatedEvent)
                 }
             })
-            signal?details.onEffect(arg):""
-            signal?analytics.updates.effectCount+=1:""
+            signal?details.onEffect(arg):"";
+            signal?analytics.updates.effectCount+=1:"";
             if(details.childComponents.length>0&&arg!="local"){
                     details.childComponents.forEach((e)=>{    
                         if(e.details.memo==false){
@@ -130,6 +132,7 @@ export function html(data,...keys){
         if(details.mounted==false){
             details.mounted=true;
             details.onMount?details.onMount():"";
+            document.dispatchEvent(mountEv);
         }
     }
 
@@ -150,7 +153,6 @@ export function html(data,...keys){
                     if(signal==false){
                         key.parentList.push({effect,i:details.key})       
                     }
-                    //details.values.push(key);
                 }else if(key.type=="For"){
                     content.querySelector(".achrplcelem").replaceWith(key.fragment);
                     key.setParent(effect)
@@ -161,6 +163,7 @@ export function html(data,...keys){
                         content.querySelector(".achrplcelem").replaceWith(selected.content);
                         details.childComponents.push(selected);
                         selected.mount();
+                        document.dispatchEvent(mountEv,selected);
                     }else{
                         content.querySelector(".achrplcelem").replaceWith(key);
                     }
@@ -174,8 +177,11 @@ export function html(data,...keys){
         if(typeof selected=="object"){
             if(selected.content){
                 content.querySelector(".achrplcelem").replaceWith(selected.content);
-                details.childComponents.push(selected);
-                selected.mount();
+                if(selected["mount"]){
+                    details.childComponents.push(selected);
+                    selected.mount();
+                }
+                document.dispatchEvent(mountEv);
             }else{
                 content.querySelector(".achrplcelem").replaceWith(selected);
             }
@@ -371,6 +377,26 @@ export function html(data,...keys){
 
     }
 
+    const [$,$$,_]=[{},{},{}]
+
+    content.querySelectorAll("[anchor]").forEach((e)=>{
+        let anchorName=e.getAttribute("anchor");
+        $[anchorName]=e
+        e.removeAttribute("anchor")
+    })
+    content.querySelectorAll("[mark]").forEach((e)=>{
+        let markName=e.getAttribute("mark");
+        _[markName]=e
+        e.removeAttribute("mark")
+    })
+    content.querySelectorAll("[tnode]").forEach((e)=>{
+        let nodeName=e.getAttribute("tnode");
+        console.log(nodeName);
+        let textNode=document.createTextNode("");
+        e.replaceWith(textNode)
+        $$[nodeName]=e
+    })
+
     let unmount={
         callback:null,
         remove:()=>{
@@ -395,15 +421,30 @@ export function html(data,...keys){
     update();
     document.addEventListener("updated",()=>update());
     content.addEventListener("updated",()=>update());
-    document.dispatchEvent(updatedEvent);
     content.firstElementChild.classList.add(details.key);
 
-    return {content,datalist,details,unmount,effect,signal,mount,update,localUpdate,states,analytics};
+    document.dispatchEvent(updatedEvent);
+    return {content,datalist,details,unmount,effect,signal,mount,update,localUpdate,states,analytics,$,_,$$};
 }
 
 export const GlobalUpdate=()=>{
     document.dispatchEvent(updatedEvent);
 }
+
+export const OnGlobalUpdate=(func)=>{
+    document.addEventListener("updated",func)
+}
+
+Object.prototype.slot=function(arg){
+    if(arg){
+        this.content.querySelector("slot").replaceWith(arg)
+    }else{
+        console.warn("Anchors Slot Error:\nSlot is not defined");
+        this.content.querySelectorAll("slot").forEach((e)=>e.remove());
+    }
+
+}
+
 
 Object.prototype.setRate=function(arg){
         function error(){
@@ -485,11 +526,12 @@ Object.prototype.component=function(qs,component){
         childrens.forEach((i)=>{
             slotfragment.append(i)
         })
-        console.log()
         let selected=component(props,(childrens.length>0?slotfragment:undefined))
         e.replaceWith(selected.content);
-        this.details.childComponents.push(selected);
-        selected.mount();
+        if(this.type!=="HTML"&&selected.mount){
+            this.details.childComponents.push(selected);
+            selected.mount();
+        }
     })
 }
 
@@ -516,11 +558,34 @@ export function c(arg,attribute,...childs) {
 export const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
+    let type="HTML";
     str.forEach((e)=>string+=e)
-    string=string.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>");
-    string=string.replaceAll("[[","mark='").replaceAll("]]","'")
+    string=Anchor.replacer(string);
+    string=Anchor.namer(string);
     template.innerHTML=string;
-    return template.content;
+
+    const [$,$$,_]=[{},{},{}]
+
+    const content=template.content;
+    content.querySelectorAll("[anchor]").forEach((e)=>{
+        let anchorName=e.getAttribute("anchor");
+        $[anchorName]=e
+        e.removeAttribute("anchor")
+    })
+    content.querySelectorAll("[mark]").forEach((e)=>{
+        let markName=e.getAttribute("mark");
+        _[markName]=e
+        e.removeAttribute("mark")
+    })
+    content.querySelectorAll("[tnode]").forEach((e)=>{
+        let nodeName=e.getAttribute("tnode");
+        let textNode=document.createTextNode("");
+        e.replaceWith(textNode)
+        $$[nodeName]=textNode
+    })
+    content.querySelectorAll("[delete]").forEach((el)=>{el.remove()});
+
+    return {content,$,_,$$,type};
 }
 
 
@@ -591,7 +656,7 @@ Object.prototype.selectElement=function(val){
 
 Object.defineProperty(Object.prototype,"text",{
 set:function(textValue){
-    if(Array.isArray(this)&&typeof this=="object"||this.length>1){
+    if(Array.isArray(this)&&typeof this=="object"&&this.length>1){
         this.forEach((element)=>{      
             textValue=textValue.toString();
                 if(element.nodeType==3){
@@ -599,7 +664,7 @@ set:function(textValue){
                 }else{
                     element.textContent!=textValue?element.textContent=textValue:""
                 }
-            })
+        })
     }else{
         textValue=textValue.toString();
         if(this.nodeType==3){
@@ -620,43 +685,7 @@ if(this){
     }else{
         return this.textContent
     }
-}
-}
-
-})
-
-Object.prototype.getAnchor=function(anchorName){
-    if(this.content){
-        var data=this.content.querySelectorAll(`[anchor='${anchorName}']`);
-    }else{
-        //For PlainHTML
-        var data=this.querySelectorAll(`[anchor='${anchorName}']`);
-    }
-
-    data.forEach((item)=>{
-        item.removeAttribute("anchor");
-    })
-
-    return data;
-}
-
-Object.prototype.getNodes=function(anchorName){
-if(this.content){
-    var data=this.content.querySelectorAll(`[anchor='${anchorName}']`);
-}else{
-    //For PlainHTML
-    var data=this.querySelectorAll(`[anchor='${anchorName}']`);
-}
-
-let nodes=[];
-data.forEach((item)=>{
-    let node=document.createTextNode("");
-    item.replaceWith(node);
-    nodes.push(node);
-})
-
-return nodes;
-}
+}}})
 
 Object.prototype.render=function(page,args){
     if(typeof page=="object"){
@@ -692,37 +721,13 @@ else if (typeof page=="function"){
     }
     let data=page(args)
     item.append(data.content)
-    data.details.target=this;
-    core.registeredRenders.push({target:this,data})
-    data.mount();
+    if(data.details){
+        data.details.target=this;
+        core.registeredRenders.push({target:this,data})
+        data.mount();
+    }
 }
 })}
-
-Object.prototype.getMark=function(mark){
-    if(this.content){
-        var selected=this.content.selectElement(`[mark='${mark}']`)
-    }else{
-        var selected=this.selectElement(`[mark='${mark}']`)
-    }
-
-    if(selected.length>1){
-        selected.forEach((e)=>{
-            e.removeAttribute("mark");
-        })
-    }else{
-        selected.removeAttribute("mark");
-    }
-
-    return selected;
-}
-
-//boilerplate of attribute setting
-let a=(attribute,object,event)=>{        
-if(Array.isArray(object)||object.length>1){
-object.forEach((item)=>{item[attribute]=event})
-}else{
-object[attribute]=event
-}}
 
 
 //on events for multiple elements
@@ -745,16 +750,9 @@ Object.defineProperties(Object.prototype,{
 "onKeyPress":{set(Event){a("onkeypress",this,Event)}},
 
 "onLoad":{set(Event){a("onload",this,Event)}},
-
 })
 
-Object.prototype.setAttributes=function(attribute,value){
-    if(Array.isArray(this)||this.length>1){
-        this.forEach((item)=>{item.setAttribute(attribute,value)})
-    }else{
-        this.setAttribute(attribute,value)
-    }
-}
+
 }
 
 const debounce = (func, delayGetter) => {

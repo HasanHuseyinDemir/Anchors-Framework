@@ -1,0 +1,84 @@
+<div id="app"></div>
+
+<script type="module">
+    import {HTML,html,GlobalUpdate,OnGlobalUpdate} from "../anchors.mjs"
+
+    const Nested2=(props,slot)=>{
+        let Page=HTML/*html*/`
+        <div>
+            <p>[{Text}]-</p>
+            <button [[updater]]>GlobalUpdate</button>
+            {(Hour)}:{(Minute)}:{(Second)}
+            [-Slot-]
+            <p>Slot</p>
+            <slot/>
+        </div>
+        `
+
+        Page.slot(slot)
+        Page.$["Text"].text=props.text;
+ 
+        const tick=()=>{
+            let date=new Date();
+            Page.$$["Hour"].text=date.getHours();
+            Page.$$["Minute"].text=date.getMinutes();
+            Page.$$["Second"].text=date.getSeconds();
+        }
+
+
+        tick();
+ 
+        Page._["updater"].onclick=()=>GlobalUpdate();
+        OnGlobalUpdate(tick)
+        return Page
+    }
+
+    const NestedComponent=()=>{
+        let Main=html`
+        <div>
+            Nested Component {{x}}
+            <button @onclick="increase">Increase {{x}}</button>
+            <button $onclick="increase">Increase Global {{x}}</button>
+            <Nested-Component2 Text="This is Prop">
+                <p>Hello World this is a Component Slot</p>
+            </Nested-Component2>
+        </div>`
+        Main.component("nested-component2",Nested2)
+
+        Main.states({
+            x:0,
+            increase(){
+                this.x++
+                console.log(this.x)
+            }
+        })
+
+        return Main
+    }
+
+    //MainPage
+    const MainPage=()=>{
+        let Main=HTML`
+        <>
+            <h1>Anchor Test</h1>
+            
+            <Nested/>
+
+            <p>[{Welcome Text}]</p>
+            <button [[Hello]]>Hello Button</button>
+        </>
+        `
+
+        //_ Mark Selector
+        Main._["Hello"].onclick=()=>{
+            console.log("Hello")
+        }
+        //$ Anchor Selector
+        Main.$["Welcome Text"].text="Welcome !"
+
+        Main.component("nested",NestedComponent)
+
+        return Main
+        };
+        document.querySelectorAll("#app").render(MainPage)
+</script>
