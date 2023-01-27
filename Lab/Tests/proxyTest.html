@@ -1,0 +1,44 @@
+<script src="./reactivity.js"></script>
+<button onclick="increase()">Increase</button>
+<button onclick="decrease()">Decrease</button>
+<input onblur="set(this)">
+
+<p value="number"></p>
+
+<ul id="app"></ul>
+
+
+<script>
+let val=document.querySelector("[value]");
+
+let number=reactive({
+    hello:"thank",
+    world:"world"
+});
+console.log(number)
+//number.add(val);
+
+let vals=new dynamicAttribute("value",val,number)
+//number.add(vals);
+
+function increase(){
+    number.value++
+    //log(number.value)
+}
+function decrease(){
+    number.value--
+}
+function set(arg){
+    number.value=arg.value
+}
+
+
+
+</script>
+
+<style>
+    body{
+        background: black;
+        color:white
+    }
+</style>
