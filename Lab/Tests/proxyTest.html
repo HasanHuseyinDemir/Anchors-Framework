@@ -1,38 +1,39 @@
 <script src="./reactivity.js"></script>
-<button onclick="increase()">Increase</button>
-<button onclick="decrease()">Decrease</button>
-<input onblur="set(this)">
+<div id="app">
 
-<p value="number"></p>
+<p>x = <span value="x"></span></p>
+<p>y = <span value="y"></span></p>
+<p>total = <span value="total"></span></p>
+<input type="number" oninput="x(this.value)">
+<input type="number" oninput="y(this.value)">
+<button onclick="x(x()+1)">Increase X</button>
+<button onclick="y(y()+1)">Increase Y</button>
 
-<ul id="app"></ul>
-
+</div>
 
 <script>
-let val=document.querySelector("[value]");
+let xEl=document.querySelector("[value='x']")
+let yEl=document.querySelector("[value='y']")
+let tEl=document.querySelector("[value='total']")
 
-let number=reactive({
-    hello:"thank",
-    world:"world"
-});
-console.log(number)
-//number.add(val);
+let data=reactive({
+    x:0,
+    y:2,
+    total:0,
+    wTotal(){
+        data.total.value=parseInt(data.x.value)+parseInt(data.y.value) 
+    },
+    hello:{
+        world:"world",
+    }
 
-let vals=new dynamicAttribute("value",val,number)
-//number.add(vals);
+})
 
-function increase(){
-    number.value++
-    //log(number.value)
-}
-function decrease(){
-    number.value--
-}
-function set(arg){
-    number.value=arg.value
-}
-
-
+const x=rState(data.x)
+const y=rState(data.y)
+data.x.add(xEl)
+data.y.add(yEl)
+data.total.add(tEl)
 
 </script>
 

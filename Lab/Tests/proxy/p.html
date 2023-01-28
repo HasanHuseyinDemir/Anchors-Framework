@@ -1,0 +1,53 @@
+<script>
+let data={price:12,quantity:2}
+let target,total,saleprice
+
+class Dep{
+    constructor() {
+        this.subscribers=[]
+    }
+    depend(){
+        if(target,!this.subscribers.includes(target)){
+            this.subscribers.push(target)
+        }
+    }
+    notify(){
+        this.subscribers.forEach(e=>typeof e=="function"?e():"")
+    }
+}
+
+Object.keys(data).forEach(key=>{
+    let internalValue=data[key];
+    const dep=new Dep();
+    Object.defineProperty(data,key,{
+        get(){
+            dep.depend();
+            return internalValue
+        },
+        set(newVal){
+            if(internalValue!=newVal){
+                internalValue=newVal
+                dep.notify();
+            }
+
+        }
+    })
+})
+
+function watcher(myFunc){
+    target=myFunc
+    target()
+    target=null
+}
+
+watcher(()=>{
+    total=data.price*data.quantity
+    console.log(total,"Total")
+})
+
+watcher(()=>{
+    saleprice=data.price*0.9
+})
+
+console.log(saleprice)
+</script>
