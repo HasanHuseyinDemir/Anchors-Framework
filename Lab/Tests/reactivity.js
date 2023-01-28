@@ -32,10 +32,12 @@ const reactive=function(arg){
     return{
         beforeValue:arg,
         deps:[],
+        watchlist:[],
         add(arg){
             this.deps.push(arg);
             wGetter().effect();
             this.update();
+            this.watchlist.forEach((e)=>e())
         },
         update(){
             this.deps.forEach((e)=>{
@@ -50,7 +52,7 @@ const reactive=function(arg){
                                 }
                             }
                             switch(e.type){
-                                case "dynamicAttribute":e.update();break;
+                                case "dynamic":e.update();break;
                             }
                         ;break;
                     }
@@ -64,7 +66,9 @@ const reactive=function(arg){
             if(this.beforeValue!==arg){
                 this.beforeValue=arg;
                 wGetter().effect();
+                
                 this.update();
+                this.watchlist.forEach((e)=>e())
             }
     }
     }
@@ -78,6 +82,7 @@ const reactive=function(arg){
             let nestedObject={
             beforeValue:arg[e],
             deps:[],
+            watchlist:[],
             update(){
                 this.deps.forEach((e)=>{
                     if(e){
@@ -88,9 +93,10 @@ const reactive=function(arg){
                                         case 3:e.nodeValue=this.beforeValue;break;
                                         case 1:e.textContent=this.beforeValue;break;
                                         }
-                                    }
-                                    switch(e.type){
-                                        case "dynamicAttribute":e.update();break;
+                                    }else{
+                                        switch(e.type){
+                                            case "dynamic":e.update();break;
+                                        }
                                     }
                                 ;break;
                             }
@@ -99,22 +105,24 @@ const reactive=function(arg){
                 },
                 add(arg){
                     this.deps.push(arg); 
-                    wGetter().effect(); 
+                    wGetter().effect();
                     this.update();
+                    this.watchlist.forEach((e)=>e())
                 },
                 get value(){
                     return this.beforeValue
                 },
                 set value(arg){
-                    if(this.beforeValue!=arg){
+                    if(this.beforeValue!==arg){
                         this.beforeValue=arg;
                         wGetter().effect();
                         this.update();
+                        this.watchlist.forEach((e)=>e())
                     }
                 }
             }
             object[`${e}`]=nestedObject;
-            }else{// if(typeof arg[e]=="object")
+            }else{
                 //prevents replacing watchers
                 this.rendered=true;
                 object[`${e}`]=reactive(arg[e]) 
@@ -123,9 +131,22 @@ const reactive=function(arg){
         
         return object
     }else if(typeof arg=="function"){
-        wGetter().subscribe(arg);
+        //watchers
+        if(arg.name.slice(0,8)=="watcher_"){
+            wGetter().subscribe(arg);
+        }
+        
         return arg
     }
+}
+
+const watchers=function(arg){
+    Object.keys(arg).forEach((e)=>{
+        let callback=arg[e].callback
+        arg[e].dependencies.forEach((e)=>{
+            e.watchlist.push(callback)
+        })
+    })
 }
 
 class dynamicAttribute{
@@ -135,13 +156,24 @@ class dynamicAttribute{
         this.getter=getter;
         this.before="";
     }
-    type="dynamicAttribute"
+    type="dynamic"
     update(){
         let before=this.before
         let newValue=this.element.getAttribute(this.attribute)
-        if(before!=newValue){
+        if(before!==newValue){
             this.element.setAttribute(this.attribute,this.getter.value)
             this.before=newValue;
         }
+    }
+}
+
+class dynamicModel{
+    constructor(element,getter) {
+        this.element=element
+        this.getter=getter
+    }
+    type="dynamic"
+    update(){
+        console.log(this.element.nodeType)
     }
 }

@@ -4,9 +4,9 @@
 <p>x = <span value="x"></span></p>
 <p>y = <span value="y"></span></p>
 <p>total = <span value="total"></span></p>
-<input type="number" oninput="x(this.value)">
+<input model type="number">
 <input type="number" oninput="y(this.value)">
-<button onclick="x(x()+1)">Increase X</button>
+<button onclick="data.x.value++">Increase X</button>
 <button onclick="y(y()+1)">Increase Y</button>
 
 </div>
@@ -15,22 +15,36 @@
 let xEl=document.querySelector("[value='x']")
 let yEl=document.querySelector("[value='y']")
 let tEl=document.querySelector("[value='total']")
+let model=document.querySelector("[model]")
 
-let data=reactive({
+const data=reactive({
     x:0,
     y:2,
     total:0,
-    wTotal(){
-        data.total.value=parseInt(data.x.value)+parseInt(data.y.value) 
-    },
-    hello:{
-        world:"world",
-    }
-
 })
+
+watchers({
+    parser:{
+        callback(){
+            data.x.value=parseInt(data.x.value)
+            data.y.value=parseInt(data.y.value)
+        },
+        dependencies:[data.x,data.y]
+    },
+    total:{
+        callback(){
+            data.total.value=data.x.value+data.y.value
+        },
+        dependencies:[data.x,data.y]
+    }
+})
+
+let modelize=new dynamicModel(model,data.x)
+data.x.add(modelize)
 
 const x=rState(data.x)
 const y=rState(data.y)
+
 data.x.add(xEl)
 data.y.add(yEl)
 data.total.add(tEl)
