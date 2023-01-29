@@ -1,0 +1,47 @@
+<script src="./reactivity.js"></script>
+
+<div>
+    <!-- Hour : Minute : Second -->
+    <span id="hour"></span>:<span id="minute"></span>:<span id="second"></span>
+</div>
+
+<script>
+    const qs=(arg)=>{
+        return document.querySelector(arg)
+    }
+
+    {
+    let date=new Date();
+
+    let clock=reactive({
+        hour:date.getHours(),
+        minute:date.getMinutes(),
+        second:date.getSeconds(),
+        watcher_parser(){
+            let date=new Date();
+            if(clock.hour.value<10&&typeof clock.hour.value=="number"){
+                    clock.hour.value="0"+clock.hour.value
+            }
+            if(clock.minute.value<10&&typeof clock.minute.value=="number"){
+                    clock.minute.value="0"+clock.minute.value
+            }
+            if(clock.second.value<10&&typeof clock.second.value=="number"){
+                    clock.second.value="0"+clock.second.value
+            }
+        }
+    })
+
+    function tick(){
+        let date=new Date();
+        clock.hour.value=date.getHours();
+        clock.minute.value=date.getMinutes();
+        clock.second.value=date.getSeconds();
+    }
+
+    setInterval(tick,1000)
+
+    clock.hour.add(qs("#hour"))
+    clock.minute.add(qs("#minute"))
+    clock.second.add(qs("#second"))
+    }
+</script>

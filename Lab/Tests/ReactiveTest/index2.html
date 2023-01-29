@@ -1,5 +1,5 @@
 <script src="../reactivity.js"></script>
-<h1 align="center">Profit Calculator #watchlist</h1>
+<h1 align="center">Profit Calculator #watcher</h1>
 <div class="container" align="center">
 <p>Price : $<span id="price"></span></p>
 <p>Quantity : *<span id="quantity"></span></p>
@@ -35,42 +35,26 @@
 
 
 <script>
+    //ElementGetter
+    const qs=(arg)=>{
+        return document.getElementById(arg)
+    }
 
-    let rendered={
-        total:0,
-        tax:0,
-        profit:0,
-        highness:0
-    }
-    const total=()=>{
-        return rendered["total"]+rendered["tax"]+rendered["profit"]+rendered["highness"]
-    }
+    window.rendered=0
 
     const product=reactive({
         price:50,
         quantity:10,
-        taxRatio:5,
+        taxRatio:12,
         tax:0,
         profit:0,
         total:"",
-        highness:""
-    })
-
-    watchers({
-        totalCount:{
-            callback(){product.total.value=product.price.value*product.quantity.value;console.log("Total",product.total.value);rendered.total++},
-            dependencies:[product.price,product.quantity]
-        },
-        tax:{
-            callback(){product.tax.value=(product.total.value/100)*product.taxRatio.value;rendered.tax++}, 
-            dependencies:[product.total,product.taxRatio]
-        },
-        profit:{
-            callback(){product.profit.value=product.total.value-product.tax.value;rendered.profit++},
-            dependencies:[product.total,product.tax]
-        },
-        highness:{
-            callback(){
+        highness:"",
+        watchers:{
+            watcher_e(){
+                product.total.value=product.price.value*product.quantity.value
+                product.tax.value=(product.total.value/100)*product.taxRatio.value
+                product.profit.value=product.total.value-product.tax.value
                 if(product.taxRatio.value<10){
                     product.highness.value="low"
                 }else if(product.taxRatio.value<50){
@@ -78,16 +62,12 @@
                 }else{
                     product.highness.value="high"
                 }
-                rendered.highness++
-            },
-            dependencies:[product.taxRatio]
+                rendered++;
+                console.log("Total",product.total.value)
+            }
+            
         }
     })
-
-    //ElementGetter
-    const qs=(arg)=>{
-        return document.getElementById(arg)
-    }
 
     product.price.add(qs("price"))
     product.quantity.add(qs("quantity"))

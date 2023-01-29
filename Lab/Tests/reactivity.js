@@ -36,6 +36,7 @@ const reactive=function(arg){
         beforeValue:arg,
         deps:[],
         watchlist:[],
+        callback:null,
         add(arg){
             this.deps.push(arg);
             wGetter().effect();
@@ -68,6 +69,7 @@ const reactive=function(arg){
         set value(arg){
             if(this.beforeValue!==arg){
                 this.beforeValue=arg;
+                typeof this.callback=="function"?this.callback():""
                 wGetter().effect();
                 this.update();
                 this.watchlist.forEach((e)=>e())
@@ -86,6 +88,7 @@ const reactive=function(arg){
             beforeValue:arg[e],
             deps:[],
             watchlist:[],
+            callback:null,
             update(){
                 this.deps.forEach((e)=>{
                     if(e){
@@ -119,6 +122,7 @@ const reactive=function(arg){
                     if(this.beforeValue!==arg){
                         this.beforeValue=arg;
                         wGetter().effect();
+                        typeof this.callback=="function"?this.callback():""
                         this.update();
                         this.watchlist.forEach((e)=>e())
                     }
@@ -162,11 +166,11 @@ class dynamicAttribute{
     type="dynamic"
     update(){
         let before=this.before
-        let newValue=this.element.getAttribute(this.attribute)
-        //if(before!==newValue){
+        let newValue=this.getter.value
+        if(before!==newValue){
             this.element.setAttribute(this.attribute,this.getter.value)
             this.before=newValue;
-        //}
+        }
     }
 }
 

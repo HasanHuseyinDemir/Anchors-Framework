@@ -2,8 +2,6 @@ import { html,HTML } from "../../anchors.mjs"
 
 let frag=new DocumentFragment();
 for(var i=0;i<=200;i++){
-    console.log("Hello")
-    //text.append(html`<component-test ${i%2==0?"local='true'":""}>Hello world ${i}</component-test>`.content) 
     let Main=html`
     <button @onmouseover="increase" @class="highness">{{x}}</button>
     `
@@ -19,9 +17,7 @@ for(var i=0;i<=200;i++){
                 Main.unMount();
             }
         }
-    
     })
-    
     frag.append(Main.content)
 }
 let component=()=>html`${frag}`

@@ -193,13 +193,15 @@ function html(data,...keys){
     }[elements,keyList,page]=[null,null,null]})
 
     const datalist={};
+
     const states=(list)=>{
+    
+        
         let keys=Object.keys(list)
         keys.forEach((key)=>{
             datalist[key]=list[key]
-    })
-
-        //{{getter}}
+        },
+        
         content.querySelectorAll("[state]").forEach((e)=>{
             //requested value
             let getted_attr=e.getAttribute("state");
@@ -232,8 +234,7 @@ function html(data,...keys){
                     details.nodeLists.push({node:nodeF,func:getterF,before:result});    
                 ;break
             };
-        })
-
+        }),
         content.querySelectorAll("*").forEach((e)=>{
             let attrnames=e.getAttributeNames()
             attrnames.forEach((i)=>{
@@ -374,6 +375,9 @@ function html(data,...keys){
                 }
             })
         })
+    )
+
+
 
     }
 

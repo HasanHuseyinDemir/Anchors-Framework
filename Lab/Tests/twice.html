@@ -1,0 +1,36 @@
+<script src="reactivity.js"></script>
+
+<h1 id="number">Number : </h1>
+<h1 id="twice">Twice : </h1>
+<button onclick="data.newNumber()">new Number</button>
+
+<script>
+const data=reactive({
+    number:25,
+    twice:0,
+    newNumber(){
+        data.number.value=Math.round(Math.random()*2)
+    },
+    watcher_1(){
+        data.twice.value=data.number.value*2
+    }
+})
+
+
+console.log(Math.random())
+console.log(Math.random())
+
+const newNode=(target)=>{
+    let node=document.createTextNode("")
+    document.querySelector(target).append(node)
+    return node
+}
+
+let numNode=newNode("#number")
+let twiceNode=newNode("#twice")
+
+data.number.add(numNode)
+data.twice.add(twiceNode)
+
+
+</script>
