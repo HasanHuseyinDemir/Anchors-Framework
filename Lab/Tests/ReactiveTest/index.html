@@ -1,0 +1,123 @@
+<script src="../reactivity.js"></script>
+<h1 align="center">Profit Calculator</h1>
+<div class="container" align="center">
+<p>Price : $<span id="price"></span></p>
+<p>Quantity : *<span id="quantity"></span></p>
+<p>Total : $<span id="total"></span></p>
+<p>Tax Ratio : %<span id="taxRatio"></span></p>
+<p>Tax : $<span id="tax"></span></p>
+<p>Profit : $<span id="profit"></span></p>
+</div>
+
+<div class="container" align="center">
+    <div>Price : <input id="priceInput"></div>
+    <div>Quantity : <input id="quantityInput"></div>
+    <div>Tax% : <input id="taxRatioInput"></div>
+</div>
+<br><hr><br>
+<div class="container" align="center">
+    <div>
+        <div>
+            <button onclick="product.price.value++">Price++</button>
+            <button onclick="product.price.value--">Price--</button>
+        </div>
+        <div>
+            <button onclick="product.quantity.value++">Quantity++</button>
+            <button onclick="product.quantity.value--">Quantity--</button>
+        </div>
+        <div>
+            <button onclick="product.taxRatio.value++">Tax%++</button>
+            <button onclick="product.taxRatio.value--">Tax%--</button>
+        </div>
+    </div>
+</div>
+<br><hr><br>
+
+
+<script>
+    const product=reactive({
+        price:50,
+        quantity:10,
+        taxRatio:5,
+        tax:0,
+        profit:0,
+        total:"",
+        highness:""
+    })
+
+    watchers({
+        totalCount:{
+            callback(){product.total.value=product.price.value*product.quantity.value},
+            dependencies:[product.price,product.quantity]
+        },
+        tax:{
+            callback(){product.tax.value=(product.total.value/100)*product.taxRatio.value}, 
+            dependencies:[product.total,product.taxRatio]
+        },
+        profit:{
+            callback(){product.profit.value=product.total.value-product.tax.value},
+            dependencies:[product.total,product.tax]
+        },
+        highness:{
+            callback(){
+                if(product.taxRatio.value<10){
+                    product.highness.value="low"
+                }else if(product.taxRatio.value<50){
+                    product.highness.value="moderate"
+                }else{
+                    product.highness.value="high"
+                }
+            },
+            dependencies:[product.taxRatio]
+        }
+    })
+
+    //ElementGetter
+    const qs=(arg)=>{
+        return document.getElementById(arg)
+    }
+
+    //
+    product.price.add(qs("price"))
+    product.quantity.add(qs("quantity"))
+    product.total.add(qs("total"))
+    product.taxRatio.add(qs("taxRatio"))
+    product.tax.add(qs("tax"));
+    product.profit.add(qs("profit"));
+    product.price.add(new dynamicModel(qs("priceInput"),product.price))
+    product.quantity.add(new dynamicModel(qs("quantityInput"),product.quantity))
+    product.taxRatio.add(new dynamicModel(qs("taxRatioInput"),product.taxRatio))
+
+    product.highness.add(new dynamicAttribute("class",qs("taxRatio"),product.highness))
+    product.highness.add(new dynamicAttribute("class",qs("tax"),product.highness))
+</script>
+
+<style>
+    *{
+        transition:1s ease-in-out;
+    }
+    body{
+        background-color: black;
+        color:lightgray;
+
+    }
+    .container>*{
+        min-width: 300px;
+        width: 30%;
+        display: flex;
+        justify-content: space-between;
+    }
+    button{
+        padding: 12px;
+        width: 100px;
+    }
+    .low{
+        color:lightgreen
+    }
+    .moderate{
+        color:yellow
+    }
+    .high{
+        color:red
+    }
+</style>

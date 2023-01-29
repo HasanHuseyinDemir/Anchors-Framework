@@ -5,7 +5,8 @@
 <p>y = <span value="y"></span></p>
 <p>total = <span value="total"></span></p>
 <input model type="number">
-<input type="number" oninput="y(this.value)">
+<input model2 type="number">
+<input model3>
 <button onclick="data.x.value++">Increase X</button>
 <button onclick="y(y()+1)">Increase Y</button>
 
@@ -15,35 +16,58 @@
 let xEl=document.querySelector("[value='x']")
 let yEl=document.querySelector("[value='y']")
 let tEl=document.querySelector("[value='total']")
-let model=document.querySelector("[model]")
+let model=document.querySelector("[model]");
+let model2=document.querySelector("[model2]")
+let model3=document.querySelector("[model3]")
+
+let watched=0;
+let watchlisted=0;
+
+test=()=>{
+    return {watched,watchlisted}
+}
+
 
 const data=reactive({
     x:0,
     y:2,
     total:0,
+    hello:"Hello",
 })
 
 watchers({
-    parser:{
+    xyparser:{
         callback(){
-            data.x.value=parseInt(data.x.value)
-            data.y.value=parseInt(data.y.value)
+            let parsedX=parseInt(data.x.value)
+            let parsedY=parseInt(data.y.value)
+            if(parsedX&&parsedY){
+                data.x.value=parsedX,
+                data.y.value=parsedY
+
+            }else if(!parsedX){
+                data.x.value=0
+            }else{
+                data.y.value=0
+            }
+            watchlisted++
         },
         dependencies:[data.x,data.y]
     },
     total:{
         callback(){
             data.total.value=data.x.value+data.y.value
+            watchlisted++
         },
         dependencies:[data.x,data.y]
-    }
+    }   
 })
 
-let modelize=new dynamicModel(model,data.x)
-data.x.add(modelize)
+data.x.add(new dynamicModel(model,data.x))
+data.y.add(new dynamicModel(model2,data.y))
+data.hello.add(new dynamicModel(model3,data.hello))
 
-const x=rState(data.x)
-const y=rState(data.y)
+const x=state(data.x)
+const y=state(data.y)
 
 data.x.add(xEl)
 data.y.add(yEl)

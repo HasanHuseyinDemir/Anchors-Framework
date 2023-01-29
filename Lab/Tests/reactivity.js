@@ -1,7 +1,10 @@
-const rState=(data)=>{
-    return (arg)=>{
-        if(arg){
+const state=(data)=>{
+    let before="";
+    return function(arg){
+        if(arg&&before!==arg){
             data.value=arg
+            before=arg//for console
+            return before
         }else{
             return data.value
         }
@@ -29,7 +32,7 @@ const reactive=function(arg){
     }
 
     if(typeof arg=="number"||typeof arg=="string"){
-    return{
+    const obj={
         beforeValue:arg,
         deps:[],
         watchlist:[],
@@ -66,15 +69,15 @@ const reactive=function(arg){
             if(this.beforeValue!==arg){
                 this.beforeValue=arg;
                 wGetter().effect();
-                
                 this.update();
                 this.watchlist.forEach((e)=>e())
             }
     }
     }
+    return obj
     }else if(typeof arg=="object"){
         //core
-        let object={};
+        const object={};
         
         //child
         Object.keys(arg).forEach((e)=>{
@@ -160,10 +163,10 @@ class dynamicAttribute{
     update(){
         let before=this.before
         let newValue=this.element.getAttribute(this.attribute)
-        if(before!==newValue){
+        //if(before!==newValue){
             this.element.setAttribute(this.attribute,this.getter.value)
             this.before=newValue;
-        }
+        //}
     }
 }
 
@@ -171,9 +174,17 @@ class dynamicModel{
     constructor(element,getter) {
         this.element=element
         this.getter=getter
+        this.nodeName=element.nodeName
+        //setter
+        switch(this.nodeName){
+            case "INPUT":this.element.oninput=(arg)=>{this.getter.value=arg.target.value};break;
+        }
     }
     type="dynamic"
     update(){
-        console.log(this.element.nodeType)
+            switch(this.nodeName){
+                case "INPUT":this.element.value=this.getter.value;break;
+            }
     }
+
 }
