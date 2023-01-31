@@ -137,7 +137,6 @@ export function html(data,...keys){
         if(details.mounted==false){
             details.mounted=true;
             details.onMount?details.onMount():"";
-            document.dispatchEvent(mountEv);
         }
     }
 
@@ -428,7 +427,7 @@ export const HTML=(str)=>{
     string=Anchor.namer(string);
     template.innerHTML=string;
     let content=template.content;
-    
+
     const [$,$$,_]=[{},{},{}]
     $$$_($,$$,_,content)
 
