@@ -1,26 +1,40 @@
 <div id="app"></div>
+<MainPage></MainPage>
+
 
 <script type="module">
-import {html} from "./anchors.mjs"
+import {html,HTML,RegisterComponent} from "./anchors.mjs"
 
 const page=()=>{
     let Main=html/*html*/`
-    <input @model="hello">
-    <input @model="hello">
-    {{hello}}{{hello}}{{hello}}
+    <input _model="hello">
+    <input _model="hello">
+    {{hello}} {(world)}
+    <Test/>
     `
     Main.states({
         hello:"Hello"
     })
 
     Main.createEffect(()=>{
-        console.log(Main.datalist.hello)
+        Main.$$["world"].text=Main.datalist.hello
     })
 
     return Main
 }
 
-app.render(page)
+const Test=()=>{
+    return HTML`<div>Merhaba Dünya </div>`
+}
+
+
+const Hello=()=>{
+    return HTML`<h1>Hello World</h1>`
+}
+RegisterComponent(Test)
+RegisterComponent(Hello)
+
+document.querySelectorAll("#app").render(page)
 </script>
 
 <style>

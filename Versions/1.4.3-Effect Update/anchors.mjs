@@ -64,8 +64,11 @@ document.addEventListener("mount",()=>{
 })
 
 export const RegisterComponent=(key,component)=>{
-
-    Anchor.registeredComponents.set(key,component)
+    if(typeof key=="string"){
+        Anchor.registeredComponents.set(key,component)
+    }else if(typeof key=="function"){
+        Anchor.registeredComponents.set(key.name,key)
+    }
 }
 
 export function html(data,...keys){
@@ -424,7 +427,8 @@ export const HTML=(str)=>{
     string=Anchor.replacer(string);
     string=Anchor.namer(string);
     template.innerHTML=string;
-
+    let content=template.content;
+    
     const [$,$$,_]=[{},{},{}]
     $$$_($,$$,_,content)
 
