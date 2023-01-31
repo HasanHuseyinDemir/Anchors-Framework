@@ -50,7 +50,7 @@ export {html,HTML,RegisterComponent,GlobalUpdate,OnGlobalUpdate,simpleFor}
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.2-Component%20Register%2CBugFix/anchors.min.js"></script>
 ```
 
 
