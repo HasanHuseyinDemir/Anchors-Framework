@@ -4,7 +4,7 @@
 <img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Lightweight Javascript Framework</p>
-<p>Minified Size Is Just 3.4KB</p>
+<p>12KB</p>
 <br>
 
 </div>
@@ -35,7 +35,7 @@
 
 > <a href="https://hasanhuseyindemir.github.io/Anchors-Framework/Versions/0-Tests/CallBack/Simple/">Simple</a> <a href="https://github.com/HasanHuseyinDemir/Anchors-Framework/tree/master/Versions/0-Tests/CallBack/Simple">Repo</a>
 
-# Installation Latest v[1.21] "Reactivity Update" 
+# Installation Latest v[1.4.2] "Dynamism Update;Component Register,Slot,Props,StateManagement,Render,Bugfixes" 
 
 ## Recomended VSCode Extensions
 > "es6-string-html"<br>
@@ -44,8 +44,8 @@
 
 ## Import For Module
 ```
-import {html,c,state,pattern} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.21-Reactivity%20Update/anchors.min.mjs"
-export {html,c,state,pattern}
+import {html,HTML,RegisterComponent,GlobalUpdate,OnGlobalUpdate,simpleFor} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.2-Component%20Register%2CBugFix/anchors.min.mjs"
+export {html,HTML,RegisterComponent,GlobalUpdate,OnGlobalUpdate,simpleFor}
 ```
 
 ## Import For Global 
