@@ -399,7 +399,7 @@ function html(data,...keys){
     content.firstElementChild.classList.add(details.key);
 
     document.dispatchEvent(updatedEvent);
-    return {content,datalist,details,unmount,effect,signal,mount,update,localUpdate,states,$,_,$$,createEffect:details.createEffect};
+    return {content,datalist,details,unmount,effect,signal,mount,update,localUpdate,states,$,_,$$};
 }
 
 const GlobalUpdate=()=>{
@@ -554,6 +554,10 @@ else if (typeof page=="function"){
     }
 }
 })}
+
+Object.prototype.createEffect=function(arg){
+    this.details.createEffect=arg;
+}
 
 
 Object.prototype.slot=function(arg){
