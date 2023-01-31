@@ -1,0 +1,15 @@
+<script>
+    const parent=function(){
+        const data={
+            x:0
+        }
+        child(data);
+        let y=0;
+        console.log(data.x);
+    }
+    const child=function (data){
+        data.x++
+    }
+    parent()
+
+</script>

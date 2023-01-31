@@ -1,0 +1,41 @@
+<div state="x"></div>
+<div state="y"></div>
+
+
+<script>
+let obj={
+    x:0,
+    y:15
+}
+
+let proxy=new Proxy(obj,{
+    get(target,key,value){
+        return target[key]
+    },
+    set(target,key,value){
+        if(target[key]!==value){
+        target[key]=value
+        }
+    },
+})
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    body{
+        background-color: black;
+        color:white;
+    }
+</style>

@@ -1,0 +1,78 @@
+<script src="../consoler.js"></script>
+
+<p id="name">Name</p>
+<p id="surname">Surname</p>
+<input oninput="person.name=this.value">
+
+<hr>
+<div id="mylog">
+
+</div>
+
+<script>
+
+const states=(object)=>{
+    const wm=new WeakMap()
+    
+    const track=(target,key)=>{
+        wm.set(target,key)
+    }
+    
+    const trigger=(target,key)=>{
+        
+    }
+
+    const helloize=()=>{
+        console.log("Hello")
+    }
+
+    let obj = new Proxy(object,{
+    get(target,key){
+        const result=Reflect.get(target,key)
+        return result
+    },
+    set(target,key,value,receiver){
+        const result=Reflect.get(target,key)
+        if(result!==value){
+            const set=Reflect.set(target,key,value)
+        }
+        return true
+    },
+    })
+
+    
+    obj.effect=(callback,array)=>{
+            if(typeof callback=="function"){
+                array.forEach(e => {
+                    
+                });
+            }
+    }
+    
+
+    return obj
+}
+
+states.prototype.effects=function(){
+    console.log("hello")
+}
+
+const person=states({
+    name:"Hasan",
+    surname:"Demir",
+    fullname:"",
+})
+
+person.effect(()=>{
+    person.fullname=person.name+" "+person.surname
+},[person.name,person.surname])
+
+
+</script>
+
+<style>
+    body{
+        background-color: rgb(15, 15, 15);
+        color:white;
+    }
+</style>
