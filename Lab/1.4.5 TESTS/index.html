@@ -1,0 +1,51 @@
+<div id="app"></div>
+
+<script type="module">
+import {html} from "./anchors.mjs"
+
+const Page=()=>{
+    let Main=html/*html*/`
+    <>
+    <input $model="name">
+    <input $model="surname">
+
+    <p>Name:{name}</p>
+    <p>Surname:{surname}</p>
+    <p>Fullname:{fullname}</p>
+    <p>Fullname:{name} {surname}</p>
+    {x}
+    </>
+    `
+    let state=Main.states({
+        name:"Hasan",
+        surname:"Demir",
+        fullname:"",
+        x:5,
+        y:0,
+        hello(arg){
+            state.name=arg.value
+        },
+        computed(){
+            state.fullname=state.name+" "+state.surname,
+            state.y=state.x+1
+        },
+        update(){
+            state.x++
+        }
+    })
+
+    return Main
+}
+
+document.querySelectorAll("#app").render(Page)
+</script>
+
+
+
+
+<style>
+    body{
+        background-color:black;
+        color:white;
+    }
+</style>
