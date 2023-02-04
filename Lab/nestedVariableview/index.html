@@ -1,0 +1,47 @@
+<h1>Is It Works?</h1>
+<div id="app"></div>
+<p>Size :<span id="size"></span></p>
+<p id="output">Output</p>
+
+<script>
+    const data={
+        clock:{
+            hour:1,
+            minute:2,
+            second:3
+        },
+        nest1:{
+            nest2:{
+                nest3:{
+                    success:"Its Works!"
+                }
+            }
+        }
+    }
+
+    //
+    let problem="data.nest1.nest2.nest3.success"
+    size.textContent=problem.split(".").length
+
+    const Returner=(data,str)=>{
+        let array=str.split(".")
+        array.shift();
+        let size=array.length;
+
+        let object=data;
+        for(nest of array){
+            object=object[nest]
+        }   
+
+        return object
+    }
+
+    app.textContent=Returner(data,"data.nest1.nest2.nest3.success")
+
+</script>
+<style>
+    body{
+        background-color: black;
+        color:aliceblue
+    }
+</style>

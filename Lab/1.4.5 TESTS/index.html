@@ -1,38 +1,69 @@
 <div id="app"></div>
 
 <script type="module">
-import {html} from "./anchors.mjs"
+import {html,createStore,RegisterComponent} from "./anchors.mjs"
+
+const data=createStore({
+        name:"Hasan",
+        surname:"Demir",
+        fullname:"s",
+        x:5,
+        y:0,
+        hello(arg){
+            data.name=arg.value
+        },
+        computed(){
+            data.fullname=data.name+" "+data.surname,
+            data.y=data.x+1
+        },
+        update(){
+            
+        },
+        selam(){
+            data.x++
+        },
+        hour:new Date().getHours(),
+        minute:new Date().getMinutes(),
+        second:new Date().getSeconds(),
+        test:{
+            hello:"SSS"
+        },
+        hello(){
+                data.x++
+                return "Hello"
+        }
+});
+
+
 
 const Page=()=>{
     let Main=html/*html*/`
     <>
     <input $model="name">
     <input $model="surname">
-
     <p>Name:{name}</p>
     <p>Surname:{surname}</p>
-    <p>Fullname:{fullname}</p>
-    <p>Fullname:{name} {surname}</p>
-    {x}
+    <p $class="surname">Fullname:{fullname}</p>
+
+    <p>{y} {x}</p>
+    <button $class="tested" $onclick="hello">Arttır</button>
+    {test.hello}
+    {tested}
     </>
     `
-    let state=Main.states({
+    Main.states({
+        tested:0,
         name:"Hasan",
         surname:"Demir",
         fullname:"",
-        x:5,
-        y:0,
-        hello(arg){
-            state.name=arg.value
-        },
         computed(){
-            state.fullname=state.name+" "+state.surname,
-            state.y=state.x+1
+            this.fullname=this.name+" "+this.surname
         },
-        update(){
-            state.x++
+        hello(){
+            this.tested++
         }
     })
+
 
     return Main
 }

@@ -188,174 +188,203 @@ export function html(data,...keys){
     [elements,keyList,page,str]=[null,null,null,null]
 })
 
-
+let datalist={};
     const states=(list)=>{
-        const ARRAY=[];
+        datalist=new Proxy(list,{
+            get: (target, key) => {
+            return target[key];
+        },
+        set: (target, key, value) => {
+            const result=Reflect.get(target,key)
+            if(result!==value){
+                Reflect.set(target,key,value);
+                effect();
+                typeof datalist["computed"]=="function"?datalist["computed"]():""
+            }
+            return true;
+            }
+        })
+
         content.querySelectorAll("[state]").forEach((e)=>{
             let getted_attr=e.getAttribute("state");
-            switch(typeof list[getted_attr]){
+            let applied=getted_attr.split("(");
+            let app=applied[0]
+            let apply=null;
+            if(applied.length>1){
+                applied[1]=applied[1].slice(0,-1)
+                apply=applied[1]
+                apply=new Function(`return ${apply}`)()
+            }
+            switch(typeof datalist[app]){
                 case "number":case "string":            
-                let node=document.createTextNode(list[getted_attr])
+                let node=document.createTextNode(datalist[app])
                 e.replaceWith(node);
-
-                const updater=()=>{
-                    node.nodeValue=list[getted_attr];
+                const getter=()=>{
+                    return datalist[app]
                 }
-                ARRAY.push({value:getted_attr,callback:updater})
-
+                details.nodeLists.push({node,func:getter,before:datalist[app]});
                 break;
-        }})
+                case "function":
 
-        content.querySelectorAll(`*`).forEach((e)=>{
+                    let result=datalist[app](apply)
+                    let nodeF=document.createTextNode(result??"")
+                    e.replaceWith(nodeF);
+                    const getterF=()=>{
+                        return datalist[app](apply)
+                    }
+                    details.nodeLists.push({node:nodeF,func:getterF,before:result});    
+                ;break
+            };
+        })
+
+        content.querySelectorAll("*").forEach((e)=>{
             let attrnames=e.getAttributeNames()
             attrnames.forEach((i)=>{
-                if(i[0]=="$"){
+                if(i[0]=="$"&&typeof list[e.getAttribute(i)]){
                     let attr=i.slice(1);
                     let getted_attr=e.getAttribute(i);
+                    let applied=getted_attr.split("(");
+                    let apply=null;
+                    if(applied.length>1){
+                        applied[1]=applied[1].slice(0,-1)
+                        apply=applied[1]
+                        if(apply[0]=="'"&&apply[0]=='"'&&apply[0]=="`"){
+                            apply=new Function(`return ${apply}`)()
+                        }else if(apply[0]=="$"){
+                            apply=new Function(`return ${datalist[apply.slice(1)]}`)()
+                        }
+                    }
                     switch(attr){
                     case "onclick":case "oninput": case "onchange": case "onmouseover":
-                            e[attr]=()=>{list[applied[0]??getted_attr](apply??e);
-                            list.computed?list.computed():""
-                        }
+                            if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                            e[attr]=()=>{datalist[applied[0]??getted_attr](apply??e);
+                            }
                     ;break;
                     
                     case "model":
                         //setter
+                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
                         if(e.type=="text"||e.type=="textarea"){
                             e["oninput"]=()=>{
-                                prox[getted_attr]=e.value;
+                                datalist[getted_attr]=e.value;
                             }
                         }else if(e.type=="checkbox"){
                             e["oninput"]=()=>{
-                                prox[getted_attr]=e.checked;
+                                datalist[getted_attr]=e.checked;
                             }
                         }
                         //getter
                         const updateModel=function(){
                             if(e.type=="text"||e.type=="textarea"||e.type=="checkbox"){
-                                e.value=list[getted_attr];
+                                e.value=datalist[getted_attr];
                             }else{
-                                e.textContent=list[getted_attr];
+                                e.textContent=datalist[getted_attr];
                             }
                         }
-                        updateModel();
-                        
-                        ARRAY.push({value:getted_attr,callback:updateModel})
+                        content.addEventListener("updated",updateModel);
+                        document.addEventListener("updated",updateModel);
 
                     break;
                     
                     case "class":
-                        let result=list[getted_attr];
+                        let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply):datalist[applied[0]??getted_attr]
                         if(result){
                             e.classList.add(result)
                         }
                         let before=result;
                         const updateClass=function(){
-                            if(list[getted_attr]&&e.classList.contains(before)){
-                                if(before!=list[getted_attr]){
+                            let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply):datalist[applied[0]??getted_attr]
+                            if(result&&e.classList.contains(before)){
+                                if(before!=result){
                                     e.classList.remove(before)
-                                    e.classList.add(list[getted_attr])
-                                    before=list[getted_attr]
+                                    e.classList.add(result)
+                                    before=result
                                 }
                             }
-                            else if(!list[getted_attr]&&e.classList.contains(before)){
+                            else if(!result&&e.classList.contains(before)){
                                 e.classList.remove(before)
-                            }else  if(list[getted_attr]&&!e.classList[list[getted_attr]]){
-                                e.classList.add(list[getted_attr])
-                                before=list[getted_attr]
+                            }else  if(result&&!e.classList[result]){
+                                e.classList.add(result)
+                                before=result
                             }
-                        }
-                        updateClass();
-                        ARRAY.push({value:getted_attr,callback:updateClass})
+                    }
+                        content.addEventListener("updated",updateClass)
+                        document.addEventListener("updated",updateClass)
+                        if(typeof list[e.getAttribute(i)])e.removeAttribute(i)
+                        ;break;
                     
                     case "hide": case "show":{
                         const control=()=>{
-                            let result=list[getted_attr];
+                            let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply??e):datalist[applied[0]??getted_attr]
                             if((attr=="hide"&&result)||attr=="show"&&!result){
                                 e.style.display="none"
                             }else{
                                 e.style.display=""
                             }
                         }
-                        control();
-                        ARRAY.push({value:getted_attr,callback:control})
+                        content.addEventListener("updated",control)
+                        document.addEventListener("updated",control)
+                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
                     }
                     ;break;
                     case "visible": case "invisible":{
                         const control=()=>{
-                            let result=list[getted_attr];
+                            let result=datalist[applied[0]??getted_attr](apply);
                             if((attr=="invisible"&&result)||attr=="visible"&&!result){
                                 e.style.visibility="hidden"
                             }else{
                                 e.style.visibility="visible"
                             }
                         }
-                        control();
-                        ARRAY.push({value:getted_attr,callback:control})
+                        content.addEventListener("updated",control)
+                        document.addEventListener("updated",control)
+                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
                     }
                     ;break;
                     case "destroy":{
                         const control=function(){
-                            let result=list[getted_attr];
+                            let result=datalist[applied[0]??getted_attr](apply??e);
                             if(result){
                                 e.remove();
+                                content.removeEventListener("updated",control);
+                                content.dispatchEvent(updatedEvent);
                             }
                         }
-                        control();
-                        ARRAY.push({value:getted_attr,callback:control})
+                        content.addEventListener("updated",control);
+                        document.addEventListener("updated",control);
+                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
                     };break;
                     default:{
-                        switch(typeof list[getted_attr]){
+                        switch(typeof datalist[applied[0]??getted_attr]){
                             case "number":case "string":{
                                 const control=()=>{
-                                    e[attr]=list[getted_attr]
+                                    e[attr]=datalist[getted_attr]
                                 }
-                                ARRAY.push({value:getted_attr,callback:control})
+                                content.addEventListener("updated",control);
+                                document.addEventListener("updated",control);
+                                if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                            };break;
+                            case "function":{
+                                const control=()=>{
+                                    e[attr]=datalist[applied[0]??getted_attr](apply)
+                                }
+                                content.addEventListener("updated",control);
+                                document.addEventListener("updated",control);
+                                if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
                             };break;
                         }
                     }
                     ;break;
                     }
                     
-                    e.removeAttribute(i)
+                    
                 }
             })
         })
         content.dispatchEvent(updatedEvent)
-
-        var prox = new Proxy(list,{
-            get(target,key){
-                const result=Reflect.get(target,key)
-                return result
-            },
-            set(target,key,value){
-                const result=Reflect.get(target,key)
-                if(result!==value){
-                    Reflect.set(target,key,value)
-                    ARRAY.forEach((e)=>{
-                        if(e.value===key){
-                            e.callback();
-                        }
-                    })
-                    if(typeof list.computed==="function"){
-                        list.computed()
-                    }
-                }
-                return true
-            },
-        })
-
-        
-        try{
-            return prox
-        }finally{
-            setTimeout(()=>{
-                if(typeof list.computed==="function"){
-                    list.computed();
-                }},1);
-        }
-
+        typeof datalist["computed"]=="function"?datalist["computed"]():""
     }
+
 
     const [$,$$,_]=[{},{},{}]
     $$$_($,$$,_,content)
@@ -388,7 +417,7 @@ export function html(data,...keys){
     document.dispatchEvent(updatedEvent);
 
 
-    return {content,details,unmount,effect,signal,mount,update,localUpdate,states,$,_,$$};
+    return {content,details,unmount,effect,signal,mount,update,localUpdate,states,datalist,$,_,$$};
 }
 
 export const GlobalUpdate=()=>{
@@ -678,10 +707,7 @@ Object.defineProperties(Object.prototype,{
 "onKeyPress":{set(Event){a("onkeypress",this,Event)}},
 
 "onLoad":{set(Event){a("onload",this,Event)}},
-})
-
-
-}
+})}
 
 //prevents unnecessary renders
 const debounce = (func, delayGetter) => {
@@ -717,5 +743,193 @@ const $$$_=($,$$,_,content)=>{
     content.querySelectorAll("[delete]").forEach((el)=>{el.remove()});
 }
 
+const Returner=(data,str)=>{
+    let array=str.split(".")
+    let object=data;
+    for(let nest of array){
+        object=object[nest]
+    }   
+    return object
+}
+
+const STATES=(element,ARRAY,list,prox)=>{
+    element.querySelectorAll("[state]").forEach((e)=>{
+    let getted_attr=e.getAttribute("state");
+    switch(typeof Returner(list,getted_attr)){
+        case "number":case "string":            
+        let node=document.createTextNode(Returner(list,getted_attr))
+        e.replaceWith(node);
+        const updater=()=>{
+            node.nodeValue=Returner(list,getted_attr);
+        }
+        ARRAY.push({value:getted_attr,callback:updater})
+        break;
+    }})
+
+    element.querySelectorAll(`*`).forEach((e)=>{
+    let attrnames=e.getAttributeNames()
+    attrnames.forEach((i)=>{
+        if(i[0]=="$"&&typeof list[e.getAttribute(i)]!=="undefined"){
+            let attr=i.slice(1);
+            let getted_attr=e.getAttribute(i);
+            switch(attr){
+            case "onclick":case "oninput": case "onchange": case "onmouseover":
+                    e[attr]=()=>{Returner(list,getted_attr)();
+                    typeof list.computed==="function"?list.computed():""
+                }
+            ;break;
+            
+            case "model":
+                //setter
+                if(e.type=="text"||e.type=="textarea"){
+                    e["oninput"]=()=>{
+                        prox[getted_attr]=e.value;
+                    }
+                }else if(e.type=="checkbox"){
+                    e["oninput"]=()=>{
+                        prox[getted_attr]=e.checked;
+                    }
+                }
+                //getter
+                const updateModel=function(){
+                    if(e.type=="text"||e.type=="textarea"||e.type=="checkbox"){
+                        e.value=list[getted_attr];
+                    }else{
+                        e.textContent=list[getted_attr];
+                    }
+                }
+                updateModel();
+                
+                ARRAY.push({value:getted_attr,callback:updateModel})
+
+            break;
+            
+            case "class":
+                let result=Returner(list,getted_attr);
+                if(result){
+                    e.classList.add(result)
+                }
+                let before=result;
+                const updateClass=function(){
+                    if(Returner(list,getted_attr)&&e.classList.contains(before)){
+                        if(before!=Returner(list,getted_attr)){
+                            e.classList.remove(before)
+                            e.classList.add(Returner(list,getted_attr))
+                            before=Returner(list,getted_attr)
+                        }
+                    }
+                    else if(!Returner(list,getted_attr)&&e.classList.contains(before)){
+                        e.classList.remove(before)
+                    }else  if(Returner(list,getted_attr)&&!e.classList[Returner(list,getted_attr)]){
+                        e.classList.add(Returner(list,getted_attr))
+                        before=Returner(list,getted_attr)
+                    }
+                }
+                updateClass();
+                
+                ARRAY.push({value:getted_attr,callback:updateClass})
+            
+            case "hide": case "show":{
+                const control=()=>{
+                    let result=Returner(list,getted_attr);
+                    if((attr=="hide"&&result)||attr=="show"&&!result){
+                        e.style.display="none"
+                    }else{
+                        e.style.display=""
+                    }
+                }
+                control();
+                
+                ARRAY.push({value:getted_attr,callback:control})
+            }
+            ;break;
+            case "visible": case "invisible":{
+                const control=()=>{
+                    let result=Returner(list,getted_attr);
+                    if((attr=="invisible"&&result)||attr=="visible"&&!result){
+                        e.style.visibility="hidden"
+                    }else{
+                        e.style.visibility="visible"
+                    }
+                }
+                control();
+                
+                ARRAY.push({value:getted_attr,callback:control})
+            }
+            ;break;
+            case "destroy":{
+                const control=function(){
+                    let result=Returner(list,getted_attr);
+                    if(result){
+                        e.remove();
+                    }
+                }
+                control();
+                
+                ARRAY.push({value:getted_attr,callback:control})
+            };break;
+            default:{
+                switch(typeof list[getted_attr]){
+                    case "number":case "string":{
+                        const control=()=>{
+                            e[attr]=list[getted_attr]
+                        }
+                        
+                        ARRAY.push({value:getted_attr,callback:control})
+                    };break;
+                }
+            }
+            ;break;
+            }
+            
+            e.removeAttribute(i)
+        }
+    })
+})}
+
+export const createStore=(list)=>{
+    const ARRAY=[];
+    var prox = new Proxy(list,{
+        get: (target, key) => {
+        return target[key];
+    },
+    set: (target, key, value) => {
+        const result=Reflect.get(target,key)
+        if(result!==value){
+            Reflect.set(target,key,value)
+            ARRAY.forEach((e)=>{
+                if(e.value===key){
+                    e.callback();
+                }
+            })
+            if(typeof target.computed=="function"){
+                if(ARRAY.length)target.computed()
+            }
+        }
+        return true;
+        }
+    })
+
+    prox.register=(e)=>{
+        STATES(e,ARRAY,list,prox)
+    }
+    try{
+        return prox
+    }finally{
+        setTimeout(()=>{
+            if(typeof list.computed==="function"){
+                list.computed();
+            }},10);
+    }
+
+}
+
+Object.prototype.RegisterStore=function(storeName){
+    if(this.content){
+        storeName.register(this.content)
+    }else if(this){
+        storeName.register(this)
+    }
+}
 
 
