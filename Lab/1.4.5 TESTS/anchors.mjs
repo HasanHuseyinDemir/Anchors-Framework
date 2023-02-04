@@ -389,8 +389,6 @@ export function html(data,...keys){
     let method={};
     const methods=(list)=>{
         method=list;
-
-    
         content.querySelectorAll("*").forEach((e)=>{
             let attrnames=e.getAttributeNames()
             attrnames.forEach((i)=>{
@@ -408,15 +406,17 @@ export function html(data,...keys){
                     apply=new Function(`return ${apply}`)()
                 }
             }
-            switch(attr){
-                
-            case "onclick":case "oninput": case "onchange": case "onmouseover":  
-            if(method[applied[0]??getted_attr])e.removeAttribute(i)
-                    e[attr]=()=>{method[applied[0]??getted_attr](apply??e);
-                    update();
-                    }
-            ;break;
-        }}})})
+            if(method[applied[0]??getted_attr]){
+                switch(attr){
+                    case "onclick":case "oninput": case "onchange": case "onmouseover":  
+                            e.removeAttribute(i)
+                            e[attr]=()=>{method[applied[0]??getted_attr](apply??e);
+                            update();
+                            }
+                    ;break;
+                }
+            }
+}})})
     }
 
     const [$,$$,_]=[{},{},{}]
