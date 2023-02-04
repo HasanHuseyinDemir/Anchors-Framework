@@ -3,22 +3,30 @@
 <div id="app2"></div>
 
 <script>
-    let notify=""
+    let mounted=""
     let unmounted=""
 
     const Test=()=>{
-        let Main= html`<p>Çalışıyor</p>`
+        let number=0;
+        let Main= html`<p>Tick:${()=>number}</p>`
         Main.onMount(()=>
-            notify="Test Mount"
+            mounted="Test"
         )
-        let int=setInterval(()=>{console.log("Tick")},1000)
-        Main.onUnmount(()=>clearInterval(int))
+        let int=setInterval(()=>{
+        console.log("Tick");
+        number++;
+            Main.update();
+        },100)
+        Main.onUnmount(()=>{
+        clearInterval(int)
+        console.log("Test unmount")
+        })
         return Main
     }
     const Test2=()=>{
         let Main= html`<p>Hellooo</p>`
         Main.onMount(()=>
-            notify="Test2 Mount"
+            mounted="Test2"
         )
         Main.onUnmount(()=>console.log("Test2 Unmount"))
         return Main
@@ -30,7 +38,7 @@
 
         let Main=html/*html*/`
         <>
-        <h1>Status :${()=>notify}</h1>
+        <h1>Mounted :${()=>mounted}</h1>
         <h1>${()=>unmounted}</h1>
         <select $onchange="select">
             <option value="test">TestComponent</option>
@@ -46,7 +54,6 @@
                     case "test":Main.$.switch.render(Test);break;
                     case "test2":Main.$.switch.render(Test2);break;
                 }
-
             }
         })
 
