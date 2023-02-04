@@ -5,6 +5,9 @@
 <script>
     let mounted=""
     let unmounted=""
+    let clock=nodeList({
+        second(){return new Date().getSeconds()}
+    })
 
     const Test=()=>{
         let number=0;
@@ -44,6 +47,7 @@
             <option value="test">TestComponent</option>
             <option value="test2">Test2</option>
         </select>    
+        ${clock.second}
         <br>
             [{switch}]
         </>

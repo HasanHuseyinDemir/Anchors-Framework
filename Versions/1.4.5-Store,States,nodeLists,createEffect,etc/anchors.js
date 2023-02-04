@@ -466,7 +466,7 @@ const OnGlobalUpdate=(func)=>{
     document.addEventListener("updated",func)
 }
 
-
+//TODO:HTML onmount unmount tests
 const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
@@ -539,9 +539,7 @@ const nodeList=function(list){
         },
 
     })
-
-
-
+    document.addEventListener("updated",update)
     return prox
 }
 

@@ -539,9 +539,7 @@ export const nodeList=function(list){
         },
 
     })
-
-
-
+    document.addEventListener("updated",update)
     return prox
 }
 
