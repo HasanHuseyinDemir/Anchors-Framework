@@ -1,0 +1,66 @@
+<script src="anchors.js"></script>
+<div id="app"></div>
+<div id="app2"></div>
+
+<script>
+    let notify=""
+    let unmounted=""
+
+    const Test=()=>{
+        let Main= html`<p>Çalışıyor</p>`
+        Main.onMount(()=>
+            notify="Test Mount"
+        )
+        let int=setInterval(()=>{console.log("Tick")},1000)
+        Main.onUnmount(()=>clearInterval(int))
+        return Main
+    }
+    const Test2=()=>{
+        let Main= html`<p>Hellooo</p>`
+        Main.onMount(()=>
+            notify="Test2 Mount"
+        )
+        Main.onUnmount(()=>console.log("Test2 Unmount"))
+        return Main
+    }
+
+
+
+    const Page=()=>{
+
+        let Main=html/*html*/`
+        <>
+        <h1>Status :${()=>notify}</h1>
+        <h1>${()=>unmounted}</h1>
+        <select $onchange="select">
+            <option value="test">TestComponent</option>
+            <option value="test2">Test2</option>
+        </select>    
+        <br>
+            [{switch}]
+        </>
+        `
+        Main.methods({
+            select(e){
+                switch(e.value){
+                    case "test":Main.$.switch.render(Test);break;
+                    case "test2":Main.$.switch.render(Test2);break;
+                }
+
+            }
+        })
+
+        Main.$["switch"].render(Test)
+        return Main
+    }
+    
+
+    document.querySelectorAll("#app").render(Page)
+</script>
+
+<style>
+    body{
+        background-color: black;
+        color:white;
+    }
+</style>

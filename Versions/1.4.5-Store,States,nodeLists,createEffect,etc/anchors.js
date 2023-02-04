@@ -1,5 +1,6 @@
 const updatedEvent=new Event("updated");
 
+
 const Anchor={
     replacer:function(string,key){
         let str=string
@@ -53,6 +54,8 @@ const Anchor={
     registeredComponents:new Map()
 }
 
+const seed=Anchor.rkg();
+
 Object.prototype.loadComponents=function(){
     Anchor.registeredComponents.forEach((component,key)=>{
         this.component(key,component)
@@ -84,7 +87,7 @@ function html(data,...keys){
         mounted:false,
         rate:30,
         childComponents:[],
-        key:Anchor.rkg(),
+        key:(seed+Anchor.rkg()),
         target:null,
     }
     let elements=[];
@@ -101,8 +104,10 @@ function html(data,...keys){
     let content=page.content;
 
     const effect=(arg)=>{
-        if(!document.querySelectorAll("."+details.key)){unmount();}
-        if(details.active==true&&document.querySelectorAll("."+details.key)){
+        if(!document.querySelectorAll("."+details.key).length){
+            unmount.callback();
+        }
+        if(details.active==true&&document.querySelectorAll("."+details.key).length){
             typeof details.createEffect=="function"?details.createEffect():""
             let signal=false;
             details.nodeLists.forEach((e)=>{
@@ -435,7 +440,7 @@ function html(data,...keys){
                 })
                 document.dispatchEvent(updatedEvent);
         }
-        details.onUnmount?details.onUnmount():"";
+        details.onUnmount&&details.mounted==true?details.onUnmount():"";
         details.mounted=false;
         details.target=null;
         details.active=false;
@@ -466,7 +471,7 @@ const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
     let type="HTML";
-    let key=Anchor.rkg();
+    let key=(seed+Anchor.rkg());
     const details={
         onUnmount:null,
         onMount:null,
@@ -622,7 +627,17 @@ Object.prototype.render=function(page,args){
         pages.content.selectElement("[anchor]").forEach((i)=>{i.removeAttribute("anchor")});
         this.append(pages.content)
         pages.content.loadComponents();
+        //
+        if(pages.details&&pages.type!=="HTML"){
+            pages.details.target=this;
+            core.registeredRenders.push({target:this,pages})
+            pages.mount();
+        }else if(data.type==="HTML"){
+            pages.mount();
+        }
+        //
         document.querySelectorAll("."+pages.details.key).forEach((e)=>e.loadComponents())
+        document.dispatchEvent(updatedEvent)
     }
 }
 
@@ -656,6 +671,7 @@ else if (typeof page=="function"){
         data.mount();
     }
     document.querySelectorAll("."+data.details.key).forEach((e)=>e.loadComponents())
+    document.dispatchEvent(updatedEvent)
 }})}
 
 Object.prototype.createEffect=function(arg){

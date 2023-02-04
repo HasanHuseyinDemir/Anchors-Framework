@@ -1,6 +1,5 @@
 const updatedEvent=new Event("updated");
 
-
 const Anchor={
     replacer:function(string,key){
         let str=string
@@ -54,8 +53,6 @@ const Anchor={
     registeredComponents:new Map()
 }
 
-const seed=Anchor.rkg();
-
 Object.prototype.loadComponents=function(){
     Anchor.registeredComponents.forEach((component,key)=>{
         this.component(key,component)
@@ -73,6 +70,8 @@ export const RegisterComponent=(key,component)=>{
         })
     }
 }
+
+const seed=Anchor.rkg();
 
 export function html(data,...keys){
     const details={
@@ -104,10 +103,8 @@ export function html(data,...keys){
     let content=page.content;
 
     const effect=(arg)=>{
-        if(!document.querySelectorAll("."+details.key).length){
-            unmount.callback();
-        }
-        if(details.active==true&&document.querySelectorAll("."+details.key).length){
+        if(!document.querySelectorAll("."+details.key)){unmount();}
+        if(details.active==true&&document.querySelectorAll("."+details.key)){
             typeof details.createEffect=="function"?details.createEffect():""
             let signal=false;
             details.nodeLists.forEach((e)=>{
@@ -440,7 +437,7 @@ export function html(data,...keys){
                 })
                 document.dispatchEvent(updatedEvent);
         }
-        details.onUnmount&&details.mounted==true?details.onUnmount():"";
+        details.onUnmount?details.onUnmount():"";
         details.mounted=false;
         details.target=null;
         details.active=false;
@@ -471,7 +468,7 @@ export const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
     let type="HTML";
-    let key=(seed+Anchor.rkg());
+    let key=("anc"+Anchor.rkg())
     const details={
         onUnmount:null,
         onMount:null,
@@ -637,7 +634,6 @@ Object.prototype.render=function(page,args){
         }
         //
         document.querySelectorAll("."+pages.details.key).forEach((e)=>e.loadComponents())
-        document.dispatchEvent(updatedEvent)
     }
 }
 
@@ -671,7 +667,6 @@ else if (typeof page=="function"){
         data.mount();
     }
     document.querySelectorAll("."+data.details.key).forEach((e)=>e.loadComponents())
-    document.dispatchEvent(updatedEvent)
 }})}
 
 Object.prototype.createEffect=function(arg){
