@@ -1,69 +1,46 @@
 <div id="app"></div>
 
 <script type="module">
-import {html,createStore,RegisterComponent} from "./anchors.mjs"
+import {html,createStore,RegisterComponent,nodeList} from "./anchors.mjs"
 
-const data=createStore({
-        name:"Hasan",
-        surname:"Demir",
-        fullname:"s",
-        x:5,
-        y:0,
-        hello(arg){
-            data.name=arg.value
-        },
-        computed(){
-            data.fullname=data.name+" "+data.surname,
-            data.y=data.x+1
-        },
-        update(){
-            
-        },
-        selam(){
-            data.x++
-        },
-        hour:new Date().getHours(),
-        minute:new Date().getMinutes(),
-        second:new Date().getSeconds(),
-        test:{
-            hello:"SSS"
-        },
-        hello(){
-                data.x++
-                return "Hello"
-        }
-});
+const clock=nodeList({
+    hour:()=>new Date().getHours(),
+    minute:()=>new Date().getMinutes(),
+    second:()=>new Date().getSeconds(),
+})
 
-
+setInterval(()=>{
+    clock.update
+},1000)
 
 const Page=()=>{
+    let x=0;
+    let name="Hello"
     let Main=html/*html*/`
     <>
-    <input $model="name">
-    <input $model="surname">
-    <p>Name:{name}</p>
-    <p>Surname:{surname}</p>
-    <p $class="surname">Fullname:{fullname}</p>
 
-    <p>{y} {x}</p>
-    <button $class="tested" $onclick="hello">Arttır</button>
-    {test.hello}
-    {tested}
+    ${clock.hour}:${clock.minute}:${clock.second}
+
+    <input $oninput="nameChange">
+    <button $onclick="updates">Update</button>
+
+    ${()=>new Date().getHours()} ${()=>new Date().getMinutes()} ${()=>new Date().getSeconds()}
+
     </>
     `
-    Main.states({
-        tested:0,
-        name:"Hasan",
-        surname:"Demir",
-        fullname:"",
-        computed(){
-            this.fullname=this.name+" "+this.surname
+    Main.methods({
+        hello(e){
+            x++
         },
-        hello(){
-            this.tested++
+        nameChange(e){
+            name=e.value
+            x++;
+        },
+        update(){
         }
     })
 
+    Main.setRate(0)
 
     return Main
 }

@@ -1,14 +1,15 @@
 const updatedEvent=new Event("updated");
 
 const Anchor={
-    replacer:function(string){
+    replacer:function(string,key){
         let str=string
         str=str.replace("<>","<div>").replace("</>","</div>");
         str=str.replaceAll("[-","<span delete='").replaceAll("-]","'></span>")
         str=str.replaceAll("[[","mark='").replaceAll("]]","'")
         str=str.replaceAll("[{","<span anchor='").replaceAll("}]","'></span>")
         str=str.replaceAll("{(","<span tnode='").replaceAll(")}","'></span>")
-        str=str.replaceAll("{","<span state='").replaceAll("}","'></span>")
+        str=str.replaceAll("{{","<span state='").replaceAll("}}","'></span>")
+        str=key?str.replaceAll("__",key):str
         str=this.namer(str);
         return str
     },
@@ -95,15 +96,13 @@ export function html(data,...keys){
     let page=document.createElement("template");
     let str="";
     elements.forEach((item)=>{typeof item=="string"?str+=item:str+=`<span class="achrplcelem"></span>`;})
-    str=Anchor.replacer(str);
+    str=Anchor.replacer(str,details.key);
     page.innerHTML=str;
     let content=page.content;
 
     const effect=(arg)=>{
-        if(!document.querySelectorAll("."+details.key)){
-            unmount();
-        }
-        if(details.active==true){
+        if(!document.querySelectorAll("."+details.key)){unmount();}
+        if(details.active==true&&document.querySelectorAll("."+details.key)){
             typeof details.createEffect=="function"?details.createEffect():""
             let signal=false;
             details.nodeLists.forEach((e)=>{
@@ -188,9 +187,9 @@ export function html(data,...keys){
     [elements,keyList,page,str]=[null,null,null,null]
 })
 
-let datalist={};
+    let state={};
     const states=(list)=>{
-        datalist=new Proxy(list,{
+        state=new Proxy(list,{
             get: (target, key) => {
             return target[key];
         },
@@ -198,8 +197,8 @@ let datalist={};
             const result=Reflect.get(target,key)
             if(result!==value){
                 Reflect.set(target,key,value);
-                effect();
-                typeof datalist["computed"]=="function"?datalist["computed"]():""
+                update();
+                typeof state["computed"]=="function"?state["computed"]():""
             }
             return true;
             }
@@ -215,22 +214,22 @@ let datalist={};
                 apply=applied[1]
                 apply=new Function(`return ${apply}`)()
             }
-            switch(typeof datalist[app]){
+            switch(typeof state[app]){
                 case "number":case "string":            
-                let node=document.createTextNode(datalist[app])
+                let node=document.createTextNode(state[app])
                 e.replaceWith(node);
                 const getter=()=>{
-                    return datalist[app]
+                    return state[app]
                 }
-                details.nodeLists.push({node,func:getter,before:datalist[app]});
+                details.nodeLists.push({node,func:getter,before:state[app]});
                 break;
                 case "function":
 
-                    let result=datalist[app](apply)
+                    let result=state[app](apply)
                     let nodeF=document.createTextNode(result??"")
                     e.replaceWith(nodeF);
                     const getterF=()=>{
-                        return datalist[app](apply)
+                        return state[app](apply)
                     }
                     details.nodeLists.push({node:nodeF,func:getterF,before:result});    
                 ;break
@@ -248,37 +247,39 @@ let datalist={};
                     if(applied.length>1){
                         applied[1]=applied[1].slice(0,-1)
                         apply=applied[1]
-                        if(apply[0]=="'"&&apply[0]=='"'&&apply[0]=="`"){
+                        if(apply[0]=="'"||apply[0]=='"'||apply[0]||"`"){
+                            apply=new Function(`return ${apply}`)()
+                        }else if(typeof new Function(`return ${apply}`)()=="number"){
                             apply=new Function(`return ${apply}`)()
                         }else if(apply[0]=="$"){
-                            apply=new Function(`return ${datalist[apply.slice(1)]}`)()
+                            apply=new Function(`return ${state[apply.slice(1)]}`)()
                         }
                     }
                     switch(attr){
                     case "onclick":case "oninput": case "onchange": case "onmouseover":
-                            if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
-                            e[attr]=()=>{datalist[applied[0]??getted_attr](apply??e);
+                            if(state[applied[0]??getted_attr])e.removeAttribute(i)
+                            e[attr]=()=>{state[applied[0]??getted_attr](apply??e);
                             }
                     ;break;
                     
                     case "model":
                         //setter
-                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                        if(state[applied[0]??getted_attr])e.removeAttribute(i)
                         if(e.type=="text"||e.type=="textarea"){
                             e["oninput"]=()=>{
-                                datalist[getted_attr]=e.value;
+                                state[getted_attr]=e.value;
                             }
                         }else if(e.type=="checkbox"){
                             e["oninput"]=()=>{
-                                datalist[getted_attr]=e.checked;
+                                state[getted_attr]=e.checked;
                             }
                         }
                         //getter
                         const updateModel=function(){
                             if(e.type=="text"||e.type=="textarea"||e.type=="checkbox"){
-                                e.value=datalist[getted_attr];
+                                e.value=state[getted_attr];
                             }else{
-                                e.textContent=datalist[getted_attr];
+                                e.textContent=state[getted_attr];
                             }
                         }
                         content.addEventListener("updated",updateModel);
@@ -287,13 +288,13 @@ let datalist={};
                     break;
                     
                     case "class":
-                        let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply):datalist[applied[0]??getted_attr]
+                        let result=typeof state[applied[0]??getted_attr]=="function"?state[applied[0]??getted_attr](apply):state[applied[0]??getted_attr]
                         if(result){
                             e.classList.add(result)
                         }
                         let before=result;
                         const updateClass=function(){
-                            let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply):datalist[applied[0]??getted_attr]
+                            let result=typeof state[applied[0]??getted_attr]=="function"?state[applied[0]??getted_attr](apply):state[applied[0]??getted_attr]
                             if(result&&e.classList.contains(before)){
                                 if(before!=result){
                                     e.classList.remove(before)
@@ -315,7 +316,7 @@ let datalist={};
                     
                     case "hide": case "show":{
                         const control=()=>{
-                            let result=typeof datalist[applied[0]??getted_attr]=="function"?datalist[applied[0]??getted_attr](apply??e):datalist[applied[0]??getted_attr]
+                            let result=typeof state[applied[0]??getted_attr]=="function"?state[applied[0]??getted_attr](apply??e):state[applied[0]??getted_attr]
                             if((attr=="hide"&&result)||attr=="show"&&!result){
                                 e.style.display="none"
                             }else{
@@ -324,12 +325,12 @@ let datalist={};
                         }
                         content.addEventListener("updated",control)
                         document.addEventListener("updated",control)
-                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                        if(state[applied[0]??getted_attr])e.removeAttribute(i)
                     }
                     ;break;
                     case "visible": case "invisible":{
                         const control=()=>{
-                            let result=datalist[applied[0]??getted_attr](apply);
+                            let result=state[applied[0]??getted_attr](apply);
                             if((attr=="invisible"&&result)||attr=="visible"&&!result){
                                 e.style.visibility="hidden"
                             }else{
@@ -338,12 +339,12 @@ let datalist={};
                         }
                         content.addEventListener("updated",control)
                         document.addEventListener("updated",control)
-                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                        if(state[applied[0]??getted_attr])e.removeAttribute(i)
                     }
                     ;break;
                     case "destroy":{
                         const control=function(){
-                            let result=datalist[applied[0]??getted_attr](apply??e);
+                            let result=state[applied[0]??getted_attr](apply??e);
                             if(result){
                                 e.remove();
                                 content.removeEventListener("updated",control);
@@ -352,25 +353,25 @@ let datalist={};
                         }
                         content.addEventListener("updated",control);
                         document.addEventListener("updated",control);
-                        if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                        if(state[applied[0]??getted_attr])e.removeAttribute(i)
                     };break;
                     default:{
-                        switch(typeof datalist[applied[0]??getted_attr]){
+                        switch(typeof state[applied[0]??getted_attr]){
                             case "number":case "string":{
                                 const control=()=>{
-                                    e[attr]=datalist[getted_attr]
+                                    e[attr]=state[getted_attr]
                                 }
                                 content.addEventListener("updated",control);
                                 document.addEventListener("updated",control);
-                                if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                                if(state[applied[0]??getted_attr])e.removeAttribute(i)
                             };break;
                             case "function":{
                                 const control=()=>{
-                                    e[attr]=datalist[applied[0]??getted_attr](apply)
+                                    e[attr]=state[applied[0]??getted_attr](apply)
                                 }
                                 content.addEventListener("updated",control);
                                 document.addEventListener("updated",control);
-                                if(datalist[applied[0]??getted_attr])e.removeAttribute(i)
+                                if(state[applied[0]??getted_attr])e.removeAttribute(i)
                             };break;
                         }
                     }
@@ -382,9 +383,41 @@ let datalist={};
             })
         })
         content.dispatchEvent(updatedEvent)
-        typeof datalist["computed"]=="function"?datalist["computed"]():""
+        typeof state["computed"]=="function"?state["computed"]():""
     }
 
+    let method={};
+    const methods=(list)=>{
+        method=list;
+
+    
+        content.querySelectorAll("*").forEach((e)=>{
+            let attrnames=e.getAttributeNames()
+            attrnames.forEach((i)=>{
+            if(i[0]=="$"&&typeof list[e.getAttribute(i)]){
+            let attr=i.slice(1);
+            let getted_attr=e.getAttribute(i);
+            let applied=getted_attr.split("(");
+            let apply=null;
+            if(applied.length>1){
+                applied[1]=applied[1].slice(0,-1)
+                apply=applied[1]
+                if(apply[0]=="'"||apply[0]=='"'||apply[0]=="`"){
+                    apply=new Function(`return ${apply}`)()
+                }else if(typeof new Function(`return ${apply}`)()=="number"){
+                    apply=new Function(`return ${apply}`)()
+                }
+            }
+            switch(attr){
+                
+            case "onclick":case "oninput": case "onchange": case "onmouseover":  
+            if(method[applied[0]??getted_attr])e.removeAttribute(i)
+                    e[attr]=()=>{method[applied[0]??getted_attr](apply??e);
+                    update();
+                    }
+            ;break;
+        }}})})
+    }
 
     const [$,$$,_]=[{},{},{}]
     $$$_($,$$,_,content)
@@ -416,8 +449,8 @@ let datalist={};
 
     document.dispatchEvent(updatedEvent);
 
-
-    return {content,details,unmount,effect,signal,mount,update,localUpdate,states,datalist,$,_,$$};
+    var object={content,details,unmount,effect,signal,mount,update,localUpdate,states,state,$,_,$$,methods}
+    return object;
 }
 
 export const GlobalUpdate=()=>{
@@ -439,7 +472,7 @@ export const HTML=(str)=>{
         onMount:null,
     }
     str.forEach((e)=>string+=e)
-    string=Anchor.replacer(string);
+    string=Anchor.replacer(string,key);
     string=Anchor.namer(string);
     template.innerHTML=string;
     let content=template.content;
@@ -461,6 +494,54 @@ export const HTML=(str)=>{
     content.firstElementChild.classList.add(key);
     return {content,$,_,$$,type,details,mount,unmount};
 }
+
+
+
+
+export const nodeList=function(list){
+    const ARRAY=[]
+    Object.keys(list).forEach((key)=>{
+        if(typeof list[key]=="function"){
+            let result=list[key]()
+            ARRAY.push({node:document.createTextNode(result),callback:list[key],key})
+        }else{
+            console.warn("Anchors TypeError :\nNodeList elements must be a function.")
+        }
+    })
+
+    const update=()=>{
+        ARRAY.forEach((e)=>{
+            let result=e.callback()
+            if(e.node.textContent!=result){
+                e.node.nodeValue=result;
+            }
+        })
+    }
+
+    let prox=new Proxy(list,{
+        get(a,keys){
+            if(keys!=="update"){
+                let selected;
+                ARRAY.forEach((e)=>{
+                if(e.key==keys){
+                    selected=e.node
+                }
+                })
+                return selected
+            }else{
+                update();
+            }
+        },
+
+    })
+
+
+
+    return prox
+}
+
+
+
 
 export const simpleFor=function(a,t){
     let array=a;
