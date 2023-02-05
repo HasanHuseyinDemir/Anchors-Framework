@@ -152,9 +152,8 @@ export function html(data,...keys){
     [...keys].forEach((key)=>{
     if(typeof key=="object"||typeof key=="number"){
             if(Object.keys(key).length>0){
-                if(key.type=="For"){
+                if(key.type=="simpleFor"){
                     content.querySelector(".achrplcelem").replaceWith(key.fragment);
-                    key.setParent(effect)
                 }
                 else{
                     if(key.content){
@@ -476,7 +475,12 @@ export const HTML=(str)=>{
         onUnmount:null,
         onMount:null,
     }
-    str.forEach((e)=>string+=e)
+    if(typeof str=="string"){
+        string=str
+    }else{
+        str.forEach((e)=>string+=e)
+    }
+
     string=Anchor.replacer(string,key);
     string=Anchor.namer(string);
     template.innerHTML=string;
@@ -550,16 +554,20 @@ export const simpleFor=function(a,t){
     let array=a;
     let template=t;
     let fragment=document.createElement("div");
-    let type="For";
+    let type="simpleFor";
     const update=()=>{
         let str=array.map(template).join("");
+        console.log(str)
         if(fragment.innerHTML!=str){
-            let temp=HTML(str);
+            let tmp=document.createElement("template")
+            tmp.innerHTML=str
+            let temp=tmp.content;
             fragment.textContent="";
             fragment.append(temp)
         }
     }
     update();
+    
     return {type,fragment,update}
 }
 
