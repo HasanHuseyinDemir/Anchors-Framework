@@ -19,7 +19,7 @@
     let second=document.querySelector("#second")
 
     
-    const diff=(first,second)=>{
+    const diff=(first,second,confirmed)=>{
         const classDiff=(st,nd)=>{
         let first=[...st.classList]
         let second=[...nd.classList]
@@ -73,9 +73,6 @@
         }
 
     }
-
-
-        //
         if(!first.isEqualNode(second)){
             let firstArray=Array.from(first.childNodes);
             let firstLength=firstArray.length;
@@ -193,6 +190,9 @@
                                     if(!e.isEqualNode(secondArray[index])){
                                         diff(e,secondArray[index],true)//confirm
                                     }
+                                    if(confirmed){
+                                        return 
+                                    }
                                 }
                             }
 
@@ -206,8 +206,7 @@
 setInterval(()=>{
     diff(first,second);
     setTimeout(()=>{
-        diff(second,third)
-        diff(third,first)
+        diff(first,third)
     },1000)
 },2000)
 
