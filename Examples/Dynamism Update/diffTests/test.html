@@ -10,7 +10,7 @@
 <hr>
 <div id="third">
 <h2 class="Merhaba selam">Hello World <span>.<b>Third</b></span></h2>
-<p>Jello <span></span></p>
+<p>Jello <span>.</span></p>
 </div>
 
 
@@ -88,7 +88,7 @@
                     //remove
                     while(differencies>0){
                         if(!first.isEqualNode(second)){
-                        first.children[Array.from(first.children).length-1].remove()
+                                first.childNodes[Array.from(first.childNodes).length-1].remove()
                         }
                         differencies--
                     }
