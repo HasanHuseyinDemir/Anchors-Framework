@@ -4,11 +4,13 @@
 </div>
 <hr>
 <div id="second">
-<h2 class="selam">Hello World <span>.</span></h2>
+<h2 class="selam selamke">Hello World <span>.<b>Hello</b></span></h2>
+<p>Hello <span></span></p>
 </div>
 <hr>
 <div id="third">
-<h2 class="Merhaba" x="ss">Hello World <span>.</span></h2>
+<h2 class="Merhaba selam">Hello World <span>.<b>jello</b></span></h2>
+<p>Jello <span></span></p>
 </div>
 
 
@@ -16,23 +18,57 @@
     let first=document.querySelector("#first")
     let second=document.querySelector("#second")
 
-    const classDiff=(st,nd)=>{
+    
+    const diff=(first,second)=>{
+        const classDiff=(st,nd)=>{
         let first=[...st.classList]
         let second=[...nd.classList]
-        let classDiffNumber=Math.abs(first.length-second.length)
-
-        console.log(classDiffNumber)
-        if(!classDiffNumber){
+        let classDiffNumber=Math.abs(first.length-second.length);
+        if(classDiffNumber==0){
+            let difference = first.filter(x =>{return !second.includes(x)});
+            let same=first.filter(x =>{return second.includes(x)});
             second.forEach((cls,inde)=>{
-                
-            })
+                if(difference.length){
+                    if(same.length==0){
+                    second.forEach((stClass)=>{
+                        st.className="";
+                        st.classList.add(stClass)
+                    })
+                    }else if(same.length){
+                        second.forEach((cl,ind)=>{
+                            first.forEach((cs,ii)=>{
+                                if(!same.includes(cs)){
+                                    st.classList.remove(cs)
+                                }
+                            })
+                        })
+                    }
+            }})
         }else{
             //add or remove
+            let bigger=first.length>second.length?"first":"second"
+            //first-remove
+            //second-add
+            if(bigger=="first"){
+                let difference = first.filter(x => !second.includes(x));
+                let same=first.filter(x => second.includes(x));
+
+                difference.forEach((differenced,i)=>{
+                    st.classList.remove(differenced)
+                })
+            }else if(bigger=="second"){
+                let difference = second.filter(x => !first.includes(x));
+                let same=second.filter(x => first.includes(x));
+                difference.forEach((differenced,i)=>{
+                    st.classList.add(differenced)
+                })
+            }
         }
 
     }
 
-    const diff=(first,second,tested)=>{
+
+        //
         if(!first.isEqualNode(second)){
             let firstArray=Array.from(first.childNodes);
             let firstLength=firstArray.length;
@@ -74,10 +110,6 @@
                                 if(e.nodeName!=secondArray[index].nodeName){
                                     e.replaceWith(secondArray[index].cloneNode(true))
                                 }else{
-                                    //Attributeler farklı olabilir!
-                                    //attributeler değişmesine rağmen aynı değilse diff açılır!
-                                    //class diffing eklenecek ekle çıkar işlemleri
-                                    //attributeler için diffing
                                     if(e.nodeType==1&&secondArray[index].nodeType==1){
                                         let firstNames=e.getAttributeNames()
                                         let secondNames=secondArray[index].getAttributeNames();
@@ -151,14 +183,8 @@
                                                 }
                                         }
                                     }
-
                                     if(!e.isEqualNode(secondArray[index])){
-                                        diff(e,secondArray[index],true)//ikisinden biri doğru
-                                    }
-
-                                    //confirm
-                                    if(tested){
-                                        e.replaceWith(secondArray[index])
+                                        diff(e,secondArray[index],true)//confirm
                                     }
                                 }
                             }
@@ -180,10 +206,14 @@ setInterval(()=>{
 </script>
 
 <style>
-    body{
+    *{
         transition: 1s;
     }
     .selam{
         background-color: blueviolet;
+    }
+    .Merhaba{
+
+        color:white;
     }
 </style>
