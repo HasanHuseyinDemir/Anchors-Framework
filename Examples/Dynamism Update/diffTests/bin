@@ -1,0 +1,30 @@
+/*
+            Array.from(first.childNodes).forEach((e,key)=>{
+                if(!e.isEqualNode(second.childNodes[key])){
+                    if(second.childNodes[key]){
+                        if(e.nodeType===3&&e.nodeValue!=second.childNodes[key].textContent){
+                            e.nodeValue=second.childNodes[key].textContent
+                        }else{
+                            diffTwoElements(e,second.childNodes[key])
+                            //e.replaceWith(second.childNodes[key].cloneNode(true))
+                            if(Array.from(second.childNodes).length>Array.from(first.childNodes).length){
+                            e.append(second.childNodes[key].cloneNode(true))
+                        }
+                        }
+                    }else{
+                        console.log(Array.from(second.childNodes).length<Array.from(first.childNodes).length)
+
+                        if(Array.from(second.childNodes).length<Array.from(first.childNodes).length){
+                            console.log("first>second")
+                            e.remove();
+                        }
+
+                    }
+
+                }else if(!first&&second){
+                    first.remove();
+                }
+            })
+            Array.from(first.children).forEach((e,key)=>{
+                diffTwoElements(e,second.children[key])
+            })*/

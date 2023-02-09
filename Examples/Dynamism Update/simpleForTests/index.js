@@ -15,7 +15,7 @@ const forTest=simpleFor(todo,(e,key)=>{
 })
 
 const Page=()=>{
-    let Main=/*jsx*/html`
+    let Main=html/*jsx*/`
     <>
         <h1>SimpleFor Test</h1>
     

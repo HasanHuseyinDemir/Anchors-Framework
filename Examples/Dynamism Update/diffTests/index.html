@@ -1,0 +1,167 @@
+<div>
+    <p class="merhaba selamlar">Merhabassss <span>s</span>
+    </p>
+    <p>Merhaba</p>
+</div>
+<hr>
+<div id="second">
+    <p class="merhabsa selam">Merhabasadsadsadsadsadsa <span>s</span></p>
+    <p>Selam</p>
+    <p>Selam</p>
+</div>
+
+<script>
+    let div=document.querySelector("div")
+    let second=document.querySelector("#second")
+
+    console.log(div.childNodes,second.childNodes)
+
+    /*const diffTest=(first,second)=>{
+        Array.from(first.childNodes).forEach((e,key)=>{
+                if(!e.isEqualNode(second.childNodes[key])){
+                    if(second.childNodes[key]){
+                        if(e.nodeType===3&&e.nodeValue!=second.childNodes[key].textContent){
+                            e.nodeValue=second.childNodes[key].textContent
+                        }else{
+                            diffTest(e,second.childNodes[key])
+                            //e.replaceWith(second.childNodes[key].cloneNode(true))
+                            if(Array.from(second.childNodes).length>Array.from(first.childNodes).length){
+                            e.append(second.childNodes[key].cloneNode(true))
+                        }
+                        }
+                    }else{
+                        console.log(Array.from(second.childNodes).length<Array.from(first.childNodes).length)
+
+                        if(Array.from(second.childNodes).length<Array.from(first.childNodes).length){
+                            e.remove();
+                        }else{
+                            e.parent.append(second.childNodes[key].cloneNode(true));
+                        }
+
+                    }
+
+                }else if(!first&&second){
+                    first.remove();
+                }
+            })
+            Array.from(first.children).forEach((e,key)=>{
+                diffTest(e,second.children[key])
+            })
+    }
+    setInterval(()=>{diffTest(div,second)},4000)*/
+
+
+    /*const diffTwoElements=(first,second)=>{
+        //first must be patched!
+        //parent
+        if(second&&first){
+            if(!first.isEqualNode(second)&&second&&first){
+            if(first.nodeType!=3&&second.nodeType!=3){
+                //ID
+                first.id!=second.id?first.id=second.id:""//id
+                //CLASS
+                first.className!=second.className?first.className=second.className:""//class
+            }
+
+
+        if(first.nodeType!=3&&second.nodeType!=3){
+            Array.from(first.childNodes).forEach((e,key)=>{
+                let secondnode=second.childNodes[key];
+                if(!e.isEqualNode(secondnode)){
+                    if(e.nodeType==3&&secondnode.nodeType==3){
+                            e.nodeValue=secondnode.textContent
+                    }
+                }
+            })
+            
+        }
+
+        if(Array.from(first.children).length){
+            Array.from(first.children).forEach((e,key)=>{
+                e.childNodes.forEach((i,k)=>{
+                    let secondnode=Array.from(second.children)[key].childNodes[k]
+                    if(!i.isEqualNode(secondnode)){
+                        if(i.nodeType==3&&secondnode.nodeType==3){
+                            i.nodeValue=secondnode.textContent
+                        }else{
+                            diffTwoElements(i,secondnode)
+                        }
+                    }
+                })
+                diffTwoElements(e,second.children[key])
+            })
+        }
+
+    }
+        }
+
+
+
+    }
+
+
+    setInterval(()=>{
+        Array.from(div.children).forEach((e,key)=>{
+            diffTwoElements(e,Array.from(second.children)[key])
+    })
+    },3000)*/
+
+
+    /*
+    let nod=document.createTextNode("hello")
+    console.log(nod.isConnected)
+    document.body.append(nod)
+    console.log(nod.isConnected)
+    */
+
+    function createElement(node) {
+    if (typeof node === 'string') {
+    return document.createTextNode(node);
+  }
+  const $el = document.createElement(node.type);
+    node.children
+    .map(createElement)
+    .forEach($el.appendChild.bind($el));
+  return $el;
+}
+
+function changed(node1, node2) {
+        return typeof node1 !== typeof node2 ||
+         typeof node1 === 'string' && node1 !== node2 ||
+         node1.type !== node2.type
+}
+
+function updateElement($parent, newNode, oldNode, index = 0) {
+  if (!oldNode) {
+    $parent.appendChild(
+      $parent.cloneNode(true)
+    );
+  } else if (!newNode) {
+    $parent.removeChild(
+      $parent.childNodes[index]
+    );
+  } else if (changed(newNode, oldNode)) {
+    $parent.replaceChild(
+      createElement(newNode),
+      $parent.childNodes[index]
+    );
+  } else if (newNode.type) {
+    const newLength = newNode.children.length;
+    const oldLength = oldNode.children.length;
+    for (let i = 0; i < newLength || i < oldLength; i++) {
+      updateElement(
+        $parent.childNodes[index],
+        newNode.children[i],
+        oldNode.children[i],
+        i
+      );
+    }
+  }
+}
+
+setInterval(()=>{
+    updateElement(div,second)
+},1000)
+
+
+</script>

@@ -1,0 +1,68 @@
+<div id="first">
+    <p>Selamlar</p>
+    <p>Selamlar</p>
+</div>
+<hr>
+<div id="second">
+    <p>Selamlar</p>
+    <p id="helloworld">Hello</p>
+</div>
+
+
+<script>
+    let first=document.querySelector("#first")
+    let second=document.querySelector("#second")
+
+    const diff=(first,second)=>{
+        //if different
+        console.log("Hello")
+        if(!first.isEqualNode(second)){
+            let firstArray=Array.from(first.children);
+            let firstLength=firstArray.length;
+            let secondArray=Array.from(second.children);
+            let secondLength=secondArray.length;
+            let differencies=Math.abs(firstLength-secondLength)
+
+            if(differencies){
+                if(firstLength>secondLength){
+                    //remove
+                    while(differencies>0){
+                        if(!first.isEqualNode(second)){
+                        first.children[Array.from(first.children).length-1].remove()
+                        }
+                        differencies--
+                    }
+                    diff(first,second)
+                }else if(secondLength>firstLength){
+                    //push
+                    while(differencies>0){
+                        if(!first.isEqualNode(second)){
+                        first.append(secondArray[secondArray.length - 1].cloneNode(true))
+                        secondArray.pop();
+                        }
+                        differencies--
+                    }
+                    diff(first,second)
+                }
+            }else{
+                firstArray.forEach((e,index)=>{
+                    if(!e.isEqualNode(secondArray[index])){
+                        /*e.childNodes.forEach((i,k)=>{
+                            if(!i.isEqualNode()){
+
+                            }
+                        })*/
+                        e.replaceWith(secondArray[index].cloneNode(true))
+
+                    }
+                })
+            }
+        }
+    }
+    //diff(first,second)
+
+setInterval(()=>{
+    diff(first,second)
+},4000)
+
+</script>
