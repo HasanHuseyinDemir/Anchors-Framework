@@ -4,8 +4,11 @@
 </div>
 <hr>
 <div id="second">
-    <p>Selamlar</p>
-    <p id="helloworld">Hello</p>
+<h2>Hello World <span>.</span></h2>
+</div>
+<hr>
+<div id="third">
+<h2>Merhaba Dünya <span>.</span></h2>
 </div>
 
 
@@ -14,15 +17,12 @@
     let second=document.querySelector("#second")
 
     const diff=(first,second)=>{
-        //if different
-        console.log("Hello")
         if(!first.isEqualNode(second)){
-            let firstArray=Array.from(first.children);
+            let firstArray=Array.from(first.childNodes);
             let firstLength=firstArray.length;
-            let secondArray=Array.from(second.children);
+            let secondArray=Array.from(second.childNodes);
             let secondLength=secondArray.length;
             let differencies=Math.abs(firstLength-secondLength)
-
             if(differencies){
                 if(firstLength>secondLength){
                     //remove
@@ -47,22 +47,33 @@
             }else{
                 firstArray.forEach((e,index)=>{
                     if(!e.isEqualNode(secondArray[index])){
-                        /*e.childNodes.forEach((i,k)=>{
-                            if(!i.isEqualNode()){
-
+                        if(e.nodeType==3&&secondArray[index].nodeType==3){
+                            if(e.textContent!=secondArray[index].textContent){
+                                e.nodeValue=secondArray[index].textContent;
                             }
-                        })*/
-                        e.replaceWith(secondArray[index].cloneNode(true))
+                        }else{
+                            if(e.nodeType!=secondArray[index].nodeType){
+                                e.replaceWith(secondArray[index].cloneNode(true))
+                            }else{
+                                if(e.nodeName!=secondArray[index].nodeName){
+                                    e.replaceWith(secondArray[index].cloneNode(true))
+                                }else{
+                                diff(e,secondArray[index])
+                                }
+                            }
 
+                        }
                     }
                 })
             }
         }
     }
-    //diff(first,second)
 
-setInterval(()=>{
-    diff(first,second)
+setTimeout(()=>{
+    diff(first,third);
+    setTimeout(()=>{
+        diff(first,second)
+    },4000)
 },4000)
 
 </script>
