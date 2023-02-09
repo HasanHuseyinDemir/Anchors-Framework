@@ -4,12 +4,12 @@
 </div>
 <hr>
 <div id="second">
-<h2 class="selam selamke">Hello World <span>.<b>Hello</b></span></h2>
+<h2 class="selam selamke">Hello World <span>.<b>Second</b></span></h2>
 <p>Hello <span></span></p>
 </div>
 <hr>
 <div id="third">
-<h2 class="Merhaba selam">Hello World <span>.<b>jello</b></span></h2>
+<h2 class="Merhaba selam">Hello World <span>.<b>Third</b></span></h2>
 <p>Jello <span></span></p>
 </div>
 
@@ -35,12 +35,20 @@
                         st.classList.add(stClass)
                     })
                     }else if(same.length){
-                        second.forEach((cl,ind)=>{
-                            first.forEach((cs,ii)=>{
-                                if(!same.includes(cs)){
-                                    st.classList.remove(cs)
-                                }
+                        second.forEach((cs,ind)=>{
+                            if(!same.includes(cs)){
+                                console.log(cs,"diff")
+                            first.forEach((cf,ii)=>{
+                                
+                                    st.classList.add(cs);
+                                    if(difference.length){
+                                        difference.forEach((diffed)=>{
+                                        st.classList.remove(diffed)
+                                        })
+                                    }
+                                
                             })
+                        }
                         })
                     }
             }})
@@ -169,6 +177,7 @@
                                                             })
                                                             if(sameAttrs){
                                                                 sameAttrs.forEach((k,jndex)=>{
+                                                                    console.log("selam")
                                                                 if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
                                                                     if(k!="class"){
                                                                         e.setAttribute(k,secondArray[index].getAttribute(k))
@@ -199,7 +208,8 @@
 setInterval(()=>{
     diff(first,second);
     setTimeout(()=>{
-        diff(first,third)
+        diff(second,third)
+        diff(third,first)
     },1000)
 },2000)
 
