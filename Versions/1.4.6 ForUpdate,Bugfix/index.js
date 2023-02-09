@@ -6,7 +6,7 @@ let Test=()=>{
     return html`<h1>Test Çalışıyor</h1>`
 }
 
-RegisterComponent(Test)
+
 
 let forList=For(array,(e)=>/*html*/`<p ${e=="text"?"class='text'":""}>${e} ${e=="test"?"<Test/>":""} <span>Not Diffed</span></p>`)
 
@@ -34,6 +34,7 @@ const Page=()=>{
     return Main
 }
 
+RegisterComponent(Test)
 
 
 app.render(Page)

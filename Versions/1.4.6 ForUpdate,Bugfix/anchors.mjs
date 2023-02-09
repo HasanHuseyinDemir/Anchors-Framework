@@ -105,7 +105,7 @@ export function html(data,...keys){
     let content=page.content;
 
     const effect=(arg)=>{
-        if(!document.querySelectorAll("."+details.key).length&&!content.isConnected){
+        if(!document.querySelectorAll("."+details.key).length||!content.isConnected){
             unmount.callback();
         }
         if(details.active==true&&document.querySelectorAll("."+details.key).length){
