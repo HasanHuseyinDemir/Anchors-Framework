@@ -4,11 +4,11 @@
 </div>
 <hr>
 <div id="second">
-<h2>Hello World <span>.</span></h2>
+<h2 classx="Dünya">Hello World <span>.</span></h2>
 </div>
 <hr>
 <div id="third">
-<h2>Merhaba Dünya <span>.</span></h2>
+<h2 classx="Merhaba">Hello World <span>.</span></h2>
 </div>
 
 
@@ -62,11 +62,26 @@
                                     //attributeler değişmesine rağmen aynı değilse diff açılır!
                                     //class diffing eklenecek ekle çıkar işlemleri
                                     //attributeler için diffing
+                                    if(e.nodeType==1&&secondArray[index].nodeType==1){
+                                        let firstNames=e.getAttributeNames()
+                                        let secondNames=secondArray[index].getAttributeNames();
 
+                                            secondNames.forEach((attr,ind)=>{
+                                                //class için olaylar farklı
+                                                if(attr!="class"){
+                                                    if(e.getAttribute(attr)!=secondArray[index].getAttribute(attr)){
+                                                        e.setAttribute(attr,secondArray[index].getAttribute(attr))
+                                                        console.log(e,secondArray[index])
+                                                    }
+                                                }
+                                            })
+
+                                    }   
 
                                     
                                     if(!e.isEqualNode(secondArray[index])){
-                                        diff(e,secondArray[index])
+                                        diff(e,secondArray[index])//ikisinden biri doğru
+                                        //e.replaceWith(secondArray[index].cloneNode(true))
                                     }
                                 }
                             }
@@ -79,9 +94,9 @@
     }
 
 setTimeout(()=>{
-    diff(first,third);
+    diff(first,second);
     setTimeout(()=>{
-        diff(first,second)
+        diff(first,third)
     },4000)
 },4000)
 
