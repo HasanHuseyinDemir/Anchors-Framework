@@ -16,6 +16,22 @@
     let first=document.querySelector("#first")
     let second=document.querySelector("#second")
 
+    const classDiff=(st,nd)=>{
+        let first=[...st.classList]
+        let second=[...nd.classList]
+        let classDiffNumber=Math.abs(first.length-second.length)
+
+        console.log(classDiffNumber)
+        if(!classDiffNumber){
+            second.forEach((cls,inde)=>{
+                
+            })
+        }else{
+            //add or remove
+        }
+
+    }
+
     const diff=(first,second,tested)=>{
         if(!first.isEqualNode(second)){
             let firstArray=Array.from(first.childNodes);
@@ -74,8 +90,7 @@
                                                         e.setAttribute(attr,secondArray[index].getAttribute(attr))
                                                     }
                                                 }else{
-                                                    console.log(e.classList)
-                                                    console.log(secondArray[index]["className"].classList)
+                                                    classDiff(e,secondArray[index])
                                                 }
                                             })
                                         }else{
@@ -96,7 +111,12 @@
                                                             if(sameAttrs.length){
                                                                 sameAttrs.forEach((k,jndex)=>{
                                                                 if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
-                                                                    e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                    if(k!="class"){
+                                                                        e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                    }else{
+                                                                        classDiff(e,secondArray[index])
+                                                                    }
+
                                                                 }
                                                             })
                                                             }
@@ -118,7 +138,11 @@
                                                             if(sameAttrs){
                                                                 sameAttrs.forEach((k,jndex)=>{
                                                                 if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
-                                                                    e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                    if(k!="class"){
+                                                                        e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                    }else{
+                                                                        classDiff(e,secondArray[index])
+                                                                    }   
                                                                 }
                                                             })
                                                             }
@@ -131,7 +155,7 @@
                                     if(!e.isEqualNode(secondArray[index])){
                                         diff(e,secondArray[index],true)//ikisinden biri doğru
                                     }
-                                    
+
                                     //confirm
                                     if(tested){
                                         e.replaceWith(secondArray[index])
