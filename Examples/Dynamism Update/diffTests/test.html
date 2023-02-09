@@ -37,7 +37,6 @@
                     }else if(same.length){
                         second.forEach((cs,ind)=>{
                             if(!same.includes(cs)){
-                                console.log(cs,"diff")
                             first.forEach((cf,ii)=>{
                                 
                                     st.classList.add(cs);
@@ -177,7 +176,6 @@
                                                             })
                                                             if(sameAttrs){
                                                                 sameAttrs.forEach((k,jndex)=>{
-                                                                    console.log("selam")
                                                                 if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
                                                                     if(k!="class"){
                                                                         e.setAttribute(k,secondArray[index].getAttribute(k))
@@ -216,9 +214,6 @@ setInterval(()=>{
 </script>
 
 <style>
-    *{
-        transition: 1s;
-    }
     .selam{
         background-color: blueviolet;
     }
