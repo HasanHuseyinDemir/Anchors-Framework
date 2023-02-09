@@ -58,7 +58,16 @@
                                 if(e.nodeName!=secondArray[index].nodeName){
                                     e.replaceWith(secondArray[index].cloneNode(true))
                                 }else{
-                                diff(e,secondArray[index])
+                                    //Attributeler farklı olabilir!
+                                    //attributeler değişmesine rağmen aynı değilse diff açılır!
+                                    //class diffing eklenecek ekle çıkar işlemleri
+                                    //attributeler için diffing
+
+
+                                    
+                                    if(!e.isEqualNode(secondArray[index])){
+                                        diff(e,secondArray[index])
+                                    }
                                 }
                             }
 
