@@ -4,11 +4,11 @@
 </div>
 <hr>
 <div id="second">
-<h2 classx="Dünya">Hello World <span>.</span></h2>
+<h2 class="selam">Hello World <span>.</span></h2>
 </div>
 <hr>
 <div id="third">
-<h2 classx="Merhaba">Hello World <span>.</span></h2>
+<h2 class="Merhaba" x="ss">Hello World <span>.</span></h2>
 </div>
 
 
@@ -16,7 +16,7 @@
     let first=document.querySelector("#first")
     let second=document.querySelector("#second")
 
-    const diff=(first,second)=>{
+    const diff=(first,second,tested)=>{
         if(!first.isEqualNode(second)){
             let firstArray=Array.from(first.childNodes);
             let firstLength=firstArray.length;
@@ -65,23 +65,76 @@
                                     if(e.nodeType==1&&secondArray[index].nodeType==1){
                                         let firstNames=e.getAttributeNames()
                                         let secondNames=secondArray[index].getAttributeNames();
-
-                                            secondNames.forEach((attr,ind)=>{
+                                        let diffAttrNumber=Math.abs(firstNames.length-secondNames.length)
+                                            if(secondNames.length==firstNames.length){
+                                                secondNames.forEach((attr,ind)=>{
                                                 //class için olaylar farklı
                                                 if(attr!="class"){
                                                     if(e.getAttribute(attr)!=secondArray[index].getAttribute(attr)){
                                                         e.setAttribute(attr,secondArray[index].getAttribute(attr))
-                                                        console.log(e,secondArray[index])
                                                     }
+                                                }else{
+                                                    console.log(e.classList)
+                                                    console.log(secondArray[index]["className"].classList)
                                                 }
                                             })
+                                        }else{
+                                            //attribute ekle çıkar işlemleri
+                                                if (firstNames.length > secondNames.length) {
+                                                    //removeattribute
+                                                            let differentAttrs=firstNames.filter((attribute)=>{
+                                                                return !secondNames.includes(attribute)
+                                                            })
+                                                            if(differentAttrs.length){
+                                                                differentAttrs.forEach((diffed)=>{
+                                                                e.removeAttribute(diffed)
+                                                                })
+                                                            }
+                                                            let sameAttrs=firstNames.filter((attribute)=>{
+                                                                return secondNames.includes(attribute)
+                                                            })
+                                                            if(sameAttrs.length){
+                                                                sameAttrs.forEach((k,jndex)=>{
+                                                                if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
+                                                                    e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                }
+                                                            })
+                                                            }
+                                                    diff(e, secondArray[index])
+                                                } else if (secondNames.length > firstNames.length) {
+                                                    //addAttr
+                                                        if (!e.isEqualNode(secondArray[index])) {
+                                                            let differentAttrs=secondNames.filter((attribute)=>{
+                                                                return !firstNames.includes(attribute)
+                                                            })
+                                                            if(differentAttrs.length){
+                                                                differentAttrs.forEach((diffed)=>{
+                                                                e.setAttribute(diffed,secondArray[index].getAttribute(diffed))
+                                                                })
+                                                            }
+                                                            let sameAttrs=secondNames.filter((attribute)=>{
+                                                                return firstNames.includes(attribute)
+                                                            })
+                                                            if(sameAttrs){
+                                                                sameAttrs.forEach((k,jndex)=>{
+                                                                if(e.getAttribute(k)!=secondArray[index].getAttribute(k)){
+                                                                    e.setAttribute(k,secondArray[index].getAttribute(k))
+                                                                }
+                                                            })
+                                                            }
+                                                        }
+                                                    diff(e, secondArray[index])
+                                                }
+                                        }
+                                    }
 
-                                    }   
-
-                                    
                                     if(!e.isEqualNode(secondArray[index])){
-                                        diff(e,secondArray[index])//ikisinden biri doğru
-                                        //e.replaceWith(secondArray[index].cloneNode(true))
+                                        diff(e,secondArray[index],true)//ikisinden biri doğru
+                                    }
+                                    
+                                    //confirm
+                                    if(tested){
+                                        e.replaceWith(secondArray[index])
                                     }
                                 }
                             }
@@ -93,11 +146,20 @@
         }
     }
 
-setTimeout(()=>{
+setInterval(()=>{
     diff(first,second);
     setTimeout(()=>{
         diff(first,third)
-    },4000)
-},4000)
+    },1000)
+},2000)
 
 </script>
+
+<style>
+    body{
+        transition: 1s;
+    }
+    .selam{
+        background-color: blueviolet;
+    }
+</style>
