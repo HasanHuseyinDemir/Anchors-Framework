@@ -10,8 +10,8 @@
 # Installation Latest v[1.4.2] "Dynamism Update;Component Register,Slot,Props,StateManagement,Render,Bugfixes" 
 
 ## Recomended VSCode Extensions
-> "es6-string-jsx"<br>
-```"/*jsx*/"``` for highlighting html string<br>
+> "es6-string-jsx" and "es6-string-html"<br>
+```"/*jsx*/ or /*html*/"``` for highlighting html string<br>
 ``` let page=html/*jsx*/`<div>Highlighted!</div>` ```
 
 ## Import For Module
