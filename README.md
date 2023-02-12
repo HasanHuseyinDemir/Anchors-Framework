@@ -16,13 +16,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,RegisterComponent,GlobalUpdate,OnGlobalUpdate,simpleFor} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.2-Component%20Register%2CBugFix/anchors.min.mjs"
-export {html,HTML,RegisterComponent,GlobalUpdate,OnGlobalUpdate,simpleFor}
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.7%20Style%20Scope/dry/anchors.min.mjs"
+export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.2-Component%20Register%2CBugFix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.7%20Style%20Scope/dry/anchors.min.js"></script>
 ```
 
 
