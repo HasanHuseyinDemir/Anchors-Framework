@@ -59,7 +59,7 @@ Object.prototype.loadComponents=function(){
     })
 }
 
-export const RegisterComponent=(key,component)=>{
+ const RegisterComponent=(key,component)=>{
     if(typeof key=="string"){
         Anchor.registeredComponents.set(key,component)
     }else if(typeof key=="function"){
@@ -101,7 +101,7 @@ const styleScoper=(content)=>{
         }
 }
 
-export function html(data,...keys){
+ function html(data,...keys){
     const details={
         nodeLists:[],
         onEffect:null,
@@ -688,16 +688,16 @@ const diff=(first,second,confirmed)=>{
 }
 
 
-export const GlobalUpdate=()=>{
+ const GlobalUpdate=()=>{
     document.dispatchEvent(updatedEvent);
 }
 
-export const OnGlobalUpdate=(func)=>{
+ const OnGlobalUpdate=(func)=>{
     document.addEventListener("updated",func)
 }
 
 
-export const HTML=(str)=>{
+ const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
     let type="HTML";
@@ -743,7 +743,7 @@ export const HTML=(str)=>{
 
 
 
-export const nodeList=function(list){
+ const nodeList=function(list){
     const ARRAY=[]
     Object.keys(list).forEach((key)=>{
         if(typeof list[key]=="function"){
@@ -786,7 +786,7 @@ export const nodeList=function(list){
 
 
 
-export const For=function(a,t){
+ const For=function(a,t){
     let array=a;
     let template=t;
     let fragment=document.createElement("div");
@@ -1225,7 +1225,7 @@ const STATES=(element,ARRAY,list,prox)=>{
     })
 })}
 
-export const createStore=(list)=>{
+ const createStore=(list)=>{
     const ARRAY=[];
     var prox = new Proxy(list,{
         get: (target, key) => {
