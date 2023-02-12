@@ -4,10 +4,10 @@
 <img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Lightweight Javascript Framework</p>
-<p>12KB</p>
+<p>19KB</p>
 <br>
 
-# Installation Latest v[1.4.2] "Dynamism Update;Component Register,Slot,Props,StateManagement,Render,Bugfixes" 
+# Installation Latest v[1.4.7] "Style Scope Update" 
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
