@@ -194,8 +194,7 @@ export function html(data,...keys){
         keys.forEach((key)=>{
             datalist[key]=list[key]
         }
-
-    )
+        )
 
         content.querySelectorAll("[state]").forEach((e)=>{
             let getted_attr=e.getAttribute("state");
