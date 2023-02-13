@@ -270,7 +270,7 @@ export function html(data,...keys){
         state=new Proxy(state,{
             get: (target, key) => {
             typeof target["computed"]=="function"?target.computed():"",
-            typeof target[key]=="function"?(effect()):""
+            typeof target[key]=="function"?(update()):""
             return target[key];
         },
         set: (target, key, value) => {
