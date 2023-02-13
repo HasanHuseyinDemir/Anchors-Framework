@@ -1264,6 +1264,9 @@ export const createStore=(list)=>{
     const ARRAY=[];
     var prox = new Proxy(list,{
         get: (target, key) => {
+            if(typeof target.computed=="function"){
+                if(ARRAY.length)target.computed()
+            }
         return target[key];
     },
     set: (target, key, value) => {
