@@ -1084,7 +1084,7 @@ Object.defineProperties(Object.prototype,{
 })}
 
 //prevents unnecessary renders
-const debounce = (func, delayGetter) => {
+export const debounce = (func, delayGetter) => {
     let db
     return function() {
       clearTimeout(db)
