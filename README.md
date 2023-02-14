@@ -4,7 +4,7 @@
 <img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Dynamic Javascript Framework</p>
-<p>Total Size:47KB</p>
+<p>Total Size : 47KB</p>
 <p>Minified Size : 19KB</p>
 <br>
 
