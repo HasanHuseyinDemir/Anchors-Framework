@@ -90,7 +90,7 @@ const MethodUpdate=(content,state)=>{
             })
         }
 
-const RegisterComponent=(key,component)=>{
+export const RegisterComponent=(key,component)=>{
     if(typeof key=="string"){
         Anchor.registeredComponents.set(key,component)
     }else if(typeof key=="function"){
@@ -132,7 +132,7 @@ const styleScoper=(content)=>{
         }
 }
 
-function html(data,...keys){
+export function html(data,...keys){
     const details={
         nodeLists:[],
         onEffect:null,
@@ -164,10 +164,9 @@ function html(data,...keys){
     let content=page.content;
     styleScoper(content)
     const effect=(arg)=>{
-        if(!document.querySelectorAll("."+details.key).length||!content.isConnected){
+        if(!(!document.querySelectorAll("."+details.key).length||!content.isConnected)&&details.mounted){
             unmount.callback();
-        }
-        if(details.mounted==true||document.querySelectorAll("."+details.key).length){
+        }else if(details.mounted||document.querySelectorAll("."+details.key).length){
             typeof details.createEffect=="function"?details.createEffect():""
             if(details.childUpdates.length){details.childUpdates.forEach((f)=>f())}
             let signal=false;
@@ -206,7 +205,6 @@ function html(data,...keys){
             details.mounted=true;
             details.onMount?details.onMount():"";
             details.active=true;
-            document.dispatchEvent(updatedEvent);
         }
     }
 
@@ -521,8 +519,6 @@ function html(data,...keys){
         details.active=false;
     }}
 
-
-
     //State Updates
     update();
     document.addEventListener("updated",()=>update());
@@ -722,16 +718,16 @@ const diff=(first,second,confirmed)=>{
 }
 
 
-const GlobalUpdate=()=>{
+export const GlobalUpdate=()=>{
     document.dispatchEvent(updatedEvent);
 }
 
-const OnGlobalUpdate=(func)=>{
+export const OnGlobalUpdate=(func)=>{
     document.addEventListener("updated",func)
 }
 
 
-const HTML=(str)=>{
+export const HTML=(str)=>{
     let template=document.createElement("template");
     let string="";
     let type="HTML";
@@ -757,7 +753,6 @@ const HTML=(str)=>{
 
     const mount=()=>{
         typeof details.onMount=="function"?details.onMount():"";
-        document.dispatchEvent(updatedEvent);
     }
 
     const unmount={
@@ -778,7 +773,7 @@ const HTML=(str)=>{
 
 
 
-const nodeList=function(list){
+export const nodeList=function(list){
     const ARRAY=[]
     Object.keys(list).forEach((key)=>{
         if(typeof list[key]=="function"){
@@ -821,7 +816,7 @@ const nodeList=function(list){
 
 
 
-const For=function(a,t){
+export const For=function(a,t){
     let array=a;
     let template=t;
     let fragment=document.createElement("div");
@@ -1264,7 +1259,7 @@ const STATES=(element,ARRAY,list,prox)=>{
     })
 })}
 
-const createStore=(list)=>{
+export const createStore=(list)=>{
     const ARRAY=[];
     var prox = new Proxy(list,{
         get: (target, key) => {
