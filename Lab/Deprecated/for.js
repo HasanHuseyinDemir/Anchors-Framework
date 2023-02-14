@@ -1,4 +1,4 @@
-
+//DEPRECATED!
 //slightly buggy
 export const For=function(a,t){
     const details={

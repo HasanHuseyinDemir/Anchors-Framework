@@ -1,0 +1,25 @@
+
+<div id="app"></div>
+
+<script type="module">
+import {html} from "./anchors.mjs"
+const Page=()=>{
+let Main=html`<div>
+Merhaba
+{{x}}
+<input $model="x" type="number">
+
+<input type="range" min="1" max="100" $model="x">
+</div>`
+Main.states({
+x:0,
+})
+
+//Debounce = 0ms
+Main.setRate(0)
+
+return Main
+}
+
+document.querySelectorAll("#app").render(Page)
+</script>
