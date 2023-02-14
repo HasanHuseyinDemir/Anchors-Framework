@@ -10,6 +10,9 @@ export const Tutorials=()=>{
     Main.onMount(()=>{
         document.title="Anchors-Tutorials"
     })
+    Main.onUnmount(()=>{
+        console.log("Tutorials-Unmount")
+    })
 
     return Main
 }

@@ -7,6 +7,8 @@ export const About=()=>{
     Main.onMount(()=>{
         document.title="Anchors-About";
     })
-
+    Main.onUnmount(()=>{
+        console.log("About-Unmount")
+    })
     return Main
 }

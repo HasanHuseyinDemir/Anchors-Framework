@@ -12,7 +12,7 @@ export const Home=()=>{
         document.title="Anchors-Home"
     })
     Main.details.onUnmount=()=>{
-        console.log("Unmount")
+        console.log("Home-Unmount")
     }
 
     return Main

@@ -8,5 +8,8 @@ export const Examples=()=>{
     Main.onMount(()=>{
     document.title="Anchors-Examples"
     })
+    Main.onUnmount(()=>{
+        console.log("Examples-Unmount")
+    })
     return Main
 }
