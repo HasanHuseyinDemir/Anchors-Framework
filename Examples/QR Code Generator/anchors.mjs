@@ -1092,7 +1092,7 @@ const $$$_=($,$$,_,content)=>{
     content.querySelectorAll("[delete]").forEach((el)=>{el.remove()});
 }
 
-const Returner=(data,str)=>{
+const NestedGetter=(data,str)=>{
     let array=str.split(".")
     let object=data;
     for(let nest of array){
@@ -1104,12 +1104,12 @@ const Returner=(data,str)=>{
 const STATES=(element,ARRAY,list,prox)=>{
     element.querySelectorAll("[state]").forEach((e)=>{
     let getted_attr=e.getAttribute("state");
-    switch(typeof Returner(list,getted_attr)){
+    switch(typeof NestedGetter(list,getted_attr)){
         case "number":case "string":            
-        let node=document.createTextNode(Returner(list,getted_attr))
+        let node=document.createTextNode(NestedGetter(list,getted_attr))
         e.replaceWith(node);
         const updater=()=>{
-            node.nodeValue=Returner(list,getted_attr);
+            node.nodeValue=NestedGetter(list,getted_attr);
         }
         ARRAY.push({value:getted_attr,callback:updater})
         break;
@@ -1123,7 +1123,7 @@ const STATES=(element,ARRAY,list,prox)=>{
             let getted_attr=e.getAttribute(i);
             switch(attr){
             case "onclick":case "oninput": case "onchange": case "onmouseover":
-                    e[attr]=()=>{Returner(list,getted_attr)();
+                    e[attr]=()=>{NestedGetter(list,getted_attr)();
                     typeof list.computed==="function"?list.computed():""
                 }
             ;break;
@@ -1154,24 +1154,24 @@ const STATES=(element,ARRAY,list,prox)=>{
             break;
             
             case "class":
-                let result=Returner(list,getted_attr);
+                let result=NestedGetter(list,getted_attr);
                 if(result){
                     e.classList.add(result)
                 }
                 let before=result;
                 const updateClass=function(){
-                    if(Returner(list,getted_attr)&&e.classList.contains(before)){
-                        if(before!=Returner(list,getted_attr)){
+                    if(NestedGetter(list,getted_attr)&&e.classList.contains(before)){
+                        if(before!=NestedGetter(list,getted_attr)){
                             e.classList.remove(before)
-                            e.classList.add(Returner(list,getted_attr))
-                            before=Returner(list,getted_attr)
+                            e.classList.add(NestedGetter(list,getted_attr))
+                            before=NestedGetter(list,getted_attr)
                         }
                     }
-                    else if(!Returner(list,getted_attr)&&e.classList.contains(before)){
+                    else if(!NestedGetter(list,getted_attr)&&e.classList.contains(before)){
                         e.classList.remove(before)
-                    }else  if(Returner(list,getted_attr)&&!e.classList[Returner(list,getted_attr)]){
-                        e.classList.add(Returner(list,getted_attr))
-                        before=Returner(list,getted_attr)
+                    }else  if(NestedGetter(list,getted_attr)&&!e.classList[NestedGetter(list,getted_attr)]){
+                        e.classList.add(NestedGetter(list,getted_attr))
+                        before=NestedGetter(list,getted_attr)
                     }
                 }
                 updateClass();
@@ -1180,7 +1180,7 @@ const STATES=(element,ARRAY,list,prox)=>{
             
             case "hide": case "show":{
                 const control=()=>{
-                    let result=Returner(list,getted_attr);
+                    let result=NestedGetter(list,getted_attr);
                     if((attr=="hide"&&result)||attr=="show"&&!result){
                         e.style.display="none"
                     }else{
@@ -1194,7 +1194,7 @@ const STATES=(element,ARRAY,list,prox)=>{
             ;break;
             case "visible": case "invisible":{
                 const control=()=>{
-                    let result=Returner(list,getted_attr);
+                    let result=NestedGetter(list,getted_attr);
                     if((attr=="invisible"&&result)||attr=="visible"&&!result){
                         e.style.visibility="hidden"
                     }else{
@@ -1208,7 +1208,7 @@ const STATES=(element,ARRAY,list,prox)=>{
             ;break;
             case "destroy":{
                 const control=function(){
-                    let result=Returner(list,getted_attr);
+                    let result=NestedGetter(list,getted_attr);
                     if(result){
                         e.remove();
                     }
