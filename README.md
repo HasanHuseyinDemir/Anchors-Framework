@@ -17,13 +17,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework@6cc3235f2dcd79ac745545bce89d4410e51d5427/Versions/1.4.8%20Interactivity%20Update/unmountFix/anchors.min.mjs"
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.8%20Interactivity%20Update/4-MajorFix/anchors.min.mjs"
 export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework@6cc3235f2dcd79ac745545bce89d4410e51d5427/Versions/1.4.8%20Interactivity%20Update/unmountFix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.8%20Interactivity%20Update/4-MajorFix/anchors.min.js"></script>
 ```
 
 
