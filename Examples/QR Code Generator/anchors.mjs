@@ -1057,7 +1057,7 @@ Object.defineProperties(Object.prototype,{
 "onLoad":{set(Event){a("onload",this,Event)}},
 })}
 
-//prevents unnecessary renders
+//prevents unnecessary renders for "html" updates
 //EXPORT
 const debounce = (func, delayGetter) => {
     let db
@@ -1065,7 +1065,7 @@ const debounce = (func, delayGetter) => {
       clearTimeout(db)
       db = setTimeout(() =>
         func()
-      , delayGetter())
+      , typeof delayGetter=="function"?delayGetter():delayGetter)
     }
   }
 
