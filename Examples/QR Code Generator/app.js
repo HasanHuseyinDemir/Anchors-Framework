@@ -10,7 +10,6 @@ const Page=()=>{
                 return ``
             }
         }}</p>
-        <Test/>
         <button [[aktif]] >Hello</button>
     </>`
 
@@ -23,20 +22,5 @@ const Page=()=>{
     document.title="QR Code Generator"
     return Main
 }
-
-let t=html`<p>${new Date().getSeconds()}</p>`
-
-const Test=()=>{
-    let Page=html`[{test}]`
-    setInterval(()=>{
-        Page.$["test"].render(t)
-    },1000)
-    return Page
-}
-
-
-
-RegisterComponent(Test)
-
 
 document.querySelectorAll("#app").render(Page);
