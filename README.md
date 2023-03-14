@@ -8,7 +8,7 @@
 <p>Minified Size : 19KB</p>
 <br>
 
-# Installation Latest v[1.4.8] "Stability Update" 
+# Installation Latest v[1.4.9] "Stability Update" 
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
