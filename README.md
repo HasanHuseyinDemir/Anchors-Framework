@@ -8,7 +8,7 @@
 <p>Minified Size : 19KB</p>
 <br>
 
-# Installation Latest v[1.4.8] "Interactivity Update" 
+# Installation Latest v[1.4.9] "Stability Update" 
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -17,13 +17,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.8%20Interactivity%20Update/4-MajorFix/anchors.min.mjs"
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/anchors.min.mjs"
 export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.8%20Interactivity%20Update/4-MajorFix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/anchors.min.js"></script>
 ```
 
 
