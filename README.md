@@ -4,11 +4,13 @@
 <img width="200px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/Anchors.png">
 <h1 align="center">Anchors</h1>
 <p align="center">A Declarative and Dynamic Javascript Framework</p>
-<p>Total Size : 47KB</p>
-<p>Minified Size : 19KB</p>
+<p>Total Size : 39KB</p>
+<p>Minified Size : 16,3 KB</p>
 <br>
 
-# Installation Latest v[1.4.9.1] "Stability Update"
+# Installation Latest v[1.4.9.3] "Stability Update"
+
+<i>1.4.9.3</i> MajorBugFixes,StateManagement,BetterStore,Optimization,DryCode
 <br>
 
 ## Recomended VSCode Extensions
@@ -18,13 +20,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/1-Component-Fix/anchors.min.mjs"
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/3-S.Management-Opt-BetterStore-BetterNodes-Modules/anchors.min.mjs"
 export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/1-Component-Fix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/3-S.Management-Opt-BetterStore-BetterNodes-Modules/anchors.min.js"></script>
 ```
 
 
