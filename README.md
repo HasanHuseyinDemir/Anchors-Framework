@@ -12,6 +12,7 @@
 
 <i>1.4.9.3</i> MajorBugFixes,StateManagement,BetterStore,Optimization,DryCode
 <br>
+<i>1.4.9.5</i> Nodelists Update
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -20,13 +21,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/3-S.Management-Opt-BetterStore-BetterNodes-Modules/anchors.min.mjs"
-export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For}
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/5-Nodelists-Update/anchors.min.mjs"
+export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/3-S.Management-Opt-BetterStore-BetterNodes-Modules/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/5-Nodelists-Update/anchors.min.js"></script>
 ```
 
 
