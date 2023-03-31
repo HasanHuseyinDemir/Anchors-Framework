@@ -31,8 +31,5 @@ export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUp
 ```
 
 ## Codepen Template
-  ``` 
-  
-https://codepen.io/pen?template=KKxLOpL
+> https://codepen.io/pen?template=KKxLOpL
 
-  ```
