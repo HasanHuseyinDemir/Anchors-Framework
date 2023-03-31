@@ -8,7 +8,7 @@
 <p>Minified Size : 16,3 KB</p>
 <br>
 
-# *Recomended for beginners : Replit Examples
+# Recomended For Beginners <br> Replit Examples
 > https://replit.com/@HasanHuseyinDem
 
 # Installation Latest v[1.4.9.5] "Stability Update"
