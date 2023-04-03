@@ -1,6 +1,6 @@
-/*OPEN*/ 
+/*OPEN
 (()=>{
-/*CLOSE*/
+CLOSE*/
 const Anchor={
     replacer:function(string){
         let str=string.replace("<>","<div>").replace("</>","</div>");
@@ -1090,7 +1090,7 @@ Object.prototype.registerStore=function(storeName){
 }
 
 //EXPORT FOR GLOBAL
-/*OPEN*/
+/*OPEN
 window.html=html
 window.HTML=HTML
 window.createStore=createStore
@@ -1105,7 +1105,7 @@ window.H=H;
 
 
 })()
-/*CLOSE*/
+CLOSE*/
 
 //FOR MODULE
-//export {createStore,debounce,For,nodeList,HTML,html,OnGlobalUpdate,GlobalUpdate,RegisterComponent,H}
+export {createStore,debounce,For,nodeList,HTML,html,OnGlobalUpdate,GlobalUpdate,RegisterComponent,H}
