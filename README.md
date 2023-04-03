@@ -11,11 +11,13 @@
 # Recomended For Beginners <br> Replit Examples
 > https://replit.com/@HasanHuseyinDem
 
-# Installation Latest v[1.4.9.5] "Stability Update"
+# Installation Latest v[1.4.9.6] "Stability Update"
 
 <i>1.4.9.3</i> MajorBugFixes,StateManagement,BetterStore,Optimization,DryCode
 <br>
 <i>1.4.9.5</i> Nodelists Update
+<br>
+<i>1.4.9.6</i> unmount problemsfix,statesfix,querySelector,querySelectorAll,getElementById,(Anchor,tnode,mark removed) 
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
