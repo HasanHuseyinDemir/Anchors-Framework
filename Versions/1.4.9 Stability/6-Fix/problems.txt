@@ -1,0 +1,3 @@
+[] For döngüsünde states soruyor?
+[] tnode ve anchor gibi array dönmesi sorun oluşturuyor
+[] 
