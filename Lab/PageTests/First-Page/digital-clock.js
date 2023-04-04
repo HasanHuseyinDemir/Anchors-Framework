@@ -1,5 +1,5 @@
 import {html,c} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/Render-Bug-Fix%201.0.1/Minified/anchors.min.mjs";
-import { twoDigit } from "../../MiniUtiltyTools/twoDigit.js";
+import { twoDigit } from "../../../MiniUtiltyTools/twoDigit.js";
 
 export function DigitalClock(){
     let page=html/*html*/`
