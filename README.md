@@ -11,13 +11,7 @@
 # Recomended For Beginners <br> Replit Examples
 > https://replit.com/@HasanHuseyinDem
 
-# Installation Latest v[1.4.9.6] "Stability Update"
-
-<i>1.4.9.3</i> MajorBugFixes,StateManagement,BetterStore,Optimization,DryCode
-<br>
-<i>1.4.9.5</i> Nodelists Update
-<br>
-<i>1.4.9.6</i> unmount problemsfix,statesfix,querySelector,querySelectorAll,getElementById,(Anchor,tnode,mark removed) 
+# Installation Latest v[1.5] "Integration Update"
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -26,13 +20,13 @@
 
 ## Import For Module
 ```
-import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/6-Fix/anchors.min.mjs"
+import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration%20Update/anchors.min.mjs"
 export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H}
 ```
 
 ## Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.4.9%20Stability/6-Fix/anchors.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration%20Update/anchors.min.js"></script>
 ```
 
 ## Replit Template
