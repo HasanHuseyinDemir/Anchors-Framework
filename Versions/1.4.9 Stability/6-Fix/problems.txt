@@ -13,4 +13,6 @@
 
 
 -------------------------------------------
-[] For döngüsü ile daha kolay etkileşim
+
+--1.5--
+[x] For döngüsü ile daha kolay etkileşim
