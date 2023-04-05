@@ -25,13 +25,13 @@
 ```"/*jsx*/ or /*html*/"``` for highlighting html string<br>
 ``` let page=html/*jsx*/`<div>Highlighted!</div>` ```
 
-## Import For Module
+## CDN Import For Module
 ```
 import {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration%20Update/anchors.min.mjs"
 export {html,HTML,createStore,nodeList,RegisterComponent,GlobalUpdate,OnGlobalUpdate,For,H}
 ```
 
-## Import For Global 
+## CDN Import For Global 
 ```
 <script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration%20Update/anchors.min.js"></script>
 ```
