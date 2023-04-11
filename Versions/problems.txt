@@ -20,5 +20,6 @@
 [] class kullanmak yerine isconnected ile document taraması yapılabilir
 
 [x] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için! =>Halledildi 1.5.1
+=> [] Vite ve npm güncellemesi gerekebilir
 
 [] Methods Değer döndürmüyor
