@@ -14,5 +14,9 @@
 
 -------------------------------------------
 
---1.5--
+--1.5 Integration Update--
 [x] For döngüsü ile daha kolay etkileşim
+
+[] class kullanmak yerine isconnected ile document taraması yapılabilir
+
+[] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için!

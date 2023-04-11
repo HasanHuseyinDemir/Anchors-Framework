@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    
+    <div id="app"></div>
+
+
+    <script>
+        let Main=()=>{
+            let Page=html`
+            <>
+                <button $onclick="increase">{{count}}</button>
+                <button $onclick="increase">{{count}}</button>
+                <button $onclick="increase">{{count}}</button>
+            </>
+            `
+
+            Page.states({
+                count:0,
+                increase(){
+                    this.count++
+                }
+            })
+            return Page
+        }
+        document.querySelectorAll("#app").render(Main)
+    </script>
+</body>
+</html>
