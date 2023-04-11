@@ -19,4 +19,6 @@
 
 [] class kullanmak yerine isconnected ile document taraması yapılabilir
 
-[] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için!
+[x] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için! =>Halledildi 1.5.1
+
+[] Methods Değer döndürmüyor
