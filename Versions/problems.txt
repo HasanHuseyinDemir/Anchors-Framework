@@ -25,7 +25,10 @@
 
 [] Methods Değer döndürmüyor
 
+//CLASS ile uyumluluk
 //template objesi sayfanın çıktısını gösterir...
 [] Class ile .render(new Class().template) yerine .render(Class) kullanılabilir
 
 [] Class ile component içine de sayfa çağırılabilir <>${Class}</>
+
+[] Class ile RegisterComponent kullanılabilir
