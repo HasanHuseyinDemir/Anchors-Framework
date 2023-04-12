@@ -25,6 +25,8 @@
 
 [] Methods Değer döndürmüyor
 
+[] Daha kolay veri erişimi için global data eklenebilir
+
 //CLASS ile uyumluluk
 //template objesi sayfanın çıktısını gösterir...
 [] Class ile .render(new Class().template) yerine .render(Class) kullanılabilir
