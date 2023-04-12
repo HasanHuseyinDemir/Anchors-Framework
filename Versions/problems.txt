@@ -17,9 +17,15 @@
 --1.5 Integration Update--
 [x] For döngüsü ile daha kolay etkileşim
 
+//Unmount için
 [] class kullanmak yerine isconnected ile document taraması yapılabilir
 
 [x] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için! =>Halledildi 1.5.1
 => [] Vite ve npm güncellemesi gerekebilir
 
 [] Methods Değer döndürmüyor
+
+//template objesi sayfanın çıktısını gösterir...
+[] Class ile .render(new Class().template) yerine .render(Class) kullanılabilir
+
+[] Class ile component içine de sayfa çağırılabilir <>${Class}</>
