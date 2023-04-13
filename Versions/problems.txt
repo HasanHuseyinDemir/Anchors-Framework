@@ -34,3 +34,5 @@
 [] Class ile component içine de sayfa çağırılabilir <>${Class}</>
 
 [] Class ile RegisterComponent kullanılabilir
+
+[] createStore artık

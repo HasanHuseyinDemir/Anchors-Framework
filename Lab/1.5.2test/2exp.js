@@ -411,6 +411,7 @@ const html=(data,...keys)=>{
     
     FEC.classList.add(details.key);
 
+
     var object={hideKey,isMounted,querySelector,querySelectorAll,getElementById,content:FEC,details,unmount,effect,signal,mount,update,localUpdate,states,methods}
     return object;
 }

@@ -411,6 +411,7 @@ const html=(data,...keys)=>{
     
     FEC.classList.add(details.key);
 
+
     var object={hideKey,isMounted,querySelector,querySelectorAll,getElementById,content:FEC,details,unmount,effect,signal,mount,update,localUpdate,states,methods}
     return object;
 }
@@ -946,18 +947,6 @@ const debounce = (func, delayGetter) => {
 
 window.prototyped=true;
 
-//data prox
-function Returner(obj, prop) {
-    if(typeof obj === 'undefined') {
-        return false;
-    }
-    var _index = prop.indexOf('.')
-     if(_index > -1) {
-        return Returner(obj[prop.substring(0, _index)], prop.substr(_index + 1));
-    }
-    return obj;
-}
-
 const STATES=(element,ARRAY,list,prox)=>{
     element.querySelectorAll("[state]").forEach((e)=>{
         let getted_attr=e.getAttribute("state");
@@ -969,13 +958,10 @@ const STATES=(element,ARRAY,list,prox)=>{
             apply=applied[1]
             apply=new Function(`return ${apply}`)()
         }
-        let split=app.split(".")
-        let last=[split[split.length-1]].join("")
-        let re=()=>Returner(prox,app)
         function getResult(){
-            return typeof re()[last]=="function"?re()[last](apply):re()[last]
+            return typeof prox[applied[0]??getted_attr]=="function"?prox[applied[0]??getted_attr](apply):prox[applied[0]??getted_attr]
         }
-        switch(typeof re()[last]){
+        switch(typeof prox[app]){
             case "number":case "string":
             let node=document.createTextNode(getResult())
             e.replaceWith(node);
@@ -983,8 +969,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                 let result=getResult()
                 node.textContent!==result?node.nodeValue=result:""
             }
-            
-            ARRAY.push({value:last,callback:getter,el:node});
+            ARRAY.push({value:getted_attr,callback:getter,el:node});
             break;
             case "function":
                 let result=()=>getResult()
@@ -996,31 +981,35 @@ const STATES=(element,ARRAY,list,prox)=>{
                 }
                 ARRAY.push({value:"*",callback:getterF,el:nodeF});
             ;break
-            case "object":/*elements*/console.warn("Anchors Warn:\nPlease do not use object for 'createStore'");break;
         };
     })
 
     element.querySelectorAll("*").forEach((e)=>{
         let attrnames=e.getAttributeNames()
         attrnames.forEach((i)=>{
-            
             if(i[0]=="$"&&typeof list[e.getAttribute(i)]){
+                //data prox
+                const Returner=(data,str)=>{
+                    let array=str.split(".")
+                    let object=data;
+                    for(let nest of array){
+                        object=object[nest]
+                    }   
+                    return object
+                }
                 let attr=i.slice(1);
                 let getted_attr=e.getAttribute(i);
                 let applied=getted_attr.split("(");
-                let app=applied[0].trim();
                 let apply=null;
-                let split=app.split(".")
-                let last=[split[split.length-1]].join("");
-                let re=()=>Returner(prox,app)
+
                 function getResult(){
-                    return typeof re()[last]=="function"?re()[last](apply):re()[last]
+                    return typeof prox[applied[0]??getted_attr]=="function"?prox[applied[0]??getted_attr](apply):prox[applied[0]??getted_attr]
                 }
                 //boilerPlate
                 const bp=(control,arg,func)=>{
-                    ARRAY.push({value:(func?"*":last),callback:control,el:e})
+                    ARRAY.push({value:(func?"*":getted_attr),callback:control,el:e})
                     if(arg){
-                        if(re()[last]!=null&&re()[last]!=undefined)e.removeAttribute(i)
+                        if(prox[applied[0]??getted_attr]!=null&&prox[applied[0]??getted_attr]!=undefined)e.removeAttribute(i)
                     }
                     control();
                 }
@@ -1036,28 +1025,28 @@ const STATES=(element,ARRAY,list,prox)=>{
                     }
                 }
                 if(isonEvents(attr)){
-                    if(re()[last]){e.removeAttribute(i)
-                        e[attr]=()=>{re()[last](apply??e)}
+                    if(prox[applied[0]??getted_attr]){e.removeAttribute(i)
+                        e[attr]=()=>{prox[applied[0]??getted_attr](apply??e)}
                         }
                 }else{
                 switch(attr){
                 case "model":
-                    if(typeof re()[last])e.removeAttribute(i)
+                    if(typeof prox[getted_attr])e.removeAttribute(i)
                     if(Anchor.valueTypeControl(e.type)){
                         e["oninput"]=()=>{
-                            re()[last]=e.value;
+                            prox[getted_attr]=e.value;
                         }
-                    }else if(Anchor.checkedTypeControl(e.type)){
+                    }else if(Anchor.checkedTypeControl(type)){
                         e["oninput"]=()=>{
-                            re()[last]=e.checked;
+                            prox[getted_attr]=e.checked;
                         }
                     }
                     //getter
                     const updateModel=function(){
                         if(Anchor.valueTypeControl(e.type)){
-                            e.value=re()[last];
+                            e.value=prox[getted_attr];
                         }else if(Anchor.checkedTypeControl(e.type)){
-                            e.textContent=re()[last];
+                            e.textContent=prox[getted_attr];
                         }
                     }
                     bp(updateModel)
@@ -1085,7 +1074,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                             before=result
                         }
                 }
-                    bp(updateClass,true,typeof re()[last]=="function")
+                    bp(updateClass,true,typeof prox[applied[0]]=="function")
                 ;break;
                 case "hide": case "show":{
                     const control=()=>{
@@ -1108,7 +1097,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                             e.style.visibility="visible"
                         }
                     }
-                    bp(control,true,typeof re()[last]=="function")
+                    bp(control,true,typeof prox[applied[0]]=="function")
                 }
                 ;break;
                 case "destroy":{
@@ -1118,14 +1107,14 @@ const STATES=(element,ARRAY,list,prox)=>{
                             e.remove();
                         }
                     }
-                    bp(control,true,typeof re()[last]=="function")
+                    bp(control,true,typeof prox[applied[0]]=="function")
                 };break;
                 default:{
                         if(attr=="click"){
                             console.warn("Anchors Warn:\nPlease use '$onclick' instead of '$click'\n$click event causes infinite loop")
                         }else{
                             const control=()=>{e[attr]=getResult()}
-                            bp(control,true,typeof re()[last]=="function")
+                            bp(control,true,typeof prox[applied[0]]=="function")
                         }
                     }
                 ;break;
@@ -1139,36 +1128,34 @@ const STATES=(element,ARRAY,list,prox)=>{
 //EXPORT
 const createStore=(list)=>{
     let ARRAY=[];
+    //DELETES JUNK ELEMENTS
     const srch=()=>ARRAY=ARRAY.filter((e)=>e.el);
     const computed=()=>{
         if(typeof prox["computed"]==="function"){
             prox["computed"]();
         };
     }
-    
     const handler=()=>{
         return {
-            get(target, key) {
-                if (typeof target[key]=="object"||Array.isArray(target[key])) {    
+            get: function (target, key) {
+                if (typeof target[key]=="object"||Array.isArray(target[key])) {
                     return new Proxy(target[key], handler());
                 }
                 return target[key];
             },
-            set(target, key, value) {
+            set: function (target, key, value) {
                 const result=Reflect.get(target,key)
                 if(result!==value){
-                    Reflect.set(target,key,value);
+                    Reflect.set(target,key,value)
                     ARRAY.forEach((e)=>{
-                        //needs optimization
-                        //en son adları alıyor x.y => y gibi
                         e.value===key||e.value==="*"?e.callback():""
                     })
-                    computed();
+                    computed()
                 }
                 srch();
                 return true;
             }
-        }
+        };
     };
     const prox=new Proxy(list,handler())
     prox.__SYMBOL__=isProxy;

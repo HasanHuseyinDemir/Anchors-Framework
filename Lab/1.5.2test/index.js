@@ -1,61 +1,49 @@
-/*class Merhaba{
-    constructor(){
-        let button=this.content.querySelector("button");
-        button.onclick=()=>{
-            this.x++;
-            console.log(x)
-            this.content.update();
+let el=document.createElement("a")
+el.textContent="hello" 
+
+let x=0
+
+let store=createStore({
+    x:5,
+    test:{
+        y:1,
+        x:22,
+        nest:{
+            xd(){
+                return x
+            }
         }
-        this.content.states({
-            hello(){
-                console.log("hello")
-            }
-        })
-        
+    },
+    xPlusY(){
+        return this.test.x+this.test.y
+    },
+    xd(){
+        console.log("Hello")
+    },
+    increase(){
+        x++;
+        this.x=x;
+    },
+    clock:{
+        hour:new Date().getHours(),
+        minute:new Date().getMinutes(),
+        second:new Date().getSeconds()
     }
-    x=0
-    content=html`
-        <>
-        <button $onclick="hello">Hello</button>
-        <button>${()=>this.x}</button>
-        </>
-    `;
-}
+})
 
-app.render(new Merhaba().content)*/
-
-class Button{
-    constructor(content,event) {
-        let button=document.createElement("button")
-        button.textContent=content;
-        button.onclick=event
-        return button
-    }
-}
+setInterval(()=>{
+    let {clock}=store
+    clock.hour=new Date().getHours()
+    clock.minute=new Date().getMinutes()
+    clock.second=new Date().getSeconds()
+},1000)
 
 
-class Component{
-    constructor(){
-        this.template.states({
-            y:0,
-            increase(){
-                this.y++
-            }
-        })
-    }
-    x=0
-    template= html`
-    <>
-        <h1>Hello</h1> 
-        <button $onclick="increase">Increase {{y}}</button>
-        <h1>x=${()=>this.x}</h1>
-        <h1>y={{y}}</h1>
-        ${new Button("Increase",()=>{this.x++,this.template.update()})}
-    </>`
-}
+let page= html`
+    <div>
+    <h1>{{clock.hour}}:{{clock.minute}}:{{clock.second}}</h1>
+    </div>`
 
-console.log(new Component())
-app.render(new Component().template)
-
-
-
+page.onUnmount(()=>{console.log("xd")})
+page.registerStore(store)
+app.render(page)

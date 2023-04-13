@@ -411,6 +411,7 @@ const html=(data,...keys)=>{
     
     FEC.classList.add(details.key);
 
+
     var object={hideKey,isMounted,querySelector,querySelectorAll,getElementById,content:FEC,details,unmount,effect,signal,mount,update,localUpdate,states,methods}
     return object;
 }
@@ -959,6 +960,7 @@ function Returner(obj, prop) {
 }
 
 const STATES=(element,ARRAY,list,prox)=>{
+    let randomKey=Anchor.rkg()+"_";
     element.querySelectorAll("[state]").forEach((e)=>{
         let getted_attr=e.getAttribute("state");
         let applied=getted_attr.split("(");
@@ -970,7 +972,7 @@ const STATES=(element,ARRAY,list,prox)=>{
             apply=new Function(`return ${apply}`)()
         }
         let split=app.split(".")
-        let last=[split[split.length-1]].join("")
+        let last=[split[split.length-1]]
         let re=()=>Returner(prox,app)
         function getResult(){
             return typeof re()[last]=="function"?re()[last](apply):re()[last]
@@ -983,8 +985,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                 let result=getResult()
                 node.textContent!==result?node.nodeValue=result:""
             }
-            
-            ARRAY.push({value:last,callback:getter,el:node});
+            ARRAY.push({value:getted_attr,callback:getter,el:node});
             break;
             case "function":
                 let result=()=>getResult()
@@ -996,7 +997,6 @@ const STATES=(element,ARRAY,list,prox)=>{
                 }
                 ARRAY.push({value:"*",callback:getterF,el:nodeF});
             ;break
-            case "object":/*elements*/console.warn("Anchors Warn:\nPlease do not use object for 'createStore'");break;
         };
     })
 
@@ -1011,14 +1011,14 @@ const STATES=(element,ARRAY,list,prox)=>{
                 let app=applied[0].trim();
                 let apply=null;
                 let split=app.split(".")
-                let last=[split[split.length-1]].join("");
+                let last=[split[split.length-1]];
                 let re=()=>Returner(prox,app)
                 function getResult(){
                     return typeof re()[last]=="function"?re()[last](apply):re()[last]
                 }
                 //boilerPlate
                 const bp=(control,arg,func)=>{
-                    ARRAY.push({value:(func?"*":last),callback:control,el:e})
+                    ARRAY.push({value:(func?"*":getted_attr),callback:control,el:e})
                     if(arg){
                         if(re()[last]!=null&&re()[last]!=undefined)e.removeAttribute(i)
                     }
@@ -1139,6 +1139,7 @@ const STATES=(element,ARRAY,list,prox)=>{
 //EXPORT
 const createStore=(list)=>{
     let ARRAY=[];
+    //DELETES JUNK ELEMENTS
     const srch=()=>ARRAY=ARRAY.filter((e)=>e.el);
     const computed=()=>{
         if(typeof prox["computed"]==="function"){
@@ -1159,9 +1160,9 @@ const createStore=(list)=>{
                 if(result!==value){
                     Reflect.set(target,key,value);
                     ARRAY.forEach((e)=>{
-                        //needs optimization
-                        //en son adları alıyor x.y => y gibi
-                        e.value===key||e.value==="*"?e.callback():""
+                        //needs optimize
+                        //e.value===key||e.value==="*"?e.callback():""
+                        e.callback()
                     })
                     computed();
                 }

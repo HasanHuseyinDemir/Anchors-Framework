@@ -1,5 +1,4 @@
-[] - nodelist bir node oluşturup sayfaya ekle ve hafızaya alır update eventinde günceller fakat node.isconnected false ise o kaydı siler.
-[] - nodelist için kayıt oluşturma eklenecek
-[] - nodelist için attribute diffing eklenecek
-[] - simpleFor için diffing enjekte edilecek
-[] - simpleFor array içinde değişimler olduğunda update tetiklenecek
+[x] - nodelist bir node oluşturup sayfaya ekle ve hafızaya alır update eventinde günceller fakat node.isconnected false ise o kaydı siler.
+[x] - nodelist için kayıt oluşturma eklenecek
+[x] - simpleFor için diffing enjekte edilecek
+[?] - simpleFor array içinde değişimler olduğunda update tetiklenecek
