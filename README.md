@@ -28,7 +28,7 @@
 ## CDN Import For Module
 ```
 import {html,createStore,createElement,RegisterComponent} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration%20Update/anchors.min.mjs"
-//export {html,createStore,createElement,RegisterComponent}
+export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
