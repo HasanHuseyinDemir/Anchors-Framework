@@ -32,6 +32,19 @@
 [x] createStore artık iç içe değer döndürebiliyor.
 ->iç içe reaktif çalışabiliyor
 
+
+//1.5.3
+
+HATALAR:
+[x]-button onclick olayında button elementi dönüyor $onclick="setClass('hello')" burada hello diye bir değişken olmadığı için hatalı sonuç veriyor
+
+Eklenebilir:
+[]-Atama Operatörü Örneğin $onclick="x=5" yapilabilir
+[]-x++ ve x-- de yapılabilir
+[]-x+1 de yapılabilir
+
+
+
 [] Daha kolay veri erişimi için global data eklenebilir
 
 //CLASS ile uyumluluk
