@@ -15,8 +15,9 @@
 <li> Npm : https://www.npmjs.com/package/anchorsjs</li>
 </ul>
 <br>
-# Recomended For Beginners ; Replit Examples
+# Recomended For Beginners ; Replit and Codepen Examples
 > https://replit.com/@HasanHuseyinDem
+> https://codepen.io/collection/rxvqgG
 
 # Installation Latest v[1.5.2] "Integration Update"
 > ASYNC and Promise <br>
