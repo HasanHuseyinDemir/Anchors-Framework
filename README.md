@@ -4,8 +4,8 @@
 <img width="600px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/new/logo-color.png">
 <h1 align="center">Anchors</h1>
 <p align="center">An Open-Source and Reactive Javascript SPA Framework</p>
-<p align="center">Total Size : 36,5KB</p>
-<p align="center">Minified Size : 13,9 KB</p>
+<p align="center">Total Size : 39KB</p>
+<p align="center">Minified Size : 15 KB</p>
 </div>
 <br>
 
@@ -19,9 +19,10 @@
 > https://replit.com/@HasanHuseyinDem <br>
 > https://codepen.io/collection/rxvqgG
 
-# Installation Latest v[1.5.2] "Integration Update"
+# Installation Latest v[1.5.4] "Integration Update"
 > ASYNC and Promise <br>
-> Nested Store Reactivity
+> Nested Store Reactivity <br>
+> Better Equations = ++ --
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -30,18 +31,14 @@
 
 ## CDN Import For Module
 ```
-import {html,createStore,createElement,RegisterComponent} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration-Update/2-BetterStore/anchors.min.mjs"
+import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.41/anchors.min.mjs"
 export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration-Update/2-BetterStore/anchors.min.js"></script>
+<script src="https://unpkg.com/anchorsjs@1.5.41/anchor.min.js"></script>
 ```
 
 ## Replit Template
 > https://replit.com/@HasanHuseyinDem/AnchorsJS-Template?v=1
-
-## Codepen Template
-> https://codepen.io/pen?template=KKxLOpL
-
