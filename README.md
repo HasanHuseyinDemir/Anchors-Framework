@@ -40,5 +40,11 @@ export {html,createStore,createElement,RegisterComponent}
 <script src="https://unpkg.com/anchorsjs@1.5.41/anchor.min.js"></script>
 ```
 
+## NPM
+```
+npm i anchorsjs
+```
+
+
 ## Replit Template
 > https://replit.com/@HasanHuseyinDem/AnchorsJS-Template?v=1
