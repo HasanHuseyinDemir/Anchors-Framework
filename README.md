@@ -19,9 +19,10 @@
 > https://replit.com/@HasanHuseyinDem <br>
 > https://codepen.io/collection/rxvqgG
 
-# Installation Latest v[1.5.2] "Integration Update"
+# Installation Latest v[1.5.4] "Integration Update"
 > ASYNC and Promise <br>
-> Nested Store Reactivity
+> Nested Store Reactivity <br>
+> Better Equations = ++ --
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -30,13 +31,13 @@
 
 ## CDN Import For Module
 ```
-import {html,createStore,createElement,RegisterComponent} from "https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration-Update/2-BetterStore/anchors.min.mjs"
+import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.41/anchors.min.mjs"
 export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
 ```
-<script src="https://cdn.jsdelivr.net/gh/hasanhuseyindemir/Anchors-Framework/Versions/1.5-Integration-Update/2-BetterStore/anchors.min.js"></script>
+<script src="https://unpkg.com/anchorsjs@1.5.41/anchor.min.js"></script>
 ```
 
 ## Replit Template
