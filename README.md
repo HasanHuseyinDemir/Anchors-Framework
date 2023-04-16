@@ -4,8 +4,8 @@
 <img width="600px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/new/logo-color.png">
 <h1 align="center">Anchors</h1>
 <p align="center">An Open-Source and Reactive Javascript SPA Framework</p>
-<p align="center">Total Size : 36,5KB</p>
-<p align="center">Minified Size : 13,9 KB</p>
+<p align="center">Total Size : 39KB</p>
+<p align="center">Minified Size : 15 KB</p>
 </div>
 <br>
 
