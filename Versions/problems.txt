@@ -20,6 +20,7 @@
 --1 5 1
 [x] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için! =>Halledildi 1.5.1
 => [] Vite ve npm güncellemesi gerekebilir
+=> 1.5.3 güncellemesinde değiştirilecektir
 
 --1 5 2
 //Unmount için
@@ -37,22 +38,20 @@
 
 HATALAR:
 [x]-button onclick olayında button elementi dönüyor $onclick="setClass('hello')" burada hello diye bir değişken olmadığı için hatalı sonuç veriyor
+=> Düzeltildi
 
+//1.5.4
 Eklenebilir:
-[]-Atama Operatörü Örneğin $onclick="x=5" yapilabilir
-[]-x++ ve x-- de yapılabilir
-[]-x+1 de yapılabilir
+[x]-Atama Operatörü Örneğin $onclick="x=5" yapilabilir
+[x]-x++ ve x-- de yapılabilir
+[]-Atama tarafında kod tekrarlarının azaltılması gerekiyor
 
 
-
-[] Daha kolay veri erişimi için global data eklenebilir
-
-//CLASS ile uyumluluk
+//CLASS Componentleri ile uyumluluk
 //template objesi sayfanın çıktısını gösterir...
 [] Class ile .render(new Class().template) yerine .render(Class) kullanılabilir
-
 [] Class ile component içine de sayfa çağırılabilir <>${Class}</>
-
 [] Class ile RegisterComponent kullanılabilir
 
-
+//XX IPTAL XX
+[] Daha kolay veri erişimi için global data eklenebilir

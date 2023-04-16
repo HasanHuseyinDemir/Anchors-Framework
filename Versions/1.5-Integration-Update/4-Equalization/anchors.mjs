@@ -1,6 +1,6 @@
-/*OPEN*/ 
+/*OPEN 
 (()=>{
-/*CLOSE*/
+CLOSE*/
 const warn=(arg)=>{
     console.warn("Anchors Warn :\n"+arg)
 }
@@ -844,10 +844,10 @@ const STATES=(element,ARRAY,list,prox)=>{
                         return arg.replaceAll("'","").replaceAll('"',"").replaceAll("`","")
                     }
                     if(app.includes("=")){
-                        e.removeAttribute(i)
                         let sp=app.split("=");
                         let end=sp[0].split(".");
                         let res=Returner(prox,sp[0]);
+                        res[end[end.length-1]]!=undefined?e.removeAttribute(i):""
                         if(cl(sp[1])){
                             e[attr]=()=>{res[end[end.length-1]]=cl(sp[1])}
                         }else{
@@ -856,12 +856,12 @@ const STATES=(element,ARRAY,list,prox)=>{
                     }else if(app.includes("++")){
                         let variable=app.split("++")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i)
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]++
                     }else if(app.includes("--")){
                         let variable=app.split("--")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i);
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]--
                     }else if(re()[last]){
                         e.removeAttribute(i)
@@ -1021,13 +1021,13 @@ Object.prototype.registerStore=function(storeName){
 }
 
 //EXPORT FOR GLOBAL
-/*OPEN*/
+/*OPEN
 window.html=html
 window.createStore=createStore
 window.RegisterComponent=RegisterComponent
 window.createElement=createElement
 })()
-/*CLOSE*/
+CLOSE*/
 
 //FOR MODULE
-//export {createStore,createElement,html,RegisterComponent}
+export {createStore,createElement,html,RegisterComponent}

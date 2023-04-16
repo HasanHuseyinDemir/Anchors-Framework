@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+
+<script>
+    let store=createStore({
+        style:"_",
+            x:0,
+            setClass(arg){
+                console.log(arg)
+                this.style=arg
+            },
+            values:{y:0,z:5}
+    })
+    let Main=()=>{
+        window.Page=html`
+        <>
+        <button $class="style" $onclick="style='bold'">SetBold</button>
+        <button $onclick="x++">X={{x}}</button>
+        <button $onclick="values.y--">Y={{values.y}}</button>
+        </>
+        `
+
+        Page.registerStore(store)
+        return Page
+    }
+    document.querySelectorAll("#app").render(Main)
+</script>
+</body>
+</html>
