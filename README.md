@@ -42,7 +42,3 @@ export {html,createStore,createElement,RegisterComponent}
 
 ## Replit Template
 > https://replit.com/@HasanHuseyinDem/AnchorsJS-Template?v=1
-
-## Codepen Template
-> https://codepen.io/pen?template=KKxLOpL
-
