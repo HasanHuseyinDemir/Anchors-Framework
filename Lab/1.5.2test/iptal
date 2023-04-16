@@ -1,0 +1,29 @@
+
+    element.querySelectorAll("[states]").forEach((e)=>{
+        let div=document.createElement("div");
+        let prop=e.getAttribute("states");
+        //e.replaceWith(div);
+        let array=prop.split(" ").filter((e)=>e!="").filter((e)=>e!="\n")
+        let obj=Returner(prox,array[0])[array[0]]
+/*        let ret=new Function(`return [${obj.map((e)=>`'${e}'`)}]`)();
+        console.log(ret)
+        console.log(new Function(res)())*/
+        /*let res=`return ${ret}.map((${array[1]})=>\`${array[2]}\`)`.replaceAll("{","${")
+        let test=obj.map((e)=>{
+            return new Function(`return (${array[1]})=>'${array[2]}'`)(array[1])
+        });
+        console.log(test)*/
+        
+        //let result=new Function(`return ${array[0]}.map((${array[1]})=>${array[2]})`.replaceAll("{","${"));
+        //console.log(result)
+        console.log({
+            0:array[0],
+            1:array[1],
+            2:array[2]
+        })
+        let pre=array[2].replaceAll("{","${")
+        let test=obj.map((e)=>{return pg(pre).firstElementChild
+        });
+        console.log(test)
+
+    })

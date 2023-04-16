@@ -1,49 +1,33 @@
-let el=document.createElement("a")
-el.textContent="hello" 
-
-let x=0
-
 let store=createStore({
-    x:5,
     test:{
-        y:1,
-        x:22,
-        nest:{
-            xd(){
-                return x
-            }
-        }
-    },
-    xPlusY(){
-        return this.test.x+this.test.y
-    },
-    xd(){
-        console.log("Hello")
-    },
-    increase(){
-        x++;
-        this.x=x;
-    },
-    clock:{
-        hour:new Date().getHours(),
-        minute:new Date().getMinutes(),
-        second:new Date().getSeconds()
+        array:["hello","world"],
+        ar(arg){
+            return this.array[arg]
+         }
     }
 })
+window.store=store;
 
-setInterval(()=>{
-    let {clock}=store
-    clock.hour=new Date().getHours()
-    clock.minute=new Date().getMinutes()
-    clock.second=new Date().getSeconds()
-},1000)
+let test=[1,2,3];
 
+let newPage=()=>{
+    return html`
+    <p>Page</p>
 
+    `
+}
 let page= html`
     <div>
-    <h1>{{clock.hour}}:{{clock.minute}}:{{clock.second}}</h1>
+    <div $class="test.ar(0)"/>
+    ${newPage}
+    {{test.ar(0)}}
+    {{test.ar(1)}}
     </div>`
+page.onUnmount(()=>{console.log("Silindi!")})
+page.createEffect(()=>{console.log("effect")})
 
-page.onUnmount(()=>{console.log("xd")})
+setInterval(()=>{page.update()},1000)
+
+
 page.registerStore(store)
 app.render(page)

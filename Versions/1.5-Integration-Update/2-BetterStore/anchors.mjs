@@ -1,6 +1,6 @@
-/*OPEN*/ 
+/*OPEN
 (()=>{
-/*CLOSE*/
+CLOSE*/
 const warn=(arg)=>{
     console.warn("Anchors Warn :\n"+arg)
 }
@@ -992,7 +992,7 @@ Object.prototype.registerStore=function(storeName){
 }
 
 //EXPORT FOR GLOBAL
-/*OPEN*/
+/*OPEN
 window.html=html
 window.createStore=createStore
 window.RegisterComponent=RegisterComponent
@@ -1001,4 +1001,4 @@ window.createElement=createElement
 /*CLOSE*/
 
 //FOR MODULE
-//export {createStore,createElement,html,RegisterComponent}
+export {createStore,createElement,html,RegisterComponent}

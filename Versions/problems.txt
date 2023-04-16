@@ -17,13 +17,20 @@
 --1.5 Integration Update--
 [x] For döngüsü ile daha kolay etkileşim
 
-//Unmount için
-[] class kullanmak yerine isconnected ile document taraması yapılabilir
-
+--1 5 1
 [x] Asenkron fonksiyon iyileştirmeleri yapılabilir özellikle for döngüler için! =>Halledildi 1.5.1
 => [] Vite ve npm güncellemesi gerekebilir
 
-[] Methods Değer döndürmüyor
+--1 5 2
+//Unmount için
+[x] class kullanmak yerine isconnected ile document taraması yapılabilir
+->Başarılı
+
+[x] Methods Değer döndürmüyor
+->Değer dönüyor
+
+[x] createStore artık iç içe değer döndürebiliyor.
+->iç içe reaktif çalışabiliyor
 
 [] Daha kolay veri erişimi için global data eklenebilir
 
@@ -35,4 +42,4 @@
 
 [] Class ile RegisterComponent kullanılabilir
 
-[] createStore artık
+

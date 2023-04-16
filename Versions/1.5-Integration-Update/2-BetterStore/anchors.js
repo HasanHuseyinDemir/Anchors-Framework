@@ -1,14 +1,13 @@
 /*OPEN*/ 
 (()=>{
 /*CLOSE*/
-window.AnchorSettings={
-    timeout:300
+const warn=(arg)=>{
+    console.warn("Anchors Warn :\n"+arg)
 }
 const Anchor={
     replacer:function(string){
-        let str=string.replace("<>","<div>").replace("</>","</div>");
-        str=str.replaceAll("[-","<span delete='").replaceAll("-]","'></span>")
-        str=str.replaceAll("{{","<span state='").replaceAll("}}","'></span>")
+        let end="'></span>"
+        let str=string.replaceAll("<>","<div>").replaceAll("</>","</div>").replaceAll("[-","<span delete='").replaceAll("-]",end).replaceAll("{{","<span state='").replaceAll("}}",end)
         str=this.namer(str);
         return str
     },
@@ -43,26 +42,26 @@ const Anchor={
     },
     rkg:()=>{
         let arr="";
-        const chars="abcdefghijklmnoprstuxvyz_".split("");
         for(var i=0;i<=9;i++){
-            arr=arr+chars[Math.floor(Math.random() * (24))]
+            arr=arr+"abcdefghijklmnoprstuxvyz_".split("")[Math.floor(Math.random() * (24))]
         }
         return arr;
     },
     valueTypeControl(type){
-        switch(type){
-            case "text":case "textarea":case "range":case "number":case "file":case "color":case "date":case "datetime-local":case "email":case "hidden":case "image":case "month":case "password":case "search":case "tel":case "time":case "url":case "week":
-            return true;
-            default:return false;
-        }
+        return ["text","textarea","range","number","file","color","date","datetime-local","email","hidden","image","month","password",
+        "search","tel","time","url","week"].includes(type)
     },
     checkedTypeControl(type){
-        switch(type){
-            case "radio":case "checkbox":return true;
-            default:return false
-        }
+        return ["radio","checkbox"].includes(type)
     },
     registeredComponents:new Map()
+}
+
+/*innerhtml*/
+const createElement=(arg)=>{
+    let temp=document.createElement("template");
+    temp.innerHTML=arg;
+    return temp.content
 }
 
 //UNIQUE SEED
@@ -74,6 +73,10 @@ Object.prototype.loadComponents=function(){
     Anchor.registeredComponents.forEach((component,key)=>{
         this.component(key,component)
     })
+}
+
+const compile=(arg)=>{
+    new Function(`return ${arg}`)()
 }
 
 const isonEvents=(arg)=>arg.slice(0,2)=="on"?true:false
@@ -91,12 +94,10 @@ const MethodUpdate=(content,state)=>{
                             if(applied.length>1){
                                 applied[1]=applied[1].slice(0,-1)
                                 apply=applied[1]
-                                if(apply[0]=="'"||apply[0]=='"'||apply[0]||"`"){
-                                    apply=new Function(`return ${apply}`)()
-                                }else if(typeof new Function(`return ${apply}`)()=="number"){
-                                    apply=new Function(`return ${apply}`)()
+                                if(apply[0]=="'"||apply[0]=='"'||apply[0]||"`"||typeof compile(apply)=="number"){
+                                    apply=compile(apply)
                                 }else if(apply[0]=="$"){
-                                    apply=new Function(`return ${state[apply.slice(1)]}`)()
+                                    apply=compile(state[apply.slice(1)])
                                 }
                             }
                 if(isonEvents(attr)){
@@ -126,7 +127,6 @@ const styleScoper=(content)=>{
         let isScoped=content.querySelectorAll("style[scoped]")
         if(isScoped.length){
             let scopekey=Anchor.rkg();
-    
             isScoped.forEach((scoped)=>{
                 let split=scoped.textContent.split("}");
                 split.forEach((i,ind)=>{
@@ -176,22 +176,14 @@ const html=(data,...keys)=>{
         elements.push(item);
         if(keyList[index]!=undefined)
         {elements.push(keyList[index])}})
-    let page=document.createElement("template");
     let str="";
     elements.forEach((item)=>{typeof item=="string"?str+=item:str+=`<span class="achrplcelem"></span>`;})
     str=Anchor.replacer(str,details.key);
-    page.innerHTML=str;
-    let content=page.content
-    content.children.length!=1?console.warn("Anchors Warn :\nThere must be only one parent element"):""
-
-    const isMounted=()=>{
-        let s=document.querySelector("."+details.key)
-        return s?(s.isConnected?true:false):false
-    }
-
+    let content=createElement(str)
+    content.children.length!=1?warn("There must be only one parent element"):""
     styleScoper(content)
     const effect=(arg)=>{
-        if(!isMounted()&&details.mounted){
+        if(!FEC.isConnected&&details.mounted){
             unmount.callback();
         }else if(details.mounted||document.querySelectorAll("."+details.key).length){
             typeof details.createEffect=="function"?details.createEffect():""
@@ -211,14 +203,17 @@ const html=(data,...keys)=>{
             signal?details.onEffect(arg):"";
             if(details.childComponents.length>0&&arg!="local"){
                     details.childComponents.forEach((e)=>{    
-                        if(e.details.memo==false&&e.type!=="HTML"){
+                        if(e.details.memo==false){
                             e.effect(arg)
                         }
                     })
             }
         }
-        signal(arg);
-        if(details.childFor.length){details.childFor.forEach((f)=>f(typeof method?method:null))}
+        //MOUNTED
+        if(FEC.isConnected){
+            signal(arg);
+            if(details.childFor.length){details.childFor.forEach((f)=>f(typeof method?method:null))}
+        }
     }
 
     const signal=(e)=>{
@@ -245,10 +240,8 @@ const html=(data,...keys)=>{
         let div=document.createElement("div")
         temp.replaceWith(div);
         const get=async(method)=>{
-            let res=await key;
-                let el=document.createElement("template")
-                el.innerHTML=res.join("");
-                let content=el.content
+                let res=await key;
+                let content=createElement(res.join(""))
                 MethodUpdate(content,method)
                 diff(div,content)
         }
@@ -256,12 +249,6 @@ const html=(data,...keys)=>{
     } 
     if(typeof key=="object"||typeof key=="number"){
             if(Object.keys(key).length>0){
-                if(key.type=="For"){
-                    temp.replaceWith(key.fragment);
-                    details.childFor.push(key.update);
-                    key.update();
-                }
-                else{
                     if(key.content){
                         let selected=key
                         temp.replaceWith(selected.content);
@@ -270,7 +257,6 @@ const html=(data,...keys)=>{
                     }else{
                         temp.replaceWith(key);
                     }
-                }
             }else{
                 temp.replaceWith(key);
             }
@@ -287,25 +273,20 @@ const html=(data,...keys)=>{
             let div=b();
             const get=async(method)=>{
                 let res=await key();
-                    let el=document.createElement("template")
-                    el.innerHTML=res.join("");
-                    let content=el.content
+                    let content=createElement(res.join(""))
                     MethodUpdate(content,method)
                     diff(div,content)
             }
                 details.childFor.push((method)=>{get(method)})
         }else if(Array.isArray(selected)){
             const get=(method)=>{
-                let el=document.createElement("template")
-                el.innerHTML=key().join("");
-                let content=el.content
+                let content=createElement(key().join(""))
                 MethodUpdate(content,method)
                 return content
             }
             let div=b();
             diff(div,get())
             details.childFor.push((method)=>{diff(div,get(method))})
-
         }else if(typeof selected=="object"){
             if(selected.content){
                 temp.replaceWith(selected.content);
@@ -324,7 +305,7 @@ const html=(data,...keys)=>{
             let i=0;
             let int=setInterval(()=>{
                 let res=key()
-                //max 6 seconds
+                //default max 6 seconds
                 if(res||i>=20){
                     clearInterval(int)
                     if(res){
@@ -335,10 +316,9 @@ const html=(data,...keys)=>{
                 }else{
                     i++
                 }
-            },AnchorSettings.timeout)
+            },300)
         }
     }
-    [elements,keyList,page,str]=[null,null,null,null]//gc
 })
 
     const states=(list)=>{
@@ -366,6 +346,7 @@ const html=(data,...keys)=>{
         })
 
         MethodUpdate(content,method)
+        return method
     }
 
     let unmount={
@@ -401,23 +382,13 @@ const html=(data,...keys)=>{
     const querySelectorAll=(arg)=>{
         return content.querySelectorAll(arg)
     }
-    const getElementById=()=>{
+    const getElementById=(arg)=>{
         return content.getElementById(arg)
     }
-    const hideKey=()=>{
-        FEC.classList.remove(details.key);
-        FEC.classList.length==0?FEC.removeAttribute("class"):""
-    }
-    
-    FEC.classList.add(details.key);
 
-
-    var object={hideKey,isMounted,querySelector,querySelectorAll,getElementById,content:FEC,details,unmount,effect,signal,mount,update,localUpdate,states,methods}
+    var object={querySelector,querySelectorAll,getElementById,content:FEC,details,unmount,effect,signal,mount,update,localUpdate,states,methods}
     return object;
 }
-
-//EXPORT
-const H=(states,htm)=>{htm.states(states);return htm}
 
 const diff=(first,second,confirmed)=>{
     
@@ -557,164 +528,6 @@ const diff=(first,second,confirmed)=>{
     }
 }
 
-//EXPORT
-const GlobalUpdate=()=>{
-    document.dispatchEvent(updatedEvent);
-}
-
-//EXPORT
-const OnGlobalUpdate=(func)=>{
-    document.addEventListener(updateSeed,func)
-}
-
-//EXPORT
-const HTML=(str)=>{
-    let template=document.createElement("template");
-    let string="";
-    let type="HTML";
-    let key=("__"+Anchor.rkg()+"__");
-    const details={
-        onUnmount:null,
-        onMount:null,
-    }
-    if(typeof str=="string"){
-        string=str
-    }else{
-        str.forEach((e)=>string+=e)
-    }
-
-    string=Anchor.replacer(string,key);
-    template.innerHTML=string;
-    let content=template.content;
-    styleScoper(content)
-
-    const states=(list)=>{
-        const state=createStore(list)
-        content.registerStore(state)
-        return state
-    };
-
-    const mount=()=>{
-        typeof details.onMount=="function"?details.onMount():"";
-    }
-
-    const unmount={
-        callback:null,
-        callback:()=>{
-        typeof details.onUnmount=="function"?details.onUnmount():"";
-        document.querySelectorAll("."+key).forEach((e)=>e.remove());
-        if(content){
-            content.remove()
-        }
-    }
-    }
-    const querySelector=(arg)=>{
-        return content.querySelector(arg)
-    }
-    const querySelectorAll=(arg)=>{
-        return content.querySelectorAll(arg)
-    }
-    const getElementById=()=>{
-        return content.getElementById(arg)
-    }
-    const hideKey=()=>{
-        FEC.classList.remove(details.key);
-        FEC.classList.length==0?FEC.removeAttribute("class"):""
-    }
-    content.firstElementChild.classList.add(key);
-    return {content,type,details,mount,unmount,states,querySelector,querySelectorAll,getElementById,hideKey};
-}
-
-//EXPORT
-//nodelist.update=["x","y"] x and y updated
-//nodelist.update="x" x updated
-const nodeList=function(list){
-    const ARRAY=[]
-    Object.keys(list).forEach((key)=>{
-        if(typeof list[key]=="function"){
-            let result=list[key]()
-            ARRAY.push({node:document.createTextNode(result),callback:list[key],key})
-        }else if(typeof list[key]=="object"){
-
-        }else{
-            console.warn("Anchors TypeError :\nNodeList elements must be a function.")
-        }
-    })
-
-    const update=(arg)=>{
-        if(typeof arg=="string"&&ARRAY[arg]){
-            let x=ARRAY.filter((e)=>e.key==arg)[0]
-            let result=x.callback()
-            if(x.node.textContent!=result){
-                x.node.nodeValue=result;
-            }
-        }
-        else{
-            ARRAY.forEach((e)=>{
-            let result=e.callback()
-            if(e.node.textContent!=result){
-                e.node.nodeValue=result;
-            }
-        })
-        }
-    }
-
-    let prox=new Proxy(list,{
-        get(a,keys){
-            if(keys!=="update"){
-                let selected;
-                ARRAY.forEach((e)=>{
-                if(e.key==keys){
-                    selected=e.node
-                }
-                })
-                return selected
-            }else{
-                update();
-            }
-        },
-        set(a,keys,set){
-            if(keys=="update"){
-                if(typeof set=="string"){
-                    update(set)
-                }else if(Array.isArray(set)){
-                    set.forEach((e)=>{
-                        update(e)
-                    })
-                }
-                return true
-            }
-        }
-
-    })
-    document.addEventListener(updateSeed,update)
-    return prox
-}
-
-//EXPORT
-const For=function(a,t){
-    const getNew=()=>{
-        return array.map((e)=>{
-            let obj=t(e)
-            obj.hideKey();
-            return obj
-        })
-    }
-    let array=a;
-    let nodes=getNew()
-    let fragment=document.createElement("div");
-    nodes.forEach((e)=>{
-        fragment.append(e.content)}
-    )
-    let type="For";
-    const update=()=>{
-        let temp=document.createElement("div");
-        getNew().forEach((e)=>temp.append(e.content));
-        diff(fragment,temp)
-    }
-    return {type,fragment,update}
-}
-
 const core={
     registeredRenders:[],
 }
@@ -761,7 +574,7 @@ if(this){
         return this.textContent
     }
 }else{
-    console.warn("Anchors :\nInvalid definition");
+    warn("Invalid definition");
 }}})
 
 Object.prototype.render=function(page,args){
@@ -780,11 +593,9 @@ Object.prototype.render=function(page,args){
         this.append(pages.content)
         pages.content.loadComponents();
         //
-        if(pages.details&&pages.type!=="HTML"){
+        if(pages.details){
             pages.details.target=this;
             core.registeredRenders.push({target:this,pages})
-            pages.mount();
-        }else if(data.type==="HTML"){
             pages.mount();
         }
         //
@@ -821,11 +632,9 @@ else if (typeof page=="function"){
     let data=page(args)
     data.content.loadComponents();
     item.append(data.content)
-    if(data.details&&data.type!=="HTML"){
+    if(data.details){
         data.details.target=this;
         core.registeredRenders.push({target:this,data})
-        data.mount();
-    }else if(data.type==="HTML"){
         data.mount();
     }
     data.content.querySelectorAll("."+data.details.key).forEach((e)=>e.loadComponents())
@@ -847,7 +656,7 @@ Object.prototype.slot=function(arg){
 
 Object.prototype.setRate=function(arg){
         function error(){
-            console.warn("Anchors SetRate Error:\nRate Must Be A 'Whole Number 0,1,2....'")
+            warn("Rate Must Be A 'Whole Number'")
         }
         if(typeof arg=="number"||typeof arg=="string"){
             if(arg>-1){
@@ -859,14 +668,6 @@ Object.prototype.setRate=function(arg){
         }
 }
 
-//unmounts and kills component
-Object.prototype.kill=function(){
-    this.unmount.callback();
-    document.body.querySelectorAll(`.${this.details.key}`).forEach((e)=>{
-        e.remove();
-    })
-    delete this;
-}
 
 Object.prototype.onEffect=function(a){
     switch(typeof a){
@@ -934,7 +735,6 @@ Object.prototype.component=function(qs,component){
 }}
 
 //decreases unnecessary count of renders for "html" updates
-//EXPORT
 const debounce = (func, delayGetter) => {
     let db
     return function() {
@@ -947,6 +747,18 @@ const debounce = (func, delayGetter) => {
 
 window.prototyped=true;
 
+//data prox
+function Returner(obj, prop) {
+    if(typeof obj === 'undefined') {
+        return false;
+    }
+    var _index = prop.indexOf('.')
+     if(_index > -1) {
+        return Returner(obj[prop.substring(0, _index)], prop.substr(_index + 1));
+    }
+    return obj;
+}
+
 const STATES=(element,ARRAY,list,prox)=>{
     element.querySelectorAll("[state]").forEach((e)=>{
         let getted_attr=e.getAttribute("state");
@@ -958,10 +770,13 @@ const STATES=(element,ARRAY,list,prox)=>{
             apply=applied[1]
             apply=new Function(`return ${apply}`)()
         }
+        let split=app.split(".")
+        let last=[split[split.length-1]].join("")
+        let re=()=>Returner(prox,app)
         function getResult(){
-            return typeof prox[applied[0]??getted_attr]=="function"?prox[applied[0]??getted_attr](apply):prox[applied[0]??getted_attr]
+            return typeof re()[last]=="function"?re()[last](apply):re()[last]
         }
-        switch(typeof prox[app]){
+        switch(typeof re()[last]){
             case "number":case "string":
             let node=document.createTextNode(getResult())
             e.replaceWith(node);
@@ -969,7 +784,8 @@ const STATES=(element,ARRAY,list,prox)=>{
                 let result=getResult()
                 node.textContent!==result?node.nodeValue=result:""
             }
-            ARRAY.push({value:getted_attr,callback:getter,el:node});
+            
+            ARRAY.push({value:last,callback:getter,el:node});
             break;
             case "function":
                 let result=()=>getResult()
@@ -981,72 +797,67 @@ const STATES=(element,ARRAY,list,prox)=>{
                 }
                 ARRAY.push({value:"*",callback:getterF,el:nodeF});
             ;break
+            case "object":/*elements*/warn("Please do not use object for 'createStore'");break;
         };
-    })
+    });
 
     element.querySelectorAll("*").forEach((e)=>{
         let attrnames=e.getAttributeNames()
         attrnames.forEach((i)=>{
+            
             if(i[0]=="$"&&typeof list[e.getAttribute(i)]){
-                //data prox
-                const Returner=(data,str)=>{
-                    let array=str.split(".")
-                    let object=data;
-                    for(let nest of array){
-                        object=object[nest]
-                    }   
-                    return object
-                }
                 let attr=i.slice(1);
                 let getted_attr=e.getAttribute(i);
                 let applied=getted_attr.split("(");
+                let app=applied[0].trim();
                 let apply=null;
-
+                let split=app.split(".")
+                let last=[split[split.length-1]].join("");
+                let re=()=>Returner(prox,app)
                 function getResult(){
-                    return typeof prox[applied[0]??getted_attr]=="function"?prox[applied[0]??getted_attr](apply):prox[applied[0]??getted_attr]
+                    return typeof re()[last]=="function"?re()[last](apply):re()[last]
                 }
                 //boilerPlate
                 const bp=(control,arg,func)=>{
-                    ARRAY.push({value:(func?"*":getted_attr),callback:control,el:e})
+                    ARRAY.push({value:(func?"*":last),callback:control,el:e})
                     if(arg){
-                        if(prox[applied[0]??getted_attr]!=null&&prox[applied[0]??getted_attr]!=undefined)e.removeAttribute(i)
+                        if(re()[last]!=null&&re()[last]!=undefined)e.removeAttribute(i)
                     }
                     control();
                 }
                 if(applied.length>1){
                     applied[1]=applied[1].slice(0,-1)
                     apply=applied[1]
-                    if(apply[0]=="'"||apply[0]=='"'||apply[0]||"`"){
-                        apply=new Function(`return ${apply}`)()
-                    }else if(typeof new Function(`return ${apply}`)()=="number"){
-                        apply=new Function(`return ${apply}`)()
+                    if(apply[0]=="'"||apply[0]=='"'||apply[0]||"`"||typeof compile(apply)=="number"){
+                        apply=compile(apply)
                     }else if(apply[0]=="$"){
-                        apply=new Function(`return ${prox[apply.slice(1)]}`)()
+                        apply=compile(prox[apply.slice(1)])
                     }
                 }
                 if(isonEvents(attr)){
-                    if(prox[applied[0]??getted_attr]){e.removeAttribute(i)
-                        e[attr]=()=>{prox[applied[0]??getted_attr](apply??e)}
+                    if(re()[last]){e.removeAttribute(i)
+                        e[attr]=()=>{re()[last](apply??e)}
                         }
                 }else{
                 switch(attr){
                 case "model":
-                    if(typeof prox[getted_attr])e.removeAttribute(i)
+                    if(typeof re()[last])e.removeAttribute(i)
                     if(Anchor.valueTypeControl(e.type)){
                         e["oninput"]=()=>{
-                            prox[getted_attr]=e.value;
+                            re()[last]=e.value;
                         }
-                    }else if(Anchor.checkedTypeControl(type)){
+                    }else if(Anchor.checkedTypeControl(e.type)){
                         e["oninput"]=()=>{
-                            prox[getted_attr]=e.checked;
+                            re()[last]=e.checked;
                         }
                     }
                     //getter
                     const updateModel=function(){
+                        let r=re()[last];
                         if(Anchor.valueTypeControl(e.type)){
-                            e.value=prox[getted_attr];
+                            e.value=r
                         }else if(Anchor.checkedTypeControl(e.type)){
-                            e.textContent=prox[getted_attr];
+                            e.textContent=r
                         }
                     }
                     bp(updateModel)
@@ -1074,7 +885,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                             before=result
                         }
                 }
-                    bp(updateClass,true,typeof prox[applied[0]]=="function")
+                    bp(updateClass,true,typeof re()[last]=="function")
                 ;break;
                 case "hide": case "show":{
                     const control=()=>{
@@ -1097,7 +908,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                             e.style.visibility="visible"
                         }
                     }
-                    bp(control,true,typeof prox[applied[0]]=="function")
+                    bp(control,true,typeof re()[last]=="function")
                 }
                 ;break;
                 case "destroy":{
@@ -1107,14 +918,14 @@ const STATES=(element,ARRAY,list,prox)=>{
                             e.remove();
                         }
                     }
-                    bp(control,true,typeof prox[applied[0]]=="function")
+                    bp(control,true,typeof re()[last]=="function")
                 };break;
                 default:{
                         if(attr=="click"){
-                            console.warn("Anchors Warn:\nPlease use '$onclick' instead of '$click'\n$click event causes infinite loop")
+                            warn("Please use '$onclick' instead of '$click'\n$click event causes infinite loop")
                         }else{
                             const control=()=>{e[attr]=getResult()}
-                            bp(control,true,typeof prox[applied[0]]=="function")
+                            bp(control,true,typeof re()[last]=="function")
                         }
                     }
                 ;break;
@@ -1128,34 +939,36 @@ const STATES=(element,ARRAY,list,prox)=>{
 //EXPORT
 const createStore=(list)=>{
     let ARRAY=[];
-    //DELETES JUNK ELEMENTS
     const srch=()=>ARRAY=ARRAY.filter((e)=>e.el);
     const computed=()=>{
         if(typeof prox["computed"]==="function"){
             prox["computed"]();
         };
     }
+    
     const handler=()=>{
         return {
-            get: function (target, key) {
-                if (typeof target[key]=="object"||Array.isArray(target[key])) {
+            get(target, key) {
+                if (typeof target[key]=="object"||Array.isArray(target[key])) {    
                     return new Proxy(target[key], handler());
                 }
                 return target[key];
             },
-            set: function (target, key, value) {
+            set(target, key, value) {
                 const result=Reflect.get(target,key)
                 if(result!==value){
-                    Reflect.set(target,key,value)
+                    Reflect.set(target,key,value);
                     ARRAY.forEach((e)=>{
+                        //needs optimization
+                        //en son adları alıyor x.y => y gibi
                         e.value===key||e.value==="*"?e.callback():""
                     })
-                    computed()
+                    computed();
                 }
                 srch();
                 return true;
             }
-        };
+        }
     };
     const prox=new Proxy(list,handler())
     prox.__SYMBOL__=isProxy;
@@ -1181,20 +994,11 @@ Object.prototype.registerStore=function(storeName){
 //EXPORT FOR GLOBAL
 /*OPEN*/
 window.html=html
-window.HTML=HTML
 window.createStore=createStore
-window.debounce=debounce
-window.For=For
-window.nodeList=nodeList
-window.OnGlobalUpdate=OnGlobalUpdate
-window.GlobalUpdate=GlobalUpdate
 window.RegisterComponent=RegisterComponent
-window.H=H;
-
-
-
+window.createElement=createElement
 })()
 /*CLOSE*/
 
 //FOR MODULE
-//export {createStore,debounce,For,nodeList,HTML,html,OnGlobalUpdate,GlobalUpdate,RegisterComponent,H}
+//export {createStore,createElement,html,RegisterComponent}
