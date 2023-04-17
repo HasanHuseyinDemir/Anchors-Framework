@@ -50,7 +50,8 @@ Eklenebilir:
 [x]-createCallback ile belirtilen arraydaki değerler değiştirildiğinde callback fonksiyonu çalıştırılabilir
     [x]-Ayrıca çağırılan her obje store Elemanı olmalıdır!
 [x]-Storenin değişen değeri tek boyutlu olmamalı
-->Deneysel olarak başarılı ama şüphelerim var!
+->Deneysel olarak başarılı ama şüphelerim var! Bu yüzden beta sürümü olarak yayınlandı
+
 
 []-Atama tarafında kod tekrarlarının azaltılması gerekiyor
 []-Callback fonksiyonları ve value değerlerinin birden fazla aynı arrayde bulunmaması gerekiyor.
@@ -61,5 +62,6 @@ Eklenebilir:
 [] Class ile component içine de sayfa çağırılabilir <>${Class}</>
 [] Class ile RegisterComponent kullanılabilir
 
-//XX IPTAL XX
+//XX SONRA XX
+[]-Methods ile states eşitlenecek
 [] Daha kolay veri erişimi için global data eklenebilir
