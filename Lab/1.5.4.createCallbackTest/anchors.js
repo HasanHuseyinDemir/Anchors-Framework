@@ -708,9 +708,9 @@ Object.prototype.memo=function(arg){
 
 }
 
-Object.prototype.component=function(qs,component){
+Object.prototype.component=function(qs){
     let target=this.content??this
-        target.querySelectorAll(qs).forEach((e)=>{
+        target.querySelectorAll(qs.name).forEach((e)=>{
             //Props
             let attrNames=e.getAttributeNames();
             let props=new Object();
@@ -725,7 +725,7 @@ Object.prototype.component=function(qs,component){
             childrens.forEach((i)=>{
                 slotfragment.append(i)
             })
-            let selected=component(props??undefined,(childrens.length>0?slotfragment:undefined))
+            let selected=qs(props??undefined,(childrens.length>0?slotfragment:undefined))
             e.replaceWith(selected.content?selected.content:selected);
             if(this.type==="html"&&selected.mount&&typeof this.details.childComponents){
                 this.details.childComponents.push(selected);
@@ -756,8 +756,8 @@ function Returner(obj, prop) {
     }
     var _index = prop.indexOf('.')
      if(_index > -1) {
-        return Returner(obj[prop.substring(0, _index)], prop.substr(_index + 1));
-    }
+         return Returner(obj[prop.substring(0, _index)], prop.substr(_index + 1));
+        }
     return obj;
 }
 
@@ -807,7 +807,7 @@ const STATES=(element,ARRAY,list,prox)=>{
         let attrnames=e.getAttributeNames()
         attrnames.forEach((i)=>{
             
-            if(i[0]=="$"&&typeof list[e.getAttribute(i)]){
+            if(i[0]=="$"||i[0]==":"||i[0]=="@"||i[0]=="#"||i[0]=="."||i[0]=="*"&&typeof list[e.getAttribute(i)]){
                 let attr=i.slice(1);
                 let getted_attr=e.getAttribute(i);
                 let applied=getted_attr.split("(");
@@ -844,10 +844,10 @@ const STATES=(element,ARRAY,list,prox)=>{
                         return arg.replaceAll("'","").replaceAll('"',"").replaceAll("`","")
                     }
                     if(app.includes("=")){
-                        e.removeAttribute(i)
                         let sp=app.split("=");
                         let end=sp[0].split(".");
                         let res=Returner(prox,sp[0]);
+                        res[end[end.length-1]]!=undefined?e.removeAttribute(i):""
                         if(cl(sp[1])){
                             e[attr]=()=>{res[end[end.length-1]]=cl(sp[1])}
                         }else{
@@ -856,12 +856,12 @@ const STATES=(element,ARRAY,list,prox)=>{
                     }else if(app.includes("++")){
                         let variable=app.split("++")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i)
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]++
                     }else if(app.includes("--")){
                         let variable=app.split("--")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i);
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]--
                     }else if(re()[last]){
                         e.removeAttribute(i)
@@ -953,7 +953,13 @@ const STATES=(element,ARRAY,list,prox)=>{
                         if(attr=="click"){
                             warn("Please use '$onclick' instead of '$click'\n$click event causes infinite loop")
                         }else{
-                            const control=()=>{e[attr]=getResult()}
+                            const control=()=>{
+                                if(e[attr]){
+                                    e[attr]=getResult()
+                                }else{
+                                    e.setAttribute(attr,getResult())
+                                }
+                                }
                             bp(control,true,typeof re()[last]=="function")
                         }
                     }
@@ -975,25 +981,65 @@ const createStore=(list)=>{
         };
     }
     
+    let keys=[]
+    let codes=0
     const handler=()=>{
         return {
             get(target, key) {
-                if (typeof target[key]=="object"||Array.isArray(target[key])) {    
-                    return new Proxy(target[key], handler());
+                if (typeof target[key]=="object"||Array.isArray(target[key])) { 
+                   key!="computed"?keys.push(key):""; 
+                   codes=1
+                   return new Proxy(target[key], handler());
+                }else if(target.__SYMBOL__==undefined){
+                    codes=2;
+                }else{
+                    codes=3
+                    keys=[key!="computed"?key:""];
                 }
+                
                 return target[key];
             },
             set(target, key, value) {
                 const result=Reflect.get(target,key)
-                if(result!==value){
-                    Reflect.set(target,key,value);
-                    ARRAY.forEach((e)=>{
-                        //needs optimization
-                        //en son adları alıyor x.y => y gibi
-                        e.value===key||e.value==="*"?e.callback():""
-                    })
-                    computed();
+                let valid
+                keys=keys.filter((e)=>e!="")
+                switch (codes) {
+                    case 3:valid=key;break;
+                    case 2:valid=keys.join(".");break;
+                    case 1:valid=keys.join(".");break;
                 }
+                keys=[];
+                if(valid&&codes!=3){
+                        let valids=valid.split(".")
+                        if(Returner(prox,valid)[valids[valids.length-1]]&&codes!=2){
+                            valid+="."+key
+                        }else if(codes==2){
+                            if(Returner(prox,valids.join("."))==false){
+                                valids.shift()
+                                Returner(prox,valids.join("."))==false?(
+                                    valids.shift(),
+                                    valids.push(key)
+                                ):""
+                            }else{
+                                valids.shift();
+                                valids.push(key);
+                            }
+                            valid=valids.join(".")
+                        }
+                }                
+                if(result!==value){
+                    //1-join+key
+                    //2-join
+                    //3-key
+                    Reflect.set(target,key,value);
+                    let filtered=ARRAY.filter((e)=>e.value===valid||e.value==="*")
+                    filtered.forEach((e)=>e.callback(prox))
+                    target[key]=value
+                }
+                valid=""
+                keys=[]
+                codes=0
+                computed();
                 srch();
                 return true;
             }
@@ -1006,10 +1052,38 @@ const createStore=(list)=>{
         STATES(e,ARRAY,list,prox)
     }
 
+    prox.__createCallback__=(func,array)=>{
+        //TODO:Tekrar eden elemanlar silinecek
+    if(typeof func=="function"){
+        if(Array.isArray(array)){
+            array.forEach((e)=>{
+                ARRAY.push({el:document,value:e,callback:func})
+            })
+            codes=0
+        }else if(typeof array=="string"){
+            ARRAY.push({el:document,value:array,callback:func})
+        }else{
+            ARRAY.push({el:document,value:"*",callback:func})
+        }
+    }else{
+        warn("createCallback must be a function")
+        return
+    }
+
+    }
+
         computed();
         return prox
 
 
+}
+
+Object.prototype.createCallback=function(func,array){
+    if(this.__SYMBOL__===isProxy){
+        this.__createCallback__(func,array)
+    }else{
+        warn("createCallback must be a store element!")
+    }
 }
 
 Object.prototype.registerStore=function(storeName){

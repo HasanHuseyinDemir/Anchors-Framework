@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <div id="test">
+        <button $onclick="alt">Alert!</button>
+        <span state="count"></span>
+        <button $onclick="count++">Arttır</button>
+    </div>
+
+    <script>
+        let store=createStore({
+            count:0,
+            styled:"x",
+            twice:0,
+            nest:{
+                point:0
+            },
+            alt(){
+                alert("Çalışıyor")
+            }
+        })
+
+        document.body.registerStore(store)
+
+        store.createCallback((e)=>{
+            e.twice=e.count*2
+            e.nest.point+=15
+            e.styled="Changed"
+        },"count")
+
+        let Main=()=>{
+            let Page=html`
+            <>
+            <h1 :class="styled">Twice : {{twice}}</h1>
+            <button :onclick="count++">{{count}}++</button>
+            <button :onclick="count--">{{count}}--</button>
+            <p>{{nest.point}}</p>
+            </>
+            `
+            Page.registerStore(store)
+            return Page
+        }
+        app.render(Main)
+    </script>
+</body>
+</html>

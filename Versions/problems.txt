@@ -44,8 +44,16 @@ HATALAR:
 Eklenebilir:
 [x]-Atama Operatörü Örneğin $onclick="x=5" yapilabilir
 [x]-x++ ve x-- de yapılabilir
-[]-Atama tarafında kod tekrarlarının azaltılması gerekiyor
 
+//1.5.5
+[x]-Page.component("component",Component); yerine Page.component(Component) yazmak yeterli olmalıdır.
+[x]-createCallback ile belirtilen arraydaki değerler değiştirildiğinde callback fonksiyonu çalıştırılabilir
+    [x]-Ayrıca çağırılan her obje store Elemanı olmalıdır!
+[x]-Storenin değişen değeri tek boyutlu olmamalı
+->Deneysel olarak başarılı ama şüphelerim var!
+
+[]-Atama tarafında kod tekrarlarının azaltılması gerekiyor
+[]-Callback fonksiyonları ve value değerlerinin birden fazla aynı arrayde bulunmaması gerekiyor.
 
 //CLASS Componentleri ile uyumluluk
 //template objesi sayfanın çıktısını gösterir...

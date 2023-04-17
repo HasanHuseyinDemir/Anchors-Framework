@@ -708,9 +708,9 @@ Object.prototype.memo=function(arg){
 
 }
 
-Object.prototype.component=function(qs,component){
+Object.prototype.component=function(qs){
     let target=this.content??this
-        target.querySelectorAll(qs).forEach((e)=>{
+        target.querySelectorAll(qs.name).forEach((e)=>{
             //Props
             let attrNames=e.getAttributeNames();
             let props=new Object();
@@ -725,7 +725,7 @@ Object.prototype.component=function(qs,component){
             childrens.forEach((i)=>{
                 slotfragment.append(i)
             })
-            let selected=component(props??undefined,(childrens.length>0?slotfragment:undefined))
+            let selected=qs(props??undefined,(childrens.length>0?slotfragment:undefined))
             e.replaceWith(selected.content?selected.content:selected);
             if(this.type==="html"&&selected.mount&&typeof this.details.childComponents){
                 this.details.childComponents.push(selected);
@@ -844,10 +844,10 @@ const STATES=(element,ARRAY,list,prox)=>{
                         return arg.replaceAll("'","").replaceAll('"',"").replaceAll("`","")
                     }
                     if(app.includes("=")){
-                        e.removeAttribute(i)
                         let sp=app.split("=");
                         let end=sp[0].split(".");
                         let res=Returner(prox,sp[0]);
+                        res[end[end.length-1]]!=undefined?e.removeAttribute(i):""
                         if(cl(sp[1])){
                             e[attr]=()=>{res[end[end.length-1]]=cl(sp[1])}
                         }else{
@@ -856,12 +856,12 @@ const STATES=(element,ARRAY,list,prox)=>{
                     }else if(app.includes("++")){
                         let variable=app.split("++")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i)
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]++
                     }else if(app.includes("--")){
                         let variable=app.split("--")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i);
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]--
                     }else if(re()[last]){
                         e.removeAttribute(i)
@@ -965,6 +965,8 @@ const STATES=(element,ARRAY,list,prox)=>{
     typeof prox["computed"]=="function"?prox["computed"]():""
 }
 
+const log=console.log
+
 //EXPORT
 const createStore=(list)=>{
     let ARRAY=[];
@@ -975,25 +977,41 @@ const createStore=(list)=>{
         };
     }
     
+    let temp=[]
     const handler=()=>{
         return {
             get(target, key) {
                 if (typeof target[key]=="object"||Array.isArray(target[key])) {    
+                    temp.push(key)
                     return new Proxy(target[key], handler());
+                }else if(target.__SYMBOL__==undefined){
+                    temp.push(key)
+                }else{
+                    temp=[key]
                 }
                 return target[key];
             },
             set(target, key, value) {
                 const result=Reflect.get(target,key)
                 if(result!==value){
+                    console.log({target,key})
                     Reflect.set(target,key,value);
-                    ARRAY.forEach((e)=>{
-                        //needs optimization
-                        //en son adları alıyor x.y => y gibi
-                        e.value===key||e.value==="*"?e.callback():""
-                    })
+                    if(temp[temp.length-1]==key){
+                    let filtered=ARRAY.filter((e)=>e.value==key);
+                    filtered.forEach((e)=>e.callback())
+                    }else if(temp[temp.length-1]!=key){
+                        temp.push(key)
+                        let filtered=ARRAY.filter((e)=>e.value===temp.join("."))
+                        filtered.forEach((e)=>e.callback())
+                    }else{
+                    let filtered=ARRAY.filter((e)=>e.value===temp.join("."))
+                    filtered.forEach((e)=>e.callback())
+                    }
+                    ARRAY.forEach((e)=>e.value=="*"?e.callback():"")
                     computed();
+                    temp=[]
                 }
+                temp=[]
                 srch();
                 return true;
             }
@@ -1006,10 +1024,36 @@ const createStore=(list)=>{
         STATES(e,ARRAY,list,prox)
     }
 
+    prox.__createCallback__=(func,array)=>{
+        //TODO:Tekrar eden elemanlar silinecek
+    if(typeof func=="function"){
+        if(Array.isArray(array)){
+            array.forEach((e)=>{
+                ARRAY.push({el:document,value:e,callback:func})
+            })
+            console.log(ARRAY)
+        }else{
+            ARRAY.push({el:document,value:"*",callback:func})
+        }
+    }else{
+        warn("createCallback must be a function")
+        return
+    }
+
+    }
+
         computed();
         return prox
 
 
+}
+
+Object.prototype.createCallback=function(func,array){
+    if(this.__SYMBOL__===isProxy){
+        this.__createCallback__(func,array)
+    }else{
+        warn("createCallback must be a store element!")
+    }
 }
 
 Object.prototype.registerStore=function(storeName){

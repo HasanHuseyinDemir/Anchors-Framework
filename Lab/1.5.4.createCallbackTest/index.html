@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+
+    <script>
+
+        let store=createStore({
+            count:0,
+            twice:0,
+            test:{
+                x:6
+            },
+            counts:{
+                xd:12,
+                test:{
+                    s:1
+                }
+            },
+            texts:{
+                model:"Model"
+            },
+            reversed:{
+                texts:""
+            },
+            nest:{
+                nested:{
+                    nested:"Text",
+                    changed:0,
+                    al(e){
+                        alert("Hello"+e)
+                    }
+                }
+            },
+            x:{x:{x:{x:"TESTESTERONNN"}}}
+        })
+        store.createCallback((e)=>{
+            e.twice=e.count*2;
+        },["count"])
+
+        store.createCallback((e)=>{
+            e.reversed.texts=e.texts.model.split("").reverse().join("")
+        },"texts.model")
+
+        store.createCallback((e)=>{
+            store.nest.nested.changed++
+            console.log("changed")
+        },"nest.nested.nested")
+
+        store.createCallback(()=>{console.log(store.x.x.x.x,"changed hgahaha")},"x.x.x.x")
+
+        const Main=()=>{
+            let Page=html/*html*/`
+            <>
+                <h1>Count:{{count}}</h1>
+                <h2>Twice:{{twice}}</h2>
+                <p>{{test.x}} {{tests}}</p>
+                <button *onclick="count++">Count : {{count}}</button>
+                <button *onclick="test.x++">store testx++</button>
+                <button *onclick="counts.test.s++">SSS {{counts.test.s}}</button>
+                {{nest.nested.nested}}
+                {{nest.nested.changed}}
+                <input :test="test.x" :class="nest.nested.nested" :model="texts.model">
+                <button :onclick="nest.nested.al">Alert</button>
+                <p>{{texts.model}}</p>
+                <p>{{reversed.texts}}</p>
+                {{x.x.x.x}}
+                <Test/>
+            </>
+            `
+            Page.registerStore(store)
+
+            return Page
+        }
+
+        document.querySelectorAll("#app").render(Main)
+    </script>
+</body>
+</html>

@@ -787,7 +787,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                 node.textContent!==result?node.nodeValue=result:""
             }
             
-            ARRAY.push({value:getted_attr,callback:getter,el:node});
+            ARRAY.push({value:last,callback:getter,el:node});
             break;
             case "function":
                 let result=()=>getResult()
@@ -821,7 +821,7 @@ const STATES=(element,ARRAY,list,prox)=>{
                 }
                 //boilerPlate
                 const bp=(control,arg,func)=>{
-                    ARRAY.push({value:(func?"*":getted_attr),callback:control,el:e})
+                    ARRAY.push({value:(func?"*":last),callback:control,el:e})
                     if(arg){
                         if(re()[last]!=null&&re()[last]!=undefined)e.removeAttribute(i)
                     }
@@ -844,10 +844,10 @@ const STATES=(element,ARRAY,list,prox)=>{
                         return arg.replaceAll("'","").replaceAll('"',"").replaceAll("`","")
                     }
                     if(app.includes("=")){
-                        e.removeAttribute(i)
                         let sp=app.split("=");
                         let end=sp[0].split(".");
                         let res=Returner(prox,sp[0]);
+                        res[end[end.length-1]]!=undefined?e.removeAttribute(i):""
                         if(cl(sp[1])){
                             e[attr]=()=>{res[end[end.length-1]]=cl(sp[1])}
                         }else{
@@ -856,12 +856,12 @@ const STATES=(element,ARRAY,list,prox)=>{
                     }else if(app.includes("++")){
                         let variable=app.split("++")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i)
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]++
                     }else if(app.includes("--")){
                         let variable=app.split("--")
                         let spl=variable[0].split(".")
-                        e.removeAttribute(i);
+                        Returner(prox,variable[0])[spl[spl.length-1]]!=undefined?e.removeAttribute(i):""
                         e[attr]=()=>Returner(prox,variable[0])[spl[spl.length-1]]--
                     }else if(re()[last]){
                         e.removeAttribute(i)
