@@ -59,6 +59,7 @@ Eklenebilir:
 //CLASS Componentleri ile uyumluluk
 //template objesi sayfanın çıktısını gösterir...
 [] Class ile .render(new Class().template) yerine .render(Class) kullanılabilir
+[] Class ile slot ve props çağırılabilir constructor kısmından alınabilir
 [] Class ile component içine de sayfa çağırılabilir <>${Class}</>
 [] Class ile RegisterComponent kullanılabilir
 
