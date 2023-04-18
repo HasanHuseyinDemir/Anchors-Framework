@@ -52,6 +52,10 @@ Eklenebilir:
 [x]-Storenin değişen değeri tek boyutlu olmamalı
 ->Deneysel olarak başarılı ama şüphelerim var! Bu yüzden beta sürümü olarak yayınlandı
 
+HATALAR:
+[]-Vite kullanıldığında .component(Component) kabul edilmiyor 
+->isteğe bağlı olarak .component("component",z) gibi kullanılabilir olması gerekiyor
+
 
 []-Atama tarafında kod tekrarlarının azaltılması gerekiyor
 []-Callback fonksiyonları ve value değerlerinin birden fazla aynı arrayde bulunmaması gerekiyor.

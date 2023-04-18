@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        let Component=html/*html*/`<h1> Component</h1>`
+
+        let button=document.createElement("button")
+        button.textContent="Çalışıyor"
+
+        let Main=()=>{
+            let Page=html`
+            <>
+                <h1>sElam</h1>    
+                <Component hello="12"/>
+                <Buttons>
+                
+            </>
+            `
+            Page.component("component",Component)
+            Page.component("buttons",button)
+            return Page
+        }
+
+        document.querySelectorAll("#app").render(Main)
+</script>
+</body>
+</html>
