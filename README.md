@@ -4,8 +4,8 @@
 <img width="600px" src="https://github.com/HasanHuseyinDemir/Anchors-Framework/blob/master/Images/new/logo-color.png">
 <h1 align="center">Anchors</h1>
 <p align="center">An Open-Source and Reactive Javascript SPA Framework</p>
-<p align="center">Total Size : 39KB</p>
-<p align="center">Minified Size : 15 KB</p>
+<p align="center">Total Size : 40KB</p>
+<p align="center">Minified Size : 16 KB</p>
 </div>
 <br>
 
@@ -51,13 +51,13 @@
 
 ## CDN Import For Module
 ```
-import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.5-B/anchors.min.mjs"
+import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.6/anchors.min.mjs"
 export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
 ```
-<script src="https://unpkg.com/anchorsjs@1.5.5-B/anchors.min.js"></script>
+<script src="https://unpkg.com/anchorsjs@1.5.6/anchors.min.js"></script>
 ```
 
 ## NPM
