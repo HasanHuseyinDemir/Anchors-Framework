@@ -9,6 +9,24 @@
 </div>
 <br>
 
+## Features
+
+- Simple and lightweight , optimized DOM
+- Vanilla Friendly optional(querySelector,getElementById)
+- Easier to use and learn
+- CDN Link or NPM Package options
+- Module based or Global usage
+- Components , Props and Slots...
+- Lifecycle hooks(createEffect,onEffect,onSignal,onMount,onUnmount)
+- JSX like Template Literals | example : `<Component prop='text'/>`
+- Proxy Based Reactive States and Callbacks,Computed States
+- Two way data binding
+- Integrated Store and Easiest State Management
+- Dynamic Attributes and linked with variables
+- Scoped Styles `<style scoped>...</style>`
+- Nested Components , Nested Effects , Memo
+<br>
+
 # Node links
 <ul>
 <li>Vite-Template : https://github.com/HasanHuseyinDemir/Vite-AnchorsJS</li>
