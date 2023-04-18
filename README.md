@@ -19,10 +19,12 @@
 > https://replit.com/@HasanHuseyinDem <br>
 > https://codepen.io/collection/rxvqgG
 
-# Installation Latest v[1.5.4] "Integration Update"
+# Installation Latest v[1.5.5] "Integration Update"
 > ASYNC and Promise <br>
 > Nested Store Reactivity <br>
-> Better Equations = ++ --
+> Better Equations = ++ --<br>
+> Better Store Reactivity , createCallback hook , dependency array <br>
+
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
@@ -31,13 +33,13 @@
 
 ## CDN Import For Module
 ```
-import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.41/anchors.min.mjs"
+import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.5-B/anchors.min.mjs"
 export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
 ```
-<script src="https://unpkg.com/anchorsjs@1.5.41/anchor.min.js"></script>
+<script src="https://unpkg.com/anchorsjs@1.5.5-B/anchors.min.js"></script>
 ```
 
 ## NPM
