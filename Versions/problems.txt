@@ -53,7 +53,7 @@ Eklenebilir:
 ->Deneysel olarak başarılı ama şüphelerim var! Bu yüzden beta sürümü olarak yayınlandı
 
 HATALAR:
-[]-Vite kullanıldığında .component(Component) kabul edilmiyor 
+[x]-Vite kullanıldığında .component(Component) kabul edilmiyor 
 ->isteğe bağlı olarak .component("component",z) gibi kullanılabilir olması gerekiyor
 
 
