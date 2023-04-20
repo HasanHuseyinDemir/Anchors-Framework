@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    
+<script>
+    //https://github.com/HasanHuseyinDemir/Anchors-Framework
+let store=createStore({
+  count:{
+    value:0,
+    twice:0,
+    more:{
+      quad:0,
+      test:{
+        test:{
+          nested:true
+        }
+      }
+    }
+  },
+
+})
+
+store.createCallback((e)=>{
+  e.count.twice=e.count.value*2
+  //console.log("Twiced")
+},"count.value")
+
+store.createCallback((e)=>{
+  //console.log("Quad")
+  e.count.more.quad=e.count.twice*2
+},"count.twice")
+
+
+let Main=()=>{
+  let Page= html`
+  <>
+    <h1>Count : {{count.value}}</h1>
+    <h2>Quad : {{count.more.quad}}</h2>
+    <button :onclick="count.value++">Increase {{count.twice}}</button>
+  </>
+  `
+  
+  Page.registerStore(store)
+  return Page
+}
+
+document.querySelectorAll("#app").render(Main)
+</script>
+    
+</body>
+</html>

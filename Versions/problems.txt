@@ -56,6 +56,9 @@ HATALAR:
 [x]-Vite kullanıldığında .component(Component) kabul edilmiyor 
 ->isteğe bağlı olarak .component("component",z) gibi kullanılabilir olması gerekiyor
 
+//1.5.7
+! Store iç içe öğelerde sorun çıkarıyor
+[] - Store Düzeltilmeli
 
 []-Atama tarafında kod tekrarlarının azaltılması gerekiyor
 []-Callback fonksiyonları ve value değerlerinin birden fazla aynı arrayde bulunmaması gerekiyor.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./anchors.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    
+<script>
+    //https://github.com/HasanHuseyinDemir/Anchors-Framework
+let store=createStore({
+  count:0,
+  twice:0,
+  model:{
+    content:"Model Text",
+    reversed:""
+  }
+})
+
+//When count changed
+store.createCallback((e)=>{
+  e.twice=e.count*2
+  //or just you can use 
+  //store.twice=store.count*2
+},"count")
+
+store.createCallback(()=>{
+  console.log("Count multiplied by two")
+},"twice")
+
+store.createCallback((e)=>{
+  let content=e.model.content
+  content=content.split("").reverse().join("")
+  store.model.reversed=content;
+  console.log("Model content is reversed!"+content)
+},"model.content")
+
+store.createCallback((e)=>{
+   console.log("Reversed!")
+},"model.reversed")
+
+let Main=()=>{
+  let Page= html`
+  <>
+    <h1>Count : {{count}}</h1>
+    <h1>Twice : {{twice}}</h1>
+    <input :model="count" type="number"/>
+    <br><br>
+    <button :onclick="count++">Increase</button>
+    <button :onclick="count--">Decrease</button>
+    <hr>
+    <h1>Model Text : {{model.content}}</h1>
+    <h2>Reversed : {{model.reversed}}</h2>
+    <input :model="model.content"/>
+    
+  </>
+  `
+  
+  Page.registerStore(store)
+  return Page
+}
+
+document.querySelectorAll("#app").render(Main)
+</script>
+    
+</body>
+</html>
