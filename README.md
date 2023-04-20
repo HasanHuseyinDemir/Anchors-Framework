@@ -37,12 +37,12 @@
 > https://replit.com/@HasanHuseyinDem <br>
 > https://codepen.io/collection/rxvqgG
 
-# Installation Latest v[1.5.5] "Integration Update"
+# Installation Latest v[1.5.6] "Integration Update"
 > ASYNC and Promise <br>
 > Nested Store Reactivity <br>
 > Better Equations = ++ --<br>
 > Better Store Reactivity , createCallback hook , dependency array <br>
-
+> Minor Fixes
 
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
