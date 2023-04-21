@@ -1,6 +1,3 @@
-/*OPEN*/ 
-(()=>{
-/*CLOSE*/
 const warn=(arg)=>{
     console.warn("Anchors Warn :\n"+arg)
 }
@@ -374,17 +371,6 @@ const html=(data,...keys)=>{
     
     content.loadComponents();
     let FEC=content.firstElementChild
-    FEC=new Proxy(FEC,{
-        get(target, key) {
-        if (key === "remove") {
-          return()=>{
-            target.remove();
-          };
-        } else {
-          return Reflect.get(target, key);
-        }
-      }
-    })
 
     const querySelector=(arg)=>{
         return content.querySelector(arg)
@@ -1103,15 +1089,4 @@ Object.prototype.registerStore=function(storeName){
         storeName.__REGISTER__(this)
     }
 }
-
-//EXPORT FOR GLOBAL
-/*OPEN*/
-window.html=html
-window.createStore=createStore
-window.RegisterComponent=RegisterComponent
-window.createElement=createElement
-})()
-/*CLOSE*/
-
-//FOR MODULE
-//export {createStore,createElement,html,RegisterComponent}
+export {createStore,createElement,html,RegisterComponent}

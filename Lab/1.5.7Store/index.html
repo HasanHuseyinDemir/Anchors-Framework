@@ -38,6 +38,7 @@ store.createCallback((e)=>{
   e.count.more.quad=e.count.twice*2
 },"count.twice")
 
+let array=[{text:"hello",name:"world"},{text:"ahaha",name:"testingg"}]
 
 let Main=()=>{
   let Page= html`
@@ -45,14 +46,16 @@ let Main=()=>{
     <h1>Count : {{count.value}}</h1>
     <h2>Quad : {{count.more.quad}}</h2>
     <button :onclick="count.value++">Increase {{count.twice}}</button>
+
   </>
   `
   
   Page.registerStore(store)
   return Page
 }
-
+console.time("render")
 document.querySelectorAll("#app").render(Main)
+console.timeEnd("render")
 </script>
     
 </body>

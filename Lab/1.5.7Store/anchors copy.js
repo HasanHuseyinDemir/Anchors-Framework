@@ -57,11 +57,8 @@ const Anchor={
     registeredComponents:new Map()
 }
 
-/*innerhtml*/
 const createElement=(arg)=>{
-    let temp=document.createElement("template");
-    temp.innerHTML=arg;
-    return temp.content
+    return document.createRange().createContextualFragment(arg);
 }
 
 //UNIQUE SEED
@@ -774,6 +771,26 @@ function Returner(obj, prop) {
     return obj;
 }
 
+const searchKEY = (obj, key, path = '') => {
+    let result = null;
+    for (let prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (prop === '__KEY__' && obj[prop] === key) {
+          return path;
+        } else if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+          const subPath = path.length === 0 ? prop : `${path}.${prop}`;
+          const subResult = searchKEY(obj[prop], key, subPath);
+          if (subResult !== null) {
+            result = subResult;
+            break;
+          }
+        }
+      }
+    }
+    return result;
+  };
+
+
 const STATES=(element,ARRAY,list,prox)=>{
     element.querySelectorAll("[state]").forEach((e)=>{
         let getted_attr=e.getAttribute("state");
@@ -983,8 +1000,6 @@ const STATES=(element,ARRAY,list,prox)=>{
     })
     typeof prox["computed"]=="function"?prox["computed"]():""
 }
-
-const log=console.log
 //EXPORT
 const createStore=(list)=>{
     let ARRAY=[];
@@ -995,118 +1010,34 @@ const createStore=(list)=>{
         };
     }
     
-    let keys=[]
-    let root=""
-    let codes=0
-    let valid=""
-    let proxKeys
     const handler=()=>{
         return {
             get(target, key) {
-                root=""
-                keys=keys.filter((e)=>e!="")
-                if (typeof target[key]=="object"||Array.isArray(target[key])) { 
-                    key!="computed"?keys.push(key):""; 
-                    console.log("BİRİNCİ",keys,key)
-                    //keys.shift();
-                    let obj=Returner(proxKeys,keys.join("."))[keys[keys.length-1]]
-                    if(typeof obj=="object"){
-                        console.log("eklendi",key)
-                        keys.push(key)
-                    }
-                    codes=1;
-                    /*if(keys.length){                        
-                        let o=Returner(proxKeys,keys.join("."))[keys[keys.length-1]]
-                        let r=typeof o
-                        if(key!="toJSON"){
-                           if(r=="object"){
-                                if(!Object.keys(o).includes(key)){
-                                    keys=[]
-                                }
-                            } 
-                        }
-                    }*/
-
-                    return new Proxy(target[key], handler());
-                }else if(target.__SYMBOL__==undefined){
-                    console.log("ikinci Başlangıç",keys)
-                    if(proxKeys){
-                        
-                        let res=typeof Returner(proxKeys,keys.join("."))[keys[keys.length-1]]
-                        if(res=="object"){    
-                            console.log(keys)
-                            if(codes==1){
-                                keys=[keys.pop()]
-                                let o=Returner(proxKeys,keys[0])[keys[0]]
-                                let r=typeof o
-                                if(key!="toJSON"){
-                                   if(r=="object"){
-                                        if(!Object.keys(o).includes(key)){
-                                            keys=[]
-                                        }
-                                    } 
-                                }
-                            }else{
-                                log("111",key)
-                            }
-                        }else{
-                            log(222,key)
-                            keys=[keys.pop()]
-                            let o=Returner(proxKeys,keys[0])[keys[0]]
-                            let r=typeof o
-                            if(key!="toJSON"){
-                               if(r=="object"){
-                                    if(!Object.keys(o).includes(key)){
-                                        keys=[]
-                                    }else{
-                                        log(keys)
-                                    }
-                                } 
-                            }
-                            //alert(keys,key,codes)
+                if (typeof target[key]=="object"||Array.isArray(target[key])) {
+                    if(typeof target=="object"){
+                        if(typeof target[key].__KEY__=="undefined"){
+                            target[key].__KEY__=Anchor.rkg()
                         }
                     }
-                    if(key=="twice")log("FARKLI")
-                    codes=2;
-                    console.log("ikinci bitiş",keys,key)
-                }else{
-                    codes=3;
-                    keys=[key!="computed"?key:""];
+                    return new Proxy(target[key], handler())
                 }
-                
-                return target[key];
+                return target[key]
             },
             set(target, key, value) {
-                log("SET")
                 const result=Reflect.get(target,key)
-                if(codes==3){
-                    valid=key
-                }else if(keys.length){
-                    valid=keys.join(".")+"."+key
-                }
-                console.log(valid,"COMPLETED")
-                
-                
+                let valid=""
                 
                 if(result!==value){
-                    //1-join+key
-                    //2-join
-                    //3-key
-                    Reflect.set(target,key,value);
+                    target[key]=value
+
+                    if(target.__KEY__){
+                        valid=searchKEY(prox,target.__KEY__)+"."+key
+                    }else{
+                        valid=key
+                    }
                     let filtered=ARRAY.filter((e)=>e.value===valid||e.value==="*")
                     filtered.forEach((e)=>e.callback(prox))
-                    
-                    if(!proxKeys){
-                        proxKeys={...prox}
-                        proxKeys=JSON.parse(JSON.stringify(proxKeys))
-                    }
-                    
-                    target[key]=value
                 }
-                valid=""
-                root=""
-                keys=[]
-                codes=0;
                 computed();
                 srch();
                 return true;

@@ -374,17 +374,6 @@ const html=(data,...keys)=>{
     
     content.loadComponents();
     let FEC=content.firstElementChild
-    FEC=new Proxy(FEC,{
-        get(target, key) {
-        if (key === "remove") {
-          return()=>{
-            target.remove();
-          };
-        } else {
-          return Reflect.get(target, key);
-        }
-      }
-    })
 
     const querySelector=(arg)=>{
         return content.querySelector(arg)
