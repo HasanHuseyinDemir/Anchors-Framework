@@ -37,13 +37,9 @@
 > https://replit.com/@HasanHuseyinDem <br>
 > https://codepen.io/collection/rxvqgG
 
-# Installation Latest v[1.5.6] "Integration Update"
-> ASYNC and Promise <br>
-> Nested Store Reactivity <br>
-> Better Equations = ++ --<br>
-> Better Store Reactivity , createCallback hook , dependency array <br>
-> Minor Fixes
-
+# Installation Latest v[1.6.0] "Storage Update"
+> Reactive Storage 
+  
 ## Recomended VSCode Extensions
 > "es6-string-jsx" and "es6-string-html"<br>
 ```"/*jsx*/ or /*html*/"``` for highlighting html string<br>
@@ -51,13 +47,13 @@
 
 ## CDN Import For Module
 ```
-import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.5.6/anchors.min.mjs"
+import {html,createStore,createElement,RegisterComponent} from "https://unpkg.com/anchorsjs@1.6.0/anchors.min.mjs"
 export {html,createStore,createElement,RegisterComponent}
 ```
 
 ## CDN Import For Global 
 ```
-<script src="https://unpkg.com/anchorsjs@1.5.6/anchors.min.js"></script>
+<script src="https://unpkg.com/anchorsjs@1.6.0/anchors.min.js"></script>
 ```
 
 ## NPM
