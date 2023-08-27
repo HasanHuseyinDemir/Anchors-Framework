@@ -1,13 +1,25 @@
-function html(data,...keys){
-    let elements=[];
-    let keyList=[...keys];
-    data.forEach((item,index)=>{
-        elements.push(item);
-        keyList[index]!=undefined?elements.push(keyList[index]):""
-    })
-    let str="";
-    elements.forEach((item)=>{typeof item=="string"?str+=item:str+=`<xx></xx>`});
-    str=str.replaceAll("<>","<div>").replaceAll("</>","</div>");
+(()=>{
+    function html(data,...keys){
+        let elements=[];
+        let keyList=[...keys];
+        data.forEach((item,index)=>{
+            elements.push(item);
+            keyList[index]!=undefined?elements.push(keyList[index]):""
+        })
+        let str="";
+        elements.forEach((item)=>{typeof item=="string"?str+=item:str+=`<xx></xx>`});
+        str=str.replaceAll("<>","<div>").replaceAll("</>","</div>");
+        /*optimizasyon*/str.includes("/>")?str=namer(str):0
+        let el=document.createRange().createContextualFragment(str);
+        [...keys].forEach((key)=>{
+            let t=el.querySelector("xx");
+            (typeof key=="object"||typeof key=="number")?t.replaceWith(key):typeof key=="function"?t.replaceWith(key()):0
+            return
+        })
+        return el
+    }
+    
+    
     function namer(item){
         let data = item;
         let last="/>";
@@ -37,16 +49,9 @@ function html(data,...keys){
         }
         return data
         }
-        str=namer(str)
+        window.html=html
+})()
 
-    let el=document.createRange().createContextualFragment(str);
-    [...keys].forEach((key)=>{
-        let t=el.querySelector("xx");
-        (typeof key=="object"||typeof key=="number")?t.replaceWith(key):typeof key=="function"?t.replaceWith(key()):0
-        return
-    })
-    return el
-}
 
 Object.prototype.render=function(s){
     this.textContent="";
@@ -54,15 +59,14 @@ Object.prototype.render=function(s){
 }
 
 Object.prototype.component=function(el,obj){
-    let target=this
     let object = typeof el=="string"?obj:el
     let name=typeof el!="string"?(typeof el=="function"?el.name:Object.keys(el)[0]):el
     if(typeof object=="object"&&typeof el=="string"){
-        target.querySelectorAll(el).forEach((e)=>{
+        this.querySelectorAll(el).forEach((e)=>{
             e.render(obj)
         })
     }else if(typeof object=="function"){
-        target.querySelectorAll(name).forEach((e)=>{
+        this.querySelectorAll(name).forEach((e)=>{
             //Props
             let attrNames=e.getAttributeNames();
             let props=new Object();
