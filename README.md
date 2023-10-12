@@ -64,3 +64,5 @@ npm i anchorsjs
 
 ## Replit Template
 > https://replit.com/@HasanHuseyinDem/AnchorsJS-Template?v=1
+
+![](https://komarev.com/ghpvc/?username=HasanHuseyinDemir)
