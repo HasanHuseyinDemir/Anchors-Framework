@@ -1,3 +1,20 @@
+const Anchor={
+    rkg:()=>{
+        let arr="";
+        for(var i=0;i<=9;i++){
+            arr=arr+"abcdefghijklmnoprstuxvyz_".split("")[Math.floor(Math.random() * (24))]
+        }
+        return arr;
+    },
+    valueTypeControl(type){
+        return ["text","textarea","range","number","file","color","date","datetime-local","email","hidden","image","month","password",
+        "search","tel","time","url","week"].includes(type)
+    },
+    checkedTypeControl(type){
+        return ["radio","checkbox"].includes(type)
+    }
+}
+
 function Returner(obj, prop) {
     if(typeof obj === 'undefined') {
         return false;
